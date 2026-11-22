@@ -10,52 +10,37 @@
     <meta name="apple-mobile-web-app-title" content="PP_R Korea">
     <link id="apple-touch-icon-link" rel="apple-touch-icon" href="">
     <script>
-        // สร้างภาพไอคอนแอปความละเอียดสูง 512x512 อัตโนมัติสำหรับ iOS Home Screen
         (function() {
             const canvas = document.createElement('canvas');
             canvas.width = 512;
             canvas.height = 512;
             const ctx = canvas.getContext('2d');
-
-            // พื้นหลังไล่เฉดสีน้ำเงินเข้ม-ครามสไตล์เดียวกับ Header
             const grad = ctx.createLinearGradient(0, 0, 512, 512);
             grad.addColorStop(0, '#090D16');
             grad.addColorStop(0.55, '#172554');
             grad.addColorStop(1, '#2563EB');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 512, 512);
-
-            // วงกลมแสงตกแต่งมุมขวาบน
             ctx.beginPath();
             ctx.arc(430, 80, 140, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(56, 189, 248, 0.16)';
             ctx.fill();
-
-            // ไอคอนธงชาติเกาหลี & เกล็ดหิมะด้านบน
-            ctx.font = '88px sans-serif';
+            ctx.font = '82px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('🇰🇷', 256, 145);
-
-            // ข้อความหลัก PP_R
+            ctx.fillText('🇰🇷📸', 256, 145);
             ctx.fillStyle = '#FFFFFF';
             ctx.font = '800 94px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('PP_R', 256, 275);
-
-            // แถบป้ายปี 2026 ด้านล่าง
             ctx.fillStyle = '#38BDF8';
             ctx.beginPath();
             ctx.roundRect(146, 345, 220, 64, 32);
             ctx.fill();
-
             ctx.fillStyle = '#0F172A';
             ctx.font = '800 38px "Plus Jakarta Sans", sans-serif';
             ctx.fillText('2026', 256, 379);
-
             const iconLink = document.getElementById('apple-touch-icon-link');
-            if (iconLink) {
-                iconLink.href = canvas.toDataURL('image/png');
-            }
+            if (iconLink) iconLink.href = canvas.toDataURL('image/png');
         })();
     </script>
     <!-- Tailwind CSS -->
@@ -153,7 +138,7 @@
                     </span>
                     <button onclick="openVersionModal()" id="version-badge" class="inline-flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-200 transition cursor-pointer" title="คลิกเพื่อดูรายละเอียดเวอร์ชันและการอัปเดต">
                         <i class="ph-bold ph-git-commit text-emerald-300"></i>
-                        <span id="version-text">v5.1 • อัปเดต: 22 พ.ย. 2569</span>
+                        <span id="version-text">v6.0 • อัปเดต: 22 พ.ย. 2569</span>
                     </button>
                     <button onclick="forceFirebaseSync()" id="cloud-sync-badge" class="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/30 px-2.5 py-1 rounded-full text-[11px] font-semibold text-amber-200 transition cursor-pointer" title="คลิกเพื่อซิงก์ข้อมูล 2 เครื่องทันที">
                         <span id="cloud-sync-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
@@ -161,6 +146,11 @@
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button onclick="exportScrapbookHTML()" class="inline-flex items-center gap-1.5 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/35 text-sky-200 px-3 py-1.5 rounded-full text-xs font-bold transition cursor-pointer" title="ส่งออกสมุดบันทึกการเดินทางพร้อมรูปภาพ 30 พ.ย. – 12 ธ.ค.">
+                        <i class="ph-bold ph-book-open-text text-sm"></i>
+                        <span class="hidden sm:inline">Export Scrapbook</span>
+                        <span class="sm:hidden">Scrapbook</span>
+                    </button>
                     <button onclick="switchTab('traveler')" id="top-traveler-btn" class="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm transition cursor-pointer" title="เปิดดู/แก้ไขข้อมูลผู้เดินทางและพาสปอร์ต">
                         <i class="ph-fill ph-identification-card text-sm"></i>
                         <span>ข้อมูลผู้เดินทาง</span>
@@ -200,6 +190,10 @@
     <!-- Sticky Main Navigation Tabs -->
     <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-xs">
         <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('solo')" data-tab="solo" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-sparkle text-purple-500 text-base"></i>
+                <span id="nav-solo-label">Solo Log (30 พ.ย.–5 ธ.ค.)</span>
+            </button>
             <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold">
                 <i class="ph-fill ph-calendar-heart text-sky-400 text-base"></i>
                 <span>1. สมุดเดินทาง 7 วัน</span>
@@ -229,6 +223,13 @@
 
     <!-- Main Content Container -->
     <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5 space-y-5">
+
+        <!-- TAB 0: SOLO LOG (30 NOV - 5 DEC) -->
+        <section id="tab-solo" class="tab-content hidden space-y-4">
+            <div id="solo-day-pills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+            <div id="solo-header-card" class="bg-white rounded-3xl p-4 sm:p-5 border border-purple-200/80 shadow-xs"></div>
+            <div id="solo-timeline" class="space-y-3.5"></div>
+        </section>
 
         <!-- TAB 1: 7-DAY TRAVEL SCRAPBOOK -->
         <section id="tab-daily" class="tab-content space-y-4">
@@ -388,13 +389,13 @@
     </main>
 
     <!-- ========================================================= -->
-    <!-- MODAL: CHECK-IN MEMORY NOTE                               -->
+    <!-- MODAL: CHECK-IN MEMORY NOTE & PHOTOS (UP TO 3 PHOTOS)     -->
     <!-- ========================================================= -->
     <div id="note-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-note-pencil text-amber-500 text-xl"></i> บันทึกความทรงจำ
+                    <i class="ph-fill ph-note-pencil text-amber-500 text-xl"></i> บันทึกความทรงจำ &amp; รูปภาพ
                 </h3>
                 <button onclick="closeNoteModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -404,8 +405,40 @@
             <form onsubmit="saveCheckinNote(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="note-modal-item-id">
                 <div>
+                    <label class="block font-semibold text-slate-700 mb-1.5">ผู้บันทึก (Author Tag)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="note-author" value="PPWR" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-purple-400 peer-checked:bg-purple-100 peer-checked:text-purple-900 text-center font-bold transition">
+                                💜 PPWR
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="note-author" value="PPSR" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-sky-400 peer-checked:bg-sky-100 peer-checked:text-sky-900 text-center font-bold transition">
+                                💙 PPSR
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="note-author" value="BOTH" checked class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white text-center font-bold transition">
+                                👫 ด้วยกัน
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div>
                     <label class="block font-semibold text-slate-700 mb-1">เขียนความประทับใจ เมนูที่สั่ง หรือเรื่องราวระหว่างวัน</label>
-                    <textarea id="note-modal-text" rows="4" placeholder="เช่น อากาศหนาวกำลังดี กาแฟอร่อยมาก ถ่ายรูปมุมนี้แสงสวยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+                    <textarea id="note-modal-text" rows="3" placeholder="เช่น อากาศหนาวกำลังดี กาแฟอร่อยมาก ถ่ายรูปมุมนี้แสงสวยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+                </div>
+                <!-- Upload up to 3 photos -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="font-semibold text-slate-700">แนบรูปภาพความทรงจำ (สูงสุด 3 รูป)</label>
+                        <span id="note-photo-count" class="text-[11px] font-bold text-slate-400">0/3 รูป</span>
+                    </div>
+                    <div id="note-photo-grid" class="grid grid-cols-3 gap-2"></div>
+                    <input type="file" id="note-photo-input" accept="image/*" multiple onchange="handleNotePhotosUpload(event)" class="hidden">
                 </div>
                 <label class="flex items-center gap-2 font-semibold text-emerald-800 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200 cursor-pointer">
                     <input type="checkbox" id="note-modal-mark-visited" checked class="rounded accent-emerald-600">
@@ -478,6 +511,30 @@
             </div>
             <form id="add-place-form" onsubmit="handleSavePlace(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="edit-place-id">
+                <!-- Author Tag Selection -->
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1.5">ผู้บันทึก (Author Tag) *</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="place-author" value="PPWR" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-purple-400 peer-checked:bg-purple-100 peer-checked:text-purple-900 text-center font-bold transition">
+                                💜 PPWR
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="place-author" value="PPSR" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-sky-400 peer-checked:bg-sky-100 peer-checked:text-sky-900 text-center font-bold transition">
+                                💙 PPSR
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="place-author" value="BOTH" checked class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl border border-slate-200 peer-checked:border-slate-900 peer-checked:bg-slate-900 peer-checked:text-white text-center font-bold transition">
+                                👫 ด้วยกัน
+                            </div>
+                        </label>
+                    </div>
+                </div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">ชื่อสถานที่ / ชื่อร้านที่แวะ *</label>
                     <input type="text" id="input-name" required placeholder="เช่น คาเฟ่ลับในซอยฮงแด / ร้านหมูย่างซองซู" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
@@ -505,44 +562,74 @@
                     <label class="block font-semibold text-slate-700 mb-1">บันทึกความทรงจำ / เมนูที่สั่ง / หมายเหตุ</label>
                     <input type="text" id="input-addr" placeholder="เช่น อเมริกาโน่ดีมาก บรรยากาศเงียบสงบ ใกล้สถานี..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
+                <!-- Upload up to 3 photos for new place -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="font-semibold text-slate-700">แนบรูปภาพสถานที่ (สูงสุด 3 รูป)</label>
+                        <span id="add-photo-count" class="text-[11px] font-bold text-slate-400">0/3 รูป</span>
+                    </div>
+                    <div id="add-photo-grid" class="grid grid-cols-3 gap-2"></div>
+                    <input type="file" id="add-photo-input" accept="image/*" multiple onchange="handleAddPhotosUpload(event)" class="hidden">
+                </div>
                 <div class="pt-2 border-t border-slate-100 space-y-2">
                     <label class="flex items-center gap-2 font-bold text-emerald-800 bg-emerald-50/80 px-3 py-2 rounded-xl border border-emerald-200 cursor-pointer">
                         <input type="checkbox" id="chk-auto-checkin" checked class="rounded accent-emerald-600">
                         <span>ประทับตรา "เช็กอินแล้ว (VISITED)" ทันทีที่บันทึก</span>
                     </label>
-                    <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
-                        <input type="checkbox" id="chk-add-cafe" onchange="toggleCafeCategoryField()" class="rounded accent-amber-500">
-                        <span>เก็บเข้าหมวด <strong>คาเฟ่ &amp; ร้านอาหาร</strong> ด้วย</span>
+                    <label class="flex items-center gap-2 font-semibold text-purple-800 bg-purple-50/70 px-3 py-2 rounded-xl border border-purple-200 cursor-pointer">
+                        <input type="checkbox" id="chk-add-solo" onchange="toggleSoloFields()" class="rounded accent-purple-600">
+                        <span>บันทึกเข้าแท็บ <strong>Solo Log (30 พ.ย. – 5 ธ.ค.)</strong></span>
                     </label>
-                    <div id="cafe-category-box" class="hidden pl-5 pt-0.5">
-                        <label class="block text-[11px] text-slate-500 mb-0.5">ประเภทร้าน</label>
+                    <div id="solo-extra-fields" class="hidden grid-cols-2 gap-2 pl-5 pt-1">
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">วันที่บันทึก</label>
+                            <select id="input-solo-date" class="w-full px-2.5 py-1.5 bg-purple-50/50 border border-purple-200 rounded-lg">
+                                <option value="2026-11-30">จ. 30 พ.ย. 2569</option>
+                                <option value="2026-12-01">อ. 1 ธ.ค. 2569</option>
+                                <option value="2026-12-02">พ. 2 ธ.ค. 2569</option>
+                                <option value="2026-12-03">พฤ. 3 ธ.ค. 2569</option>
+                                <option value="2026-12-04">ศ. 4 ธ.ค. 2569</option>
+                                <option value="2026-12-05">ส. 5 ธ.ค. 2569</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">ช่วงเวลา / โอกาส (ไม่บังคับ)</label>
+                            <input type="text" id="input-solo-time" placeholder="เช่น หลังเลิกงาน / มื้อเย็น" class="w-full px-2.5 py-1.5 bg-purple-50/50 border border-purple-200 rounded-lg">
+                        </div>
+                    </div>
+                    <label class="flex items-center gap-2 font-semibold text-blue-800 bg-blue-50/70 px-3 py-2 rounded-xl border border-blue-200 cursor-pointer">
+                        <input type="checkbox" id="chk-add-daily" onchange="toggleDailyFields()" checked class="rounded accent-royal">
+                        <span>เพิ่มลงในตารางทริปหลัก (Day 1 – Day 7)</span>
+                    </label>
+                    <div id="daily-extra-fields" class="grid grid-cols-2 gap-2 pl-5 pt-1">
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">เลือกวันที่ (Day 1–7)</label>
+                            <select id="input-day" class="w-full px-2.5 py-1.5 bg-blue-50/50 border border-blue-200 rounded-lg">
+                                <option value="1">Day 1 (6 ธ.ค. ปูซาน)</option>
+                                <option value="2">Day 2 (7 ธ.ค. ปูซาน)</option>
+                                <option value="3">Day 3 (8 ธ.ค. โซล)</option>
+                                <option value="4">Day 4 (9 ธ.ค. โซล)</option>
+                                <option value="5">Day 5 (10 ธ.ค. โซล)</option>
+                                <option value="6">Day 6 (11 ธ.ค. โซล)</option>
+                                <option value="7">Day 7 (12 ธ.ค. กลับไทย)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-500 mb-0.5">ช่วงเวลา</label>
+                            <input type="text" id="input-time" placeholder="เช่น 14:30 – 15:30" class="w-full px-2.5 py-1.5 bg-blue-50/50 border border-blue-200 rounded-lg">
+                        </div>
+                    </div>
+                    <label class="flex items-center gap-2 font-semibold text-amber-800 bg-amber-50/70 px-3 py-2 rounded-xl border border-amber-200 cursor-pointer">
+                        <input type="checkbox" id="chk-add-cafe" onchange="toggleCafeCategoryField()" class="rounded accent-amber-500">
+                        <span>เพิ่มลงในแท็บ <strong>คาเฟ่ &amp; ร้านอาหาร</strong></span>
+                    </label>
+                    <div id="cafe-category-box" class="hidden pl-5 pt-1">
+                        <label class="block text-[11px] text-slate-500 mb-0.5">หมวดหมู่ร้าน</label>
                         <select id="input-cafe-type" class="w-full px-2.5 py-1.5 bg-amber-50/50 border border-amber-200 rounded-lg">
                             <option value="คาเฟ่ / กาแฟ">☕ คาเฟ่ / กาแฟ</option>
                             <option value="ร้านขนม / เบเกอรี">🥐 ร้านขนม / เบเกอรี</option>
                             <option value="ร้านอาหาร">🍲 ร้านอาหาร</option>
                         </select>
-                    </div>
-                    <label class="flex items-center gap-2 font-semibold text-slate-700 cursor-pointer">
-                        <input type="checkbox" id="chk-add-daily" checked onchange="toggleDailyFields()" class="rounded accent-royal">
-                        <span>บันทึกเข้าสมุดรายวัน (Day 1 – Day 7)</span>
-                    </label>
-                    <div id="daily-extra-fields" class="grid grid-cols-2 gap-2 pl-5 pt-1">
-                        <div>
-                            <label class="block text-[11px] text-slate-500 mb-0.5">เลือกวัน</label>
-                            <select id="input-day" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
-                                <option value="1">Day 1 (อา. 6 ธ.ค.)</option>
-                                <option value="2">Day 2 (จ. 7 ธ.ค.)</option>
-                                <option value="3">Day 3 (อ. 8 ธ.ค.)</option>
-                                <option value="4">Day 4 (พ. 9 ธ.ค.)</option>
-                                <option value="5">Day 5 (พฤ. 10 ธ.ค.)</option>
-                                <option value="6">Day 6 (ศ. 11 ธ.ค.)</option>
-                                <option value="7">Day 7 (ส. 12 ธ.ค.)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] text-slate-500 mb-0.5">เวลาที่แวะ</label>
-                            <input type="text" id="input-time" placeholder="เช่น 14:30 น." class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
-                        </div>
                     </div>
                     <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
                         <input type="checkbox" id="chk-add-stamp" class="rounded accent-amber-500">
@@ -583,6 +670,10 @@
                     </ul>
                 </div>
                 <div class="space-y-2">
+                    <div class="border-l-2 border-purple-500 pl-3">
+                        <div class="font-bold text-slate-900">v6.0 • 22 พ.ย. 2569</div>
+                        <p>เพิ่มแท็บพิเศษ <strong>Solo Log (30 พ.ย.–5 ธ.ค.)</strong> สำหรับบันทึกช่วงเดินทางล่วงหน้า, เพิ่มป้าย Tag ผู้บันทึก <strong>PPWR (สีม่วงพาสเทล)</strong> และ <strong>PPSR (สีน้ำเงินโอเชียนบลู)</strong>, รองรับการแนบรูปภาพสูงสุด 3 รูปต่อสถานที่พร้อมบีบอัดอัตโนมัติ และเพิ่มปุ่ม <strong>Export Scrapbook</strong> สำหรับเปิดพิมพ์/เซฟ PDF ฉบับสมบูรณ์</p>
+                    </div>
                     <div class="border-l-2 border-emerald-500 pl-3">
                         <div class="font-bold text-slate-900">v5.1 • 22 พ.ย. 2569</div>
                         <p>กู้คืนข้อมูลทั้งหมดจาก v5.0 (ข้อมูลผู้เดินทาง PIN 070910, แท็บทั้ง 6 หมวด, คลังพิกัด Naver Map, จุดเก็บ Stamp, กาชาปอง และ Route แฮบังชน) พร้อมเชื่อมต่อระบบซิงก์เรียลไทม์ 2 เครื่องผ่าน Firebase Realtime Database</p>
@@ -775,9 +866,9 @@
             lastSaved: '',
             travelers: [
                 {
-                    label: 'ผู้เดินทางคนที่ 1',
+                    label: 'ผู้เดินทางคนที่ 1 (PPWR)',
                     fullName: '',
-                    nickname: '',
+                    nickname: 'PPWR',
                     passportNo: '',
                     dob: '',
                     expiryDate: '',
@@ -785,9 +876,9 @@
                     flights: { outNo: '', outPnr: '', outTime: 'เดินทาง 30 พ.ย. 2569', outSeat: '', inNo: 'TW101 (หรือรอบ 19:50/20:15)', inPnr: '', inTime: 'ออก ICN 19:50 / 20:15 น.', inSeat: 'Terminal 1' }
                 },
                 {
-                    label: 'ผู้เดินทางคนที่ 2',
+                    label: 'ผู้เดินทางคนที่ 2 (PPSR)',
                     fullName: '',
-                    nickname: '',
+                    nickname: 'PPSR',
                     passportNo: '',
                     dob: '',
                     expiryDate: '',
@@ -827,18 +918,564 @@
         let completedIds = JSON.parse(localStorage.getItem('ppr2026_checked') || '{}');
         // checkinNotes stores user memory notes keyed by item id
         let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
+        // placePhotos stores array of compressed base64 images (max 3) keyed by item id
+        let placePhotos = JSON.parse(localStorage.getItem('ppr2026_place_photos') || '{}');
+        // noteAuthors stores 'PPWR' | 'PPSR' | 'BOTH' keyed by item id
+        let noteAuthors = JSON.parse(localStorage.getItem('ppr2026_note_authors') || '{}');
         let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
         let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
-            major: 5,
-            minor: 1,
+            major: 6,
+            minor: 0,
             updatedAt: '22 พ.ย. 2569'
         }));
 
         let currentDay = 1;
+        let currentSoloDate = 'ALL';
         let currentMapZone = 'ALL';
         let currentCafeZone = 'ALL';
         let currentCafeType = 'ALL';
         let lastAddedId = null;
+        let tempNotePhotos = [];
+        let tempAddPhotos = [];
+        let pendingConfirmCallback = null;
+
+        // ---------------------------------------------------------
+        // CORE STATE, HELPERS & EXPORT SCRAPBOOK FUNCTIONS
+        // ---------------------------------------------------------
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }, 2600);
+        }
+
+        function copyText(text) {
+            if (!text) return;
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('คัดลอกเรียบร้อยแล้ว!');
+            } catch (e) {
+                showToast('ไม่สามารถคัดลอกได้');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function getCheckinTimestamp() {
+            const now = new Date();
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const d = now.getDate();
+            const m = months[now.getMonth()];
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            return `${d} ${m} ${hh}:${mm}`;
+        }
+
+        function bumpMinorVersion() {
+            versionState.minor = (Number(versionState.minor) || 0) + 1;
+            const now = new Date();
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            versionState.updatedAt = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 543}`;
+        }
+
+        function renderVersionBadge() {
+            const el = document.getElementById('version-text');
+            if (el) {
+                el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
+            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
+            localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
+            localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
+            localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
+            localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
+            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
+            localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
+
+            if (!isApplyingRemote) {
+                lastSyncTimestamp = Date.now();
+                localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
+                if (dbRef) {
+                    updateCloudSyncBadge('syncing', 'Syncing...');
+                    dbRef.set(buildSyncPayload())
+                        .then(() => updateCloudSyncBadge('live', 'Cloud Synced'))
+                        .catch(() => updateCloudSyncBadge('offline', 'Offline Mode'));
+                }
+            }
+        }
+
+        function toggleCheck(id) {
+            if (completedIds[id]) {
+                delete completedIds[id];
+                showToast('ยกเลิกการเช็กอินแล้ว');
+            } else {
+                completedIds[id] = getCheckinTimestamp();
+                showToast('ประทับตรา VISITED เรียบร้อยแล้ว!');
+            }
+            saveState();
+            updateProgressUI();
+        }
+
+        function getDailyPlanWithCustom() {
+            return baseDailyPlans.map(dayObj => {
+                const baseEvs = dayObj.events.map(ev => {
+                    const ov = eventOverrides[ev.id];
+                    if (!ov) return { ...ev };
+                    return {
+                        ...ev,
+                        time: ov.time || ev.time,
+                        transit: ov.transit || ev.transit,
+                        title: ov.title || ev.title,
+                        desc: ov.desc || ev.desc,
+                        isEdited: true
+                    };
+                });
+
+                const customEvs = userCustomPlaces
+                    .filter(cp => cp.addDaily && Number(cp.day) === dayObj.day)
+                    .map(cp => ({
+                        id: `ev_${cp.id}`,
+                        customId: cp.id,
+                        isCustom: true,
+                        author: cp.author || 'BOTH',
+                        time: cp.time || 'แวะเพิ่มเติม',
+                        transit: cp.zone || 'บันทึกจุดแวะใหม่',
+                        title: cp.name,
+                        desc: cp.addr || '',
+                        places: cp.kr ? [{ name: cp.name, kr: cp.kr }] : []
+                    }));
+
+                return { ...dayObj, events: [...baseEvs, ...customEvs] };
+            });
+        }
+
+        function getAllCafeFoodItems() {
+            const customCafes = userCustomPlaces
+                .filter(cp => cp.addCafe)
+                .map(cp => ({
+                    id: `cf_${cp.id}`,
+                    customId: cp.id,
+                    isCustom: true,
+                    zone: cp.zone || 'อื่นๆ',
+                    type: cp.cafeType || 'คาเฟ่ / กาแฟ',
+                    name: cp.name,
+                    kr: cp.kr || '',
+                    menu: cp.addr || '',
+                    note: ''
+                }));
+            return [...customCafes, ...baseCafeFoodItems];
+        }
+
+        function getAllStamps() {
+            const customStamps = userCustomPlaces
+                .filter(cp => cp.addStamp)
+                .map(cp => ({
+                    id: `st_${cp.id}`,
+                    day: cp.zone || 'บันทึกใหม่',
+                    name: cp.name,
+                    loc: cp.addr || cp.zone || '',
+                    kr: cp.kr || ''
+                }));
+            return [...baseStampItems, ...customStamps];
+        }
+
+        function getAllGacha() {
+            const customGacha = userCustomPlaces
+                .filter(cp => cp.addGacha)
+                .map(cp => ({
+                    id: `gc_${cp.id}`,
+                    tag: cp.zone || 'บันทึกใหม่',
+                    name: cp.name,
+                    desc: cp.addr || '',
+                    kr: cp.kr || ''
+                }));
+            return [...baseGachaItems, ...customGacha];
+        }
+
+        function getAllPlaces() {
+            const customAll = userCustomPlaces.map(cp => ({
+                id: cp.id,
+                isCustom: true,
+                name: cp.name,
+                kr: cp.kr || '',
+                zone: cp.zone || 'อื่นๆ',
+                addr: cp.addr || ''
+            }));
+            return [...customAll, ...baseNaverPlaces];
+        }
+
+        function updateProgressUI() {
+            const plans = getDailyPlanWithCustom();
+            const dailyEvents = plans.flatMap(d => d.events);
+            const soloEvents = userCustomPlaces.filter(cp => cp.addSolo);
+            const totalSpots = dailyEvents.length + soloEvents.length;
+            const visitedDaily = dailyEvents.filter(e => completedIds[e.id]).length;
+            const visitedSolo = soloEvents.filter(cp => completedIds[`solo_${cp.id}`]).length;
+            const visitedTotal = visitedDaily + visitedSolo;
+            const pct = totalSpots > 0 ? Math.round((visitedTotal / totalSpots) * 100) : 0;
+
+            const gpText = document.getElementById('global-progress-text');
+            const gpBar = document.getElementById('global-progress-bar');
+            if (gpText) gpText.textContent = `${visitedTotal}/${totalSpots} จุด (${pct}%)`;
+            if (gpBar) gpBar.style.width = `${pct}%`;
+
+            const soloLabel = document.getElementById('nav-solo-label');
+            if (soloLabel) soloLabel.textContent = `Solo Log (${soloEvents.length})`;
+
+            const cafes = getAllCafeFoodItems();
+            const visitedCafes = cafes.filter(c => completedIds[c.id]).length;
+            const cafeCountEl = document.getElementById('cafe-visited-count');
+            const navCafeEl = document.getElementById('nav-cafe-label');
+            if (cafeCountEl) cafeCountEl.textContent = `เช็กอินแล้ว ${visitedCafes}/${cafes.length} ร้าน`;
+            if (navCafeEl) navCafeEl.textContent = `2. คาเฟ่ & ร้านอาหาร (${cafes.length})`;
+
+            const stamps = getAllStamps();
+            const visitedStamps = stamps.filter(s => completedIds[s.id]).length;
+            const stTotalEl = document.getElementById('stamp-total-label');
+            const stCountEl = document.getElementById('stamp-count');
+            const stBarEl = document.getElementById('stamp-progress-bar');
+            if (stTotalEl) stTotalEl.textContent = stamps.length;
+            if (stCountEl) stCountEl.textContent = `${visitedStamps}/${stamps.length}`;
+            if (stBarEl) stBarEl.style.width = `${stamps.length ? Math.round((visitedStamps / stamps.length) * 100) : 0}%`;
+
+            const gachas = getAllGacha();
+            const allGachaFree = [...gachas, ...baseFreebieItems];
+            const visitedGacha = allGachaFree.filter(g => completedIds[g.id]).length;
+            const gcCountEl = document.getElementById('gacha-count');
+            if (gcCountEl) gcCountEl.textContent = `${visitedGacha}/${allGachaFree.length}`;
+
+            const navMapEl = document.getElementById('nav-map-label');
+            if (navMapEl) navMapEl.textContent = `6. พิกัดทั้งหมด (${getAllPlaces().length})`;
+        }
+
+        function switchTab(tabName) {
+            if (tabName === 'traveler' && !isTravelerUnlocked) {
+                openPinModal();
+                return;
+            }
+            document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabName}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.tab === tabName) {
+                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold';
+                } else {
+                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium';
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openPinModal() {
+            const input = document.getElementById('pin-input');
+            const err = document.getElementById('pin-error');
+            if (input) input.value = '';
+            if (err) err.classList.add('hidden');
+            const modal = document.getElementById('pin-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => input && input.focus(), 100);
+        }
+
+        function closePinModal() {
+            const modal = document.getElementById('pin-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function verifyTravelerPin(e) {
+            e.preventDefault();
+            const val = document.getElementById('pin-input').value.trim();
+            if (val === TRAVELER_PIN) {
+                isTravelerUnlocked = true;
+                closePinModal();
+                renderTravelerTab();
+                switchTab('traveler');
+                showToast('ปลดล็อกข้อมูลผู้เดินทางแล้ว');
+            } else {
+                document.getElementById('pin-error').classList.remove('hidden');
+            }
+        }
+
+        function lockTravelerTab() {
+            isTravelerUnlocked = false;
+            switchTab('daily');
+            showToast('ล็อกหน้าข้อมูลผู้เดินทางแล้ว');
+        }
+
+        function saveTravelerInfo() {
+            travelerData.travelers.forEach((t, idx) => {
+                t.fullName = document.getElementById(`t-fullname-${idx}`)?.value.trim() || '';
+                t.nickname = document.getElementById(`t-nickname-${idx}`)?.value.trim() || '';
+                t.passportNo = document.getElementById(`t-passport-${idx}`)?.value.trim() || '';
+                t.dob = document.getElementById(`t-dob-${idx}`)?.value.trim() || '';
+                t.expiryDate = document.getElementById(`t-expiry-${idx}`)?.value.trim() || '';
+                t.flights = {
+                    outNo: document.getElementById(`t-flight-out-no-${idx}`)?.value.trim() || '',
+                    outPnr: document.getElementById(`t-flight-out-pnr-${idx}`)?.value.trim() || '',
+                    outTime: document.getElementById(`t-flight-out-time-${idx}`)?.value.trim() || '',
+                    outSeat: document.getElementById(`t-flight-out-seat-${idx}`)?.value.trim() || '',
+                    inNo: document.getElementById(`t-flight-in-no-${idx}`)?.value.trim() || '',
+                    inPnr: document.getElementById(`t-flight-in-pnr-${idx}`)?.value.trim() || '',
+                    inTime: document.getElementById(`t-flight-in-time-${idx}`)?.value.trim() || '',
+                    inSeat: document.getElementById(`t-flight-in-seat-${idx}`)?.value.trim() || ''
+                };
+            });
+            travelerData.notes = {
+                busanHotel: document.getElementById('note-busan-hotel')?.value.trim() || '',
+                seoulHotel: document.getElementById('note-seoul-hotel')?.value.trim() || '',
+                insurance: document.getElementById('note-insurance')?.value.trim() || '',
+                esim: document.getElementById('note-esim')?.value.trim() || '',
+                general: document.getElementById('note-general')?.value.trim() || ''
+            };
+            travelerData.lastSaved = getCheckinTimestamp();
+            bumpMinorVersion();
+            saveState();
+            renderTravelerTab();
+            showToast('บันทึกข้อมูลผู้เดินทางเรียบร้อยแล้ว!');
+        }
+
+        async function handlePassportUpload(e, idx) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            showToast('กำลังอัปโหลดและย่อรูปพาสปอร์ต...');
+            const compressed = await compressImageFile(file, 900, 0.8);
+            if (compressed) {
+                travelerData.travelers[idx].passportImg = compressed;
+                saveState();
+                renderTravelerTab();
+                showToast('อัปโหลดรูปพาสปอร์ตเรียบร้อยแล้ว');
+            }
+        }
+
+        function removePassportImage(idx) {
+            travelerData.travelers[idx].passportImg = '';
+            saveState();
+            renderTravelerTab();
+            showToast('ลบรูปพาสปอร์ตแล้ว');
+        }
+
+        function openImageViewer(src) {
+            const img = document.getElementById('viewer-img');
+            const modal = document.getElementById('image-viewer-modal');
+            if (img && modal) {
+                img.src = src;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeImageViewer() {
+            const modal = document.getElementById('image-viewer-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function openVersionModal() {
+            const modal = document.getElementById('version-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeVersionModal() {
+            const modal = document.getElementById('version-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openConfirmModal(message, onConfirm) {
+            document.getElementById('confirm-modal-text').textContent = message;
+            pendingConfirmCallback = onConfirm;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.getElementById('confirm-modal-yes').onclick = () => {
+                closeConfirmModal();
+                if (typeof pendingConfirmCallback === 'function') pendingConfirmCallback();
+            };
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function resetAllProgress() {
+            completedIds = {};
+            checkinNotes = {};
+            placePhotos = {};
+            noteAuthors = {};
+            saveState();
+            refreshAllViews();
+            showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
+        }
+
+        function exportScrapbookHTML() {
+            const soloItems = userCustomPlaces
+                .filter(cp => cp.addSolo)
+                .sort((a, b) => (a.soloDate || '').localeCompare(b.soloDate || ''));
+            const dailyPlans = getDailyPlanWithCustom();
+
+            const authorPill = (a) => {
+                if (a === 'PPWR') return '<span style="background:#f3e8ff;color:#6b21a8;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">💜 PPWR</span>';
+                if (a === 'PPSR') return '<span style="background:#e0f2fe;color:#075985;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">💙 PPSR</span>';
+                if (a === 'BOTH') return '<span style="background:#f1f5f9;color:#334155;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">👫 PPWR &amp; PPSR</span>';
+                return '';
+            };
+
+            const renderPhotosPrint = (photos) => {
+                if (!Array.isArray(photos) || !photos.length) return '';
+                return `<div style="display:grid;grid-template-columns:repeat(${Math.min(photos.length, 3)},1fr);gap:8px;margin-top:10px;">
+                    ${photos.map(src => `<img src="${src}" style="width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid #e2e8f0;">`).join('')}
+                </div>`;
+            };
+
+            let soloHtml = '';
+            if (soloItems.length > 0) {
+                soloHtml = `<h2 style="margin-top:28px;color:#6b21a8;border-bottom:2px solid #e9d5ff;padding-bottom:6px;">✨ ช่วงเดินทางล่วงหน้า: Solo Log (30 พ.ย. – 5 ธ.ค. 2569)</h2>` +
+                    soloItems.map(cp => {
+                        const key = `solo_${cp.id}`;
+                        const meta = soloDaysMeta.find(m => m.dateKey === cp.soloDate);
+                        const visited = completedIds[key];
+                        const note = checkinNotes[key];
+                        const photos = placePhotos[key] || [];
+                        const author = noteAuthors[key] || cp.author || 'PPWR';
+                        return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+                                <div><strong>${meta ? meta.label : ''}</strong> ${cp.soloTime ? '• ' + cp.soloTime : ''} ${authorPill(author)}</div>
+                                ${visited ? `<span style="color:#059669;font-weight:800;font-size:11px;border:1.5px solid #059669;padding:2px 8px;border-radius:6px;">VISITED ✓</span>` : ''}
+                            </div>
+                            <div style="font-size:15px;font-weight:700;">${cp.name}</div>
+                            ${cp.addr ? `<p style="font-size:13px;color:#475569;margin:4px 0;">${cp.addr}</p>` : ''}
+                            ${note ? `<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;font-size:12px;margin-top:6px;"><strong>บันทึก:</strong> ${note}</div>` : ''}
+                            ${renderPhotosPrint(photos)}
+                        </div>`;
+                    }).join('');
+            }
+
+            const dailyHtml = dailyPlans.map(d => {
+                const evHtml = d.events.map(ev => {
+                    const visited = completedIds[ev.id];
+                    const note = checkinNotes[ev.id];
+                    const photos = placePhotos[ev.id] || [];
+                    const author = noteAuthors[ev.id] || ev.author || '';
+                    return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+                            <div style="font-size:12px;color:#2563eb;font-weight:700;">${ev.time} ${authorPill(author)}</div>
+                            ${visited ? `<span style="color:#059669;font-weight:800;font-size:11px;border:1.5px solid #059669;padding:2px 8px;border-radius:6px;">VISITED ✓ ${typeof visited === 'string' ? visited : ''}</span>` : ''}
+                        </div>
+                        <div style="font-size:15px;font-weight:700;">${ev.title}</div>
+                        <p style="font-size:13px;color:#475569;margin:4px 0;">${ev.desc}</p>
+                        ${note ? `<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;font-size:12px;margin-top:6px;"><strong>บันทึกความทรงจำ:</strong> ${note}</div>` : ''}
+                        ${renderPhotosPrint(photos)}
+                    </div>`;
+                }).join('');
+                return `<h2 style="margin-top:28px;color:#0f172a;border-bottom:2px solid #cbd5e1;padding-bottom:6px;">Day ${d.day} (${d.date} 2569) • ${d.city} — ${d.title}</h2>${evHtml}`;
+            }).join('');
+
+            const win = window.open('', '_blank');
+            if (!win) {
+                showToast('กรุณาอนุญาต Pop-up เพื่อเปิดหน้า Export Scrapbook');
+                return;
+            }
+            win.document.write(`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>PP_R in KOREA 2026 - Travel Scrapbook</title>
+                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700;800&display=swap" rel="stylesheet">
+                <style>body{font-family:'Noto Sans Thai',sans-serif;max-width:820px;margin:0 auto;padding:24px;background:#f8fafc;color:#0f172a;}@media print{.no-print{display:none;}body{background:#fff;padding:0;}}</style>
+                </head><body>
+                <div class="no-print" style="background:#0f172a;color:#fff;padding:14px 20px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <div><strong>📖 PP_R in KOREA 2026 Scrapbook</strong><div style="font-size:12px;color:#94a3b8;">กดปุ่มด้านขวาเพื่อพิมพ์หรือบันทึกเป็นไฟล์ PDF</div></div>
+                    <button onclick="window.print()" style="background:#38bdf8;color:#0f172a;border:none;padding:10px 18px;border-radius:12px;font-weight:800;cursor:pointer;">🖨️ พิมพ์ / Save PDF</button>
+                </div>
+                <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:24px;">
+                    <div style="font-size:34px;">🇰🇷📸</div>
+                    <h1 style="margin:6px 0;font-size:28px;">PP_R in KOREA 2026</h1>
+                    <p style="margin:0;color:#bae6fd;font-size:14px;">สมุดบันทึกการเดินทาง PPWR &amp; PPSR • 30 พ.ย. – 12 ธ.ค. 2569</p>
+                </div>
+                ${soloHtml}
+                ${dailyHtml}
+                </body></html>`);
+            win.document.close();
+        }
+
+        const soloDaysMeta = [
+            { dateKey: '2026-11-30', shortDate: '30 พ.ย.', label: 'จ. 30 พ.ย. 2569', subtitle: 'วันที่ 30 พ.ย. 2569' },
+            { dateKey: '2026-12-01', shortDate: '1 ธ.ค.', label: 'อ. 1 ธ.ค. 2569', subtitle: 'วันที่ 1 ธ.ค. 2569' },
+            { dateKey: '2026-12-02', shortDate: '2 ธ.ค.', label: 'พ. 2 ธ.ค. 2569', subtitle: 'วันที่ 2 ธ.ค. 2569' },
+            { dateKey: '2026-12-03', shortDate: '3 ธ.ค.', label: 'พฤ. 3 ธ.ค. 2569', subtitle: 'วันที่ 3 ธ.ค. 2569' },
+            { dateKey: '2026-12-04', shortDate: '4 ธ.ค.', label: 'ศ. 4 ธ.ค. 2569', subtitle: 'วันที่ 4 ธ.ค. 2569' },
+            { dateKey: '2026-12-05', shortDate: '5 ธ.ค.', label: 'ส. 5 ธ.ค. 2569', subtitle: 'วันที่ 5 ธ.ค. 2569' }
+        ];
+
+        function renderAuthorBadge(author) {
+            if (author === 'PPWR') {
+                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">💜 PPWR</span>`;
+            }
+            if (author === 'PPSR') {
+                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800 border border-sky-200">💙 PPSR</span>`;
+            }
+            if (author === 'BOTH') {
+                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">👫 PPWR &amp; PPSR</span>`;
+            }
+            return '';
+        }
+
+        function compressImageFile(file, maxWidth = 800, quality = 0.75) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxWidth) {
+                            h = Math.round((h * maxWidth) / w);
+                            w = maxWidth;
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = () => resolve(null);
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderPhotoGalleryHtml(photos) {
+            if (!Array.isArray(photos) || photos.length === 0) return '';
+            const gridCols = photos.length === 1 ? 'grid-cols-1 max-w-xs' : photos.length === 2 ? 'grid-cols-2' : 'grid-cols-3';
+            return `
+                <div class="mt-2.5 grid ${gridCols} gap-2">
+                    ${photos.map((src, idx) => `
+                        <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 aspect-square group">
+                            <img src="${src}" onclick="openImageViewer('${src}')" alt="Memory Photo ${idx + 1}" class="w-full h-full object-cover cursor-zoom-in group-hover:scale-105 transition duration-300">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
 
         // ---------------------------------------------------------
         // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (44+ SPOTS)
@@ -1385,6 +2022,8 @@
                 updatedAtTs: lastSyncTimestamp,
                 checked: completedIds,
                 checkinNotes: checkinNotes,
+                placePhotos: placePhotos,
+                noteAuthors: noteAuthors,
                 customPlaces: userCustomPlaces,
                 travelerData: travelerData,
                 eventOverrides: eventOverrides,
@@ -1397,6 +2036,8 @@
             isApplyingRemote = true;
             if (parsed.checked) completedIds = parsed.checked;
             if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
+            if (parsed.placePhotos) placePhotos = parsed.placePhotos;
+            if (parsed.noteAuthors) noteAuthors = parsed.noteAuthors;
             if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
             if (parsed.travelerData) {
                 travelerData = {
@@ -1422,6 +2063,8 @@
 
             localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
             localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
+            localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
+            localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
             localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
             localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
@@ -1470,33 +2113,66 @@
         }
 
         // ---------------------------------------------------------
-        // CUSTOM CONFIRM MODAL (NO BROWSER ALERTS)
+        // CHECK-IN & MEMORY NOTE HANDLERS (WITH PHOTOS & AUTHOR TAG)
         // ---------------------------------------------------------
-        function openConfirmModal(msg, onConfirm) {
-            document.getElementById('confirm-modal-text').textContent = msg;
-            document.getElementById('confirm-modal-yes').onclick = () => {
-                closeConfirmModal();
-                onConfirm();
-            };
-            const m = document.getElementById('confirm-modal');
-            m.classList.remove('hidden');
-            m.classList.add('flex');
+        function renderNotePhotoGrid() {
+            const grid = document.getElementById('note-photo-grid');
+            const countEl = document.getElementById('note-photo-count');
+            if (!grid || !countEl) return;
+            countEl.textContent = `${tempNotePhotos.length}/3 รูป`;
+
+            let html = tempNotePhotos.map((src, idx) => `
+                <div class="relative aspect-square rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeTempNotePhoto(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-x text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            if (tempNotePhotos.length < 3) {
+                html += `
+                    <button type="button" onclick="document.getElementById('note-photo-input').click()" class="aspect-square rounded-2xl border-2 border-dashed border-slate-200 hover:border-amber-400 bg-slate-50 flex flex-col items-center justify-center text-slate-400 hover:text-amber-600 transition cursor-pointer">
+                        <i class="ph-bold ph-camera-plus text-xl"></i>
+                        <span class="text-[10px] font-bold mt-1">เพิ่มรูป</span>
+                    </button>
+                `;
+            }
+            grid.innerHTML = html;
         }
 
-        function closeConfirmModal() {
-            const m = document.getElementById('confirm-modal');
-            m.classList.add('hidden');
-            m.classList.remove('flex');
+        async function handleNotePhotosUpload(e) {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+            const remaining = 3 - tempNotePhotos.length;
+            const selected = files.slice(0, remaining);
+            showToast('กำลังย่อขนาดรูปภาพ...');
+            for (const f of selected) {
+                const compressed = await compressImageFile(f, 800, 0.75);
+                if (compressed) tempNotePhotos.push(compressed);
+            }
+            e.target.value = '';
+            renderNotePhotoGrid();
         }
 
-        // ---------------------------------------------------------
-        // CHECK-IN & MEMORY NOTE HANDLERS
-        // ---------------------------------------------------------
+        function removeTempNotePhoto(idx) {
+            tempNotePhotos.splice(idx, 1);
+            renderNotePhotoGrid();
+        }
+
         function openNoteModal(itemId, title) {
             document.getElementById('note-modal-item-id').value = itemId;
             document.getElementById('note-modal-place-title').textContent = title;
             document.getElementById('note-modal-text').value = checkinNotes[itemId] || '';
             document.getElementById('note-modal-mark-visited').checked = true;
+
+            const savedAuthor = noteAuthors[itemId] || 'BOTH';
+            const radio = document.querySelector(`input[name="note-author"][value="${savedAuthor}"]`);
+            if (radio) radio.checked = true;
+
+            tempNotePhotos = Array.isArray(placePhotos[itemId]) ? [...placePhotos[itemId]] : [];
+            renderNotePhotoGrid();
+
             const modal = document.getElementById('note-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -1514,12 +2190,21 @@
             const itemId = document.getElementById('note-modal-item-id').value;
             const text = document.getElementById('note-modal-text').value.trim();
             const markVisited = document.getElementById('note-modal-mark-visited').checked;
+            const authorVal = document.querySelector('input[name="note-author"]:checked')?.value || 'BOTH';
 
             if (text) {
                 checkinNotes[itemId] = text;
             } else {
                 delete checkinNotes[itemId];
             }
+
+            if (tempNotePhotos.length > 0) {
+                placePhotos[itemId] = [...tempNotePhotos];
+            } else {
+                delete placePhotos[itemId];
+            }
+
+            noteAuthors[itemId] = authorVal;
 
             if (markVisited && !completedIds[itemId]) {
                 completedIds[itemId] = getCheckinTimestamp();
@@ -1528,7 +2213,7 @@
             saveState();
             closeNoteModal();
             refreshAllViews();
-            showToast('บันทึกความทรงจำเรียบร้อยแล้ว!');
+            showToast('บันทึกความทรงจำและรูปภาพเรียบร้อยแล้ว!');
         }
 
         // ---------------------------------------------------------
@@ -1616,26 +2301,108 @@
         // ---------------------------------------------------------
         // ADD / EDIT PLACE MODAL & BACKUP MODAL FUNCTIONS
         // ---------------------------------------------------------
+        function renderAddPhotoGrid() {
+            const grid = document.getElementById('add-photo-grid');
+            const countEl = document.getElementById('add-photo-count');
+            if (!grid || !countEl) return;
+            countEl.textContent = `${tempAddPhotos.length}/3 รูป`;
+
+            let html = tempAddPhotos.map((src, idx) => `
+                <div class="relative aspect-square rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeTempAddPhoto(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-x text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            if (tempAddPhotos.length < 3) {
+                html += `
+                    <button type="button" onclick="document.getElementById('add-photo-input').click()" class="aspect-square rounded-2xl border-2 border-dashed border-slate-200 hover:border-royal bg-slate-50 flex flex-col items-center justify-center text-slate-400 hover:text-royal transition cursor-pointer">
+                        <i class="ph-bold ph-camera-plus text-xl"></i>
+                        <span class="text-[10px] font-bold mt-1">เพิ่มรูป</span>
+                    </button>
+                `;
+            }
+            grid.innerHTML = html;
+        }
+
+        async function handleAddPhotosUpload(e) {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+            const remaining = 3 - tempAddPhotos.length;
+            const selected = files.slice(0, remaining);
+            showToast('กำลังย่อขนาดรูปภาพ...');
+            for (const f of selected) {
+                const compressed = await compressImageFile(f, 800, 0.75);
+                if (compressed) tempAddPhotos.push(compressed);
+            }
+            e.target.value = '';
+            renderAddPhotoGrid();
+        }
+
+        function removeTempAddPhoto(idx) {
+            tempAddPhotos.splice(idx, 1);
+            renderAddPhotoGrid();
+        }
+
+        function toggleSoloFields() {
+            const checked = document.getElementById('chk-add-solo').checked;
+            const box = document.getElementById('solo-extra-fields');
+            if (checked) {
+                box.classList.remove('hidden');
+                box.classList.add('grid');
+            } else {
+                box.classList.add('hidden');
+                box.classList.remove('grid');
+            }
+        }
+
         function openAddCafeModal() {
             openAddModal();
             document.getElementById('chk-add-cafe').checked = true;
             toggleCafeCategoryField();
         }
 
+        function openAddSoloModal(presetSoloDate = null) {
+            openAddModal();
+            const ppwrRadio = document.querySelector('input[name="place-author"][value="PPWR"]');
+            if (ppwrRadio) ppwrRadio.checked = true;
+            document.getElementById('chk-add-solo').checked = true;
+            toggleSoloFields();
+            const targetDate = (presetSoloDate && presetSoloDate !== 'ALL')
+                ? presetSoloDate
+                : (currentSoloDate !== 'ALL' ? currentSoloDate : '2026-11-30');
+            document.getElementById('input-solo-date').value = targetDate;
+            document.getElementById('chk-add-daily').checked = false;
+            toggleDailyFields();
+            document.getElementById('input-kr').required = false;
+            document.getElementById('input-kr').placeholder = 'ชื่อเกาหลี / อังกฤษสำหรับเปิดแผนที่ (ไม่ใส่ก็ได้)';
+        }
+
         function openAddModal(presetDay = null, editId = null) {
             const modal = document.getElementById('add-modal');
             const form = document.getElementById('add-place-form');
             form.reset();
+            document.getElementById('input-kr').required = true;
+            document.getElementById('input-kr').placeholder = 'เช่น 홍대 카페 (ใช้เปิดแผนที่ Naver Map)';
             document.getElementById('edit-place-id').value = editId || '';
             document.getElementById('input-custom-zone').classList.add('hidden');
             document.getElementById('daily-extra-fields').classList.remove('hidden');
             document.getElementById('daily-extra-fields').classList.add('grid');
+            document.getElementById('solo-extra-fields').classList.add('hidden');
+            document.getElementById('solo-extra-fields').classList.remove('grid');
             document.getElementById('cafe-category-box').classList.add('hidden');
+            tempAddPhotos = [];
 
             if (editId) {
                 const target = userCustomPlaces.find(p => p.id === editId);
                 if (target) {
                     document.getElementById('modal-title').innerHTML = '<i class="ph-fill ph-pencil-simple text-royal text-xl"></i> แก้ไขบันทึกสถานที่';
+                    const authorVal = target.author || 'BOTH';
+                    const radio = document.querySelector(`input[name="place-author"][value="${authorVal}"]`);
+                    if (radio) radio.checked = true;
+
                     document.getElementById('input-name').value = target.name || '';
                     document.getElementById('input-kr').value = target.kr || '';
                     const zoneSelect = document.getElementById('input-zone');
@@ -1648,7 +2415,21 @@
                         document.getElementById('input-custom-zone').classList.remove('hidden');
                     }
                     document.getElementById('input-addr').value = target.addr || '';
-                    document.getElementById('chk-auto-checkin').checked = !!completedIds[`ev_${editId}`] || !!completedIds[`cf_${editId}`];
+                    tempAddPhotos = Array.isArray(placePhotos[`ev_${editId}`])
+                        ? [...placePhotos[`ev_${editId}`]]
+                        : Array.isArray(placePhotos[`solo_${editId}`])
+                        ? [...placePhotos[`solo_${editId}`]]
+                        : Array.isArray(placePhotos[`cf_${editId}`])
+                        ? [...placePhotos[`cf_${editId}`]]
+                        : [];
+
+                    document.getElementById('chk-auto-checkin').checked = !!completedIds[`ev_${editId}`] || !!completedIds[`solo_${editId}`] || !!completedIds[`cf_${editId}`];
+                    document.getElementById('chk-add-solo').checked = !!target.addSolo;
+                    toggleSoloFields();
+                    if (target.addSolo) {
+                        document.getElementById('input-solo-date').value = target.soloDate || '2026-11-30';
+                        document.getElementById('input-solo-time').value = target.soloTime || '';
+                    }
                     document.getElementById('chk-add-cafe').checked = !!target.addCafe;
                     if (target.addCafe) {
                         toggleCafeCategoryField();
@@ -1671,6 +2452,7 @@
                 document.getElementById('input-day').value = String(presetDay || currentDay || 1);
             }
 
+            renderAddPhotoGrid();
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
@@ -1717,6 +2499,7 @@
         function handleSavePlace(e) {
             e.preventDefault();
             const editId = document.getElementById('edit-place-id').value;
+            const author = document.querySelector('input[name="place-author"]:checked')?.value || 'BOTH';
             const name = document.getElementById('input-name').value.trim();
             const kr = document.getElementById('input-kr').value.trim();
             const zoneSel = document.getElementById('input-zone').value;
@@ -1724,6 +2507,9 @@
             const zone = zoneSel === 'OTHER' ? (customZone || 'อื่นๆ') : zoneSel;
             const addr = document.getElementById('input-addr').value.trim();
             const autoCheckin = document.getElementById('chk-auto-checkin').checked;
+            const addSolo = document.getElementById('chk-add-solo').checked;
+            const soloDate = document.getElementById('input-solo-date').value;
+            const soloTime = document.getElementById('input-solo-time').value.trim();
             const addCafe = document.getElementById('chk-add-cafe').checked;
             const cafeType = document.getElementById('input-cafe-type').value;
             const addDaily = document.getElementById('chk-add-daily').checked;
@@ -1736,23 +2522,35 @@
             if (editId) {
                 const idx = userCustomPlaces.findIndex(p => p.id === editId);
                 if (idx !== -1) {
-                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], name, kr, zone, addr, addCafe, cafeType, addDaily, day, time, addStamp, addGacha };
+                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addDaily, day, time, addStamp, addGacha };
                     lastAddedId = editId;
                 }
             } else {
                 targetId = 'custom_' + Date.now();
-                userCustomPlaces.unshift({ id: targetId, name, kr, zone, addr, addCafe, cafeType, addDaily, day, time, addStamp, addGacha });
+                userCustomPlaces.unshift({ id: targetId, author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addDaily, day, time, addStamp, addGacha });
                 lastAddedId = targetId;
             }
+
+            const linkedKeys = [`ev_${targetId}`, `solo_${targetId}`, `cf_${targetId}`, `st_${targetId}`, `gc_${targetId}`];
+            linkedKeys.forEach(k => {
+                noteAuthors[k] = author;
+                if (tempAddPhotos.length > 0) {
+                    placePhotos[k] = [...tempAddPhotos];
+                } else {
+                    delete placePhotos[k];
+                }
+            });
 
             if (autoCheckin) {
                 const stampTime = getCheckinTimestamp();
                 if (addDaily) completedIds[`ev_${targetId}`] = stampTime;
+                if (addSolo) completedIds[`solo_${targetId}`] = stampTime;
                 if (addCafe) completedIds[`cf_${targetId}`] = stampTime;
                 if (addStamp) completedIds[`st_${targetId}`] = stampTime;
                 if (addGacha) completedIds[`gc_${targetId}`] = stampTime;
             }
 
+            if (addSolo && currentSoloDate !== 'ALL') currentSoloDate = soloDate;
             if (addDaily) currentDay = Number(day);
             bumpMinorVersion();
             saveState();
@@ -1763,10 +2561,12 @@
 
         function deleteCustomPlace(id) {
             userCustomPlaces = userCustomPlaces.filter(p => p.id !== id);
-            delete completedIds[`ev_${id}`];
-            delete completedIds[`cf_${id}`];
-            delete completedIds[`st_${id}`];
-            delete completedIds[`gc_${id}`];
+            ['ev_', 'solo_', 'cf_', 'st_', 'gc_'].forEach(prefix => {
+                delete completedIds[`${prefix}${id}`];
+                delete placePhotos[`${prefix}${id}`];
+                delete noteAuthors[`${prefix}${id}`];
+                delete checkinNotes[`${prefix}${id}`];
+            });
             bumpMinorVersion();
             saveState();
             refreshAllViews();
@@ -1798,6 +2598,8 @@
                 const parsed = JSON.parse(raw);
                 if (parsed.checked) completedIds = parsed.checked;
                 if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
+                if (parsed.placePhotos) placePhotos = parsed.placePhotos;
+                if (parsed.noteAuthors) noteAuthors = parsed.noteAuthors;
                 if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
                 if (parsed.travelerData) travelerData = parsed.travelerData;
                 if (parsed.eventOverrides) eventOverrides = parsed.eventOverrides;
@@ -1811,397 +2613,158 @@
             }
         }
 
-        function openVersionModal() {
-            document.getElementById('version-modal').classList.remove('hidden');
-            document.getElementById('version-modal').classList.add('flex');
-        }
-
-        function closeVersionModal() {
-            const modal = document.getElementById('version-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function getThaiDateShort() {
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = new Date();
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
-        }
-
-        function getCheckinTimestamp() {
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = new Date();
-            const hh = String(d.getHours()).padStart(2, '0');
-            const mm = String(d.getMinutes()).padStart(2, '0');
-            return `${d.getDate()} ${months[d.getMonth()]} ${hh}:${mm}`;
-        }
-
-        function renderVersionBadge() {
-            const el = document.getElementById('version-text');
-            if (el) {
-                el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
-            }
-        }
-
-        function bumpMinorVersion() {
-            versionState.minor = (Number(versionState.minor) || 0) + 1;
-            versionState.updatedAt = getThaiDateShort();
-        }
-
-        function saveState() {
-            lastSyncTimestamp = Date.now();
-            localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
-            localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
-            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
-            localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
-            localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
-            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
-            localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
-            renderVersionBadge();
-            updateProgressUI();
-
-            if (dbRef && !isApplyingRemote) {
-                updateCloudSyncBadge('syncing', 'Syncing...');
-                dbRef.set(buildSyncPayload())
-                    .then(() => updateCloudSyncBadge('live', 'Cloud Synced'))
-                    .catch(() => updateCloudSyncBadge('offline', 'Offline (Saved Local)'));
-            }
-        }
-
-        function toggleCheck(id) {
-            if (completedIds[id]) {
-                delete completedIds[id];
-                showToast('ยกเลิกการเช็กอินจุดนี้แล้ว');
-            } else {
-                completedIds[id] = getCheckinTimestamp();
-                showToast('เช็กอินสำเร็จ! ประทับตรา VISITED แล้ว');
-            }
-            saveState();
-        }
-
-        function resetAllProgress() {
-            completedIds = {};
-            checkinNotes = {};
-            saveState();
-            refreshAllViews();
-            showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
-        }
-
-        function copyText(text) {
-            if (!text) return;
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showToast(`คัดลอก "${text.length > 28 ? text.slice(0, 28) + '...' : text}" แล้ว!`);
-            } catch (err) {
-                showToast('ไม่สามารถคัดลอกข้อความได้');
-            }
-            document.body.removeChild(textarea);
-        }
-
-        let toastTimeout = null;
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
-            if (!toast || !toastMsg) return;
-            toastMsg.textContent = msg;
-            toast.classList.remove('opacity-0', 'translate-y-4');
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-4');
-            }, 2600);
-        }
-
-        function getDailyPlanWithCustom() {
-            const cloned = JSON.parse(JSON.stringify(baseDailyPlans));
-
-            cloned.forEach(dayObj => {
-                dayObj.events.forEach(ev => {
-                    if (eventOverrides[ev.id]) {
-                        const ov = eventOverrides[ev.id];
-                        ev.isEdited = true;
-                        if (ov.time) ev.time = ov.time;
-                        if (ov.transit) ev.transit = ov.transit;
-                        if (ov.title) ev.title = ov.title;
-                        if (ov.desc !== undefined) ev.desc = ov.desc;
-                    }
-                });
-            });
-
-            userCustomPlaces.forEach(cp => {
-                if (cp.addDaily) {
-                    const targetDay = cloned.find(d => d.day === Number(cp.day));
-                    if (targetDay) {
-                        targetDay.events.push({
-                            id: `ev_${cp.id}`,
-                            customId: cp.id,
-                            isCustom: true,
-                            time: cp.time || 'แวะระหว่างวัน',
-                            transit: cp.zone,
-                            title: cp.name,
-                            desc: cp.addr || 'จุดแวะใหม่ที่บันทึกเพิ่มระหว่างเดินทาง',
-                            places: [{ name: cp.name, kr: cp.kr }]
-                        });
-                    }
-                }
-            });
-            return cloned;
-        }
-
-        function getAllCafeFoodItems() {
-            const customCafes = userCustomPlaces
-                .filter(cp => cp.addCafe)
-                .map(cp => ({
-                    id: `cf_${cp.id}`,
-                    customId: cp.id,
-                    isCustom: true,
-                    zone: cp.zone,
-                    type: cp.cafeType || 'คาเฟ่ / กาแฟ',
-                    name: cp.name,
-                    kr: cp.kr,
-                    menu: cp.addr || 'ร้านที่บันทึกเพิ่มใหม่',
-                    note: cp.addDaily ? `บันทึกไว้ใน Day ${cp.day}` : 'เพิ่มใหม่'
-                }));
-            return [...customCafes, ...baseCafeFoodItems];
-        }
-
-        function getAllStamps() {
-            const customStamps = userCustomPlaces
-                .filter(cp => cp.addStamp)
-                .map(cp => ({
-                    id: `st_${cp.id}`,
-                    day: cp.addDaily ? `Day ${cp.day}` : cp.zone,
-                    name: cp.name,
-                    loc: cp.addr || 'จุดเก็บ Stamp ที่เพิ่มใหม่',
-                    kr: cp.kr
-                }));
-            return [...customStamps, ...baseStampItems];
-        }
-
-        function getAllGacha() {
-            const customGacha = userCustomPlaces
-                .filter(cp => cp.addGacha)
-                .map(cp => ({
-                    id: `gc_${cp.id}`,
-                    tag: cp.zone,
-                    name: cp.name,
-                    desc: cp.addr || 'พิกัดกาชาปอง / ของฟรีที่เพิ่มใหม่',
-                    kr: cp.kr
-                }));
-            return [...customGacha, ...baseGachaItems];
-        }
-
-        function getAllPlaces() {
-            const customMapped = userCustomPlaces.map(cp => ({
-                id: cp.id,
-                isCustom: true,
-                name: cp.name,
-                kr: cp.kr,
-                zone: cp.zone,
-                addr: cp.addr
-            }));
-            return [...customMapped, ...baseNaverPlaces];
-        }
-
-        function updateProgressUI() {
-            const allEvents = getDailyPlanWithCustom().flatMap(d => d.events);
-            const allCafes = getAllCafeFoodItems();
-            const allStamps = getAllStamps();
-            const allGachas = [...getAllGacha(), ...baseFreebieItems];
-
-            const totalItems = allEvents.length + allCafes.length + allStamps.length + allGachas.length;
-            const checkedEvents = allEvents.filter(e => completedIds[e.id]).length;
-            const checkedCafes = allCafes.filter(c => completedIds[c.id]).length;
-            const checkedStamps = allStamps.filter(s => completedIds[s.id]).length;
-            const checkedGachas = allGachas.filter(g => completedIds[g.id]).length;
-
-            const totalChecked = checkedEvents + checkedCafes + checkedStamps + checkedGachas;
-            const pct = totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
-
-            const globalText = document.getElementById('global-progress-text');
-            const globalBar = document.getElementById('global-progress-bar');
-            if (globalText) globalText.textContent = `${totalChecked}/${totalItems} จุด (${pct}%)`;
-            if (globalBar) globalBar.style.width = `${pct}%`;
-
-            const cafeVisitedEl = document.getElementById('cafe-visited-count');
-            if (cafeVisitedEl) cafeVisitedEl.textContent = `เช็กอินแล้ว ${checkedCafes}/${allCafes.length} ร้าน`;
-
-            const stampTotalEl = document.getElementById('stamp-total-label');
-            const stampCountEl = document.getElementById('stamp-count');
-            const stampBarEl = document.getElementById('stamp-progress-bar');
-            if (stampTotalEl) stampTotalEl.textContent = allStamps.length;
-            if (stampCountEl) stampCountEl.textContent = `${checkedStamps}/${allStamps.length}`;
-            if (stampBarEl) stampBarEl.style.width = `${allStamps.length ? Math.round((checkedStamps / allStamps.length) * 100) : 0}%`;
-
-            const gachaCountEl = document.getElementById('gacha-count');
-            if (gachaCountEl) gachaCountEl.textContent = `${checkedGachas}/${allGachas.length}`;
-
-            const navCafeLabel = document.getElementById('nav-cafe-label');
-            if (navCafeLabel) navCafeLabel.textContent = `2. คาเฟ่ & ร้านอาหาร (${allCafes.length})`;
-
-            const navLabel = document.getElementById('nav-map-label');
-            if (navLabel) navLabel.textContent = `6. พิกัดทั้งหมด (${getAllPlaces().length})`;
-        }
-
         // ---------------------------------------------------------
-        // PIN SECURITY LOGIC FOR TRAVELER TAB
+        // RENDER SOLO LOG TAB (30 NOV - 5 DEC) - FREE-FORM LOG
         // ---------------------------------------------------------
-        function openPinModal() {
-            const modal = document.getElementById('pin-modal');
-            const input = document.getElementById('pin-input');
-            const err = document.getElementById('pin-error');
-            input.value = '';
-            err.classList.add('hidden');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => input.focus(), 100);
-        }
+        function renderSoloLog() {
+            const soloEntries = userCustomPlaces.filter(cp => cp.addSolo);
+            const pillsEl = document.getElementById('solo-day-pills');
+            if (pillsEl) {
+                const allActive = currentSoloDate === 'ALL';
+                const allPill = `<button onclick="currentSoloDate='ALL';renderSoloLog()" class="px-4 py-2.5 rounded-2xl text-xs whitespace-nowrap transition flex flex-col items-start min-w-[96px] ${allActive ? 'bg-purple-700 text-white shadow-md font-bold' : 'bg-white text-slate-700 border border-purple-200/80 hover:bg-purple-50/50 font-medium'}">
+                    <div class="flex items-center justify-between w-full gap-1.5">
+                        <span>ทั้งหมด</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-full ${allActive ? 'bg-purple-200 text-purple-950 font-extrabold' : 'bg-purple-100 text-purple-800 font-bold'}">${soloEntries.length}</span>
+                    </div>
+                    <span class="text-[10px] mt-0.5 ${allActive ? 'text-purple-200' : 'text-slate-400'}">30 พ.ย.–5 ธ.ค.</span>
+                </button>`;
 
-        function closePinModal() {
-            const modal = document.getElementById('pin-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+                const dayPills = soloDaysMeta.map(meta => {
+                    const active = meta.dateKey === currentSoloDate;
+                    const countInDay = soloEntries.filter(s => s.soloDate === meta.dateKey).length;
+                    return `<button onclick="currentSoloDate='${meta.dateKey}';renderSoloLog()" class="px-4 py-2.5 rounded-2xl text-xs whitespace-nowrap transition flex flex-col items-start min-w-[84px] ${active ? 'bg-purple-700 text-white shadow-md font-bold' : 'bg-white text-slate-700 border border-purple-200/80 hover:bg-purple-50/50 font-medium'}">
+                        <div class="flex items-center justify-between w-full gap-1.5">
+                            <span>${meta.shortDate}</span>
+                            ${countInDay > 0 ? `<span class="text-[10px] px-1.5 py-0.2 rounded-full ${active ? 'bg-purple-200 text-purple-950 font-extrabold' : 'bg-purple-100 text-purple-800 font-bold'}">${countInDay}</span>` : ''}
+                        </div>
+                        <span class="text-[10px] mt-0.5 ${active ? 'text-purple-200' : 'text-slate-400'}">บันทึกอิสระ</span>
+                    </button>`;
+                }).join('');
 
-        function verifyTravelerPin(e) {
-            e.preventDefault();
-            const val = document.getElementById('pin-input').value.trim();
-            if (val === TRAVELER_PIN) {
-                isTravelerUnlocked = true;
-                closePinModal();
-                showToast('ปลดล็อกข้อมูลผู้เดินทางสำเร็จ');
-                switchTab('traveler');
-            } else {
-                const err = document.getElementById('pin-error');
-                err.classList.remove('hidden');
-                const input = document.getElementById('pin-input');
-                input.value = '';
-                input.focus();
+                pillsEl.innerHTML = allPill + dayPills;
             }
-        }
 
-        function lockTravelerTab() {
-            isTravelerUnlocked = false;
-            showToast('ล็อกข้อมูลผู้เดินทางเรียบร้อยแล้ว');
-            switchTab('daily');
-        }
+            const currentMeta = currentSoloDate === 'ALL'
+                ? { dateKey: 'ALL', shortDate: 'ช่วงทำงาน 30 พ.ย.–5 ธ.ค.', label: '30 พ.ย. – 5 ธ.ค. 2569', subtitle: 'สมุดบันทึกอิสระช่วงไปทำงานของ PPWR' }
+                : (soloDaysMeta.find(m => m.dateKey === currentSoloDate) || soloDaysMeta[0]);
 
-        function handlePassportUpload(event, idx) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    const maxW = 900;
-                    let w = img.width;
-                    let h = img.height;
-                    if (w > maxW) {
-                        h = Math.round((h * maxW) / w);
-                        w = maxW;
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    travelerData.travelers[idx].passportImg = canvas.toDataURL('image/jpeg', 0.82);
-                    saveState();
-                    renderTravelerTab();
-                    showToast('อัปโหลดรูปหน้าพาสปอร์ตเรียบร้อยแล้ว');
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
+            const dayItems = (currentSoloDate === 'ALL'
+                ? [...soloEntries].sort((a, b) => (a.soloDate || '').localeCompare(b.soloDate || ''))
+                : soloEntries.filter(s => s.soloDate === currentSoloDate));
 
-        function removePassportImage(idx) {
-            travelerData.travelers[idx].passportImg = '';
-            saveState();
-            renderTravelerTab();
-            showToast('ลบรูปหน้าพาสปอร์ตแล้ว');
-        }
+            const headerEl = document.getElementById('solo-header-card');
+            if (headerEl) {
+                headerEl.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-800 border border-purple-200">💜 PPWR Solo Log</span>
+                            <span class="text-xs text-slate-500 font-semibold">${currentMeta.label}</span>
+                            <span class="text-[11px] font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-full">บันทึกไว้ ${dayItems.length} รายการ</span>
+                        </div>
+                        <button onclick="openAddSoloModal('${currentMeta.dateKey}')" class="text-xs bg-purple-700 hover:bg-purple-800 text-white font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                            <i class="ph-bold ph-plus"></i> ${currentSoloDate === 'ALL' ? 'เพิ่มบันทึกใหม่' : 'เพิ่มบันทึกวันที่ ' + currentMeta.shortDate}
+                        </button>
+                    </div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 mb-1">${currentMeta.subtitle}</h2>
+                    <p class="text-xs text-slate-600 leading-relaxed">พื้นที่บันทึกอิสระสำหรับ <strong>PPWR</strong> — ไม่ต้องล็อกแพลนล่วงหน้า วันไหนเลิกงานแล้วแวะคาเฟ่ ร้านอาหาร หรือเดินเล่นแถวไหน ค่อยกดเพิ่มบันทึกและแนบรูปภาพ (สูงสุด 3 รูป) เก็บไว้ได้เลยครับ</p>
+                `;
+            }
 
-        function openImageViewer(src) {
-            const modal = document.getElementById('image-viewer-modal');
-            const img = document.getElementById('viewer-img');
-            if (!modal || !img) return;
-            img.src = src;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+            const timelineEl = document.getElementById('solo-timeline');
+            if (!timelineEl) return;
 
-        function closeImageViewer() {
-            const modal = document.getElementById('image-viewer-modal');
-            if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function saveTravelerInfo() {
-            travelerData.travelers.forEach((t, idx) => {
-                t.fullName = (document.getElementById(`t-fullname-${idx}`)?.value || '').trim().toUpperCase();
-                t.nickname = (document.getElementById(`t-nickname-${idx}`)?.value || '').trim();
-                t.passportNo = (document.getElementById(`t-passport-${idx}`)?.value || '').trim().toUpperCase();
-                t.dob = (document.getElementById(`t-dob-${idx}`)?.value || '').trim();
-                t.expiryDate = (document.getElementById(`t-expiry-${idx}`)?.value || '').trim();
-                t.flights = {
-                    outNo: (document.getElementById(`t-flight-out-no-${idx}`)?.value || '').trim(),
-                    outPnr: (document.getElementById(`t-flight-out-pnr-${idx}`)?.value || '').trim().toUpperCase(),
-                    outTime: (document.getElementById(`t-flight-out-time-${idx}`)?.value || '').trim(),
-                    outSeat: (document.getElementById(`t-flight-out-seat-${idx}`)?.value || '').trim(),
-                    inNo: (document.getElementById(`t-flight-in-no-${idx}`)?.value || '').trim(),
-                    inPnr: (document.getElementById(`t-flight-in-pnr-${idx}`)?.value || '').trim().toUpperCase(),
-                    inTime: (document.getElementById(`t-flight-in-time-${idx}`)?.value || '').trim(),
-                    inSeat: (document.getElementById(`t-flight-in-seat-${idx}`)?.value || '').trim()
-                };
-            });
-            travelerData.notes = {
-                busanHotel: (document.getElementById('note-busan-hotel')?.value || '').trim(),
-                seoulHotel: (document.getElementById('note-seoul-hotel')?.value || '').trim(),
-                insurance: (document.getElementById('note-insurance')?.value || '').trim(),
-                esim: (document.getElementById('note-esim')?.value || '').trim(),
-                general: (document.getElementById('note-general')?.value || '').trim()
-            };
-            travelerData.lastSaved = getThaiDateShort();
-            bumpMinorVersion();
-            saveState();
-            renderTravelerTab();
-            showToast('บันทึกข้อมูลผู้เดินทางเรียบร้อยแล้ว!');
-        }
-
-        function switchTab(tabId) {
-            if (tabId === 'traveler' && !isTravelerUnlocked) {
-                openPinModal();
+            if (dayItems.length === 0) {
+                timelineEl.innerHTML = `
+                    <div class="bg-white rounded-3xl p-8 text-center border-2 border-dashed border-purple-200 space-y-2.5">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center mx-auto">
+                            <i class="ph-fill ph-notebook text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">ยังไม่มีบันทึก${currentSoloDate === 'ALL' ? 'ในช่วง 30 พ.ย. – 5 ธ.ค.' : 'ในวันที่ ' + currentMeta.shortDate}</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">ว่างเมื่อไหร่หรือแวะร้านไหนหลังเลิกงาน กดปุ่ม <strong>"เพิ่มบันทึกใหม่"</strong> เพื่อจดเรื่องราวและแนบรูปถ่ายได้เลยครับ</p>
+                    </div>
+                `;
                 return;
             }
 
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            timelineEl.innerHTML = dayItems.map((cp, idx) => {
+                const key = `solo_${cp.id}`;
+                const checkVal = completedIds[key];
+                const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'บันทึกแล้ว';
+                const author = noteAuthors[key] || cp.author || 'PPWR';
+                const userNote = checkinNotes[key];
+                const photos = placePhotos[key] || [];
+                const dateObj = soloDaysMeta.find(m => m.dateKey === cp.soloDate);
+                const dateBadge = dateObj ? dateObj.shortDate : '';
 
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.dataset.tab === tabId) {
-                    btn.classList.add('bg-slate-900', 'text-white', 'shadow-sm', 'font-semibold');
-                    btn.classList.remove('text-slate-600', 'hover:bg-slate-100', 'font-medium');
-                } else {
-                    btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm', 'font-semibold');
-                    btn.classList.add('text-slate-600', 'hover:bg-slate-100', 'font-medium');
-                }
-            });
+                return `
+                    <div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-purple-300 bg-gradient-to-br from-white to-purple-50/30' : 'border-slate-200/80'} shadow-xs transition">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="w-6 h-6 rounded-full bg-purple-700 text-white text-[11px] font-bold inline-flex items-center justify-center">${idx + 1}</span>
+                                ${dateBadge ? `<span class="text-xs font-extrabold text-purple-900 bg-purple-100 border border-purple-200 px-2.5 py-1 rounded-xl">${dateBadge}</span>` : ''}
+                                ${cp.soloTime ? `<span class="text-xs font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-xl inline-flex items-center gap-1"><i class="ph-bold ph-clock"></i> ${cp.soloTime}</span>` : ''}
+                                ${renderAuthorBadge(author)}
+                            </div>
+                            ${isVisited ? `
+                                <span class="visited-stamp px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold tracking-wide uppercase flex items-center gap-1">
+                                    <i class="ph-fill ph-seal-check text-sm"></i> VISITED • ${stampLabel}
+                                </span>
+                            ` : ''}
+                        </div>
 
-            const topTravelerBtn = document.getElementById('top-traveler-btn');
-            if (topTravelerBtn) {
-                if (tabId === 'traveler') {
-                    topTravelerBtn.classList.add('ring-2', 'ring-white', 'bg-amber-300');
-                } else {
-                    topTravelerBtn.classList.remove('ring-2', 'ring-white', 'bg-amber-300');
-                }
-            }
+                        <div class="text-[11px] text-slate-600 bg-slate-100/90 px-3 py-1.5 rounded-xl mb-2.5 inline-flex items-center gap-1.5">
+                            <i class="ph-fill ph-map-pin text-purple-600"></i>
+                            <span>${cp.zone}</span>
+                        </div>
+
+                        <h4 class="font-bold text-sm sm:text-base text-slate-900">${cp.name}</h4>
+                        ${cp.addr ? `<p class="text-xs sm:text-[13px] text-slate-600 mt-1 leading-relaxed">${cp.addr}</p>` : ''}
+
+                        ${userNote ? `
+                            <div class="mt-2.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 flex items-start justify-between gap-2">
+                                <div class="flex items-start gap-2">
+                                    <i class="ph-fill ph-chat-teardrop-text text-amber-600 text-base shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-amber-800 uppercase">บันทึกเพิ่มเติม</div>
+                                        <p class="mt-0.5 leading-relaxed">${userNote}</p>
+                                    </div>
+                                </div>
+                                <button onclick="openNoteModal('${key}', '${cp.name.replace(/'/g, "\\'")}')" class="text-[11px] text-amber-700 hover:underline font-semibold shrink-0">แก้ไข</button>
+                            </div>
+                        ` : ''}
+
+                        ${renderPhotoGalleryHtml(photos)}
+
+                        ${cp.kr ? `
+                            <div class="flex items-center justify-between bg-slate-50 border border-slate-200/90 rounded-2xl p-2 pl-3 gap-2 mt-3">
+                                <span class="text-xs font-mono text-slate-600 truncate">${cp.kr}</span>
+                                <div class="flex items-center gap-1 shrink-0">
+                                    <button onclick="copyText('${cp.kr}')" class="p-2 bg-white hover:bg-slate-200 text-slate-600 border border-slate-200 rounded-xl transition"><i class="ph ph-copy text-sm"></i></button>
+                                    <a href="${nMap(cp.kr)}" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs transition"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <button onclick="toggleCheck('${key}');renderSoloLog()" class="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isVisited ? 'bg-purple-700 text-white shadow-xs' : 'bg-slate-900 hover:bg-slate-800 text-white'}">
+                                    <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'} text-base"></i>
+                                    <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
+                                </button>
+                                <button onclick="openNoteModal('${key}', '${cp.name.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
+                                    <i class="ph-bold ph-camera-plus"></i>
+                                    <span>${photos.length > 0 || userNote ? 'โน้ต/รูป (' + photos.length + '/3)' : 'จดโน้ต & เพิ่มรูป'}</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="openAddModal(null, '${cp.id}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-royal rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไข</button>
+                                <button onclick="openConfirmModal('ต้องการลบรายการนี้ออกจาก Solo Log ใช่ไหมครับ?', () => deleteCustomPlace('${cp.id}'))" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-rose-500 rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // ---------------------------------------------------------
@@ -2248,9 +2811,11 @@
                 const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 const isNew = ev.customId && ev.customId === lastAddedId;
                 const userNote = checkinNotes[ev.id];
+                const photos = placePhotos[ev.id] || [];
+                const author = noteAuthors[ev.id] || ev.author || '';
 
                 return `<div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-emerald-300/90 bg-gradient-to-br from-white to-emerald-50/30' : ev.isEdited ? 'border-indigo-200' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
-                    <!-- Top Card Bar: Step/Time + Edit Schedule + Visited Stamp -->
+                    <!-- Top Card Bar: Step/Time + Edit Schedule + Author Tag + Visited Stamp -->
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <div class="flex flex-wrap items-center gap-1.5">
                             <span class="w-6 h-6 rounded-full ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'} text-[11px] font-bold inline-flex items-center justify-center shrink-0">${idx + 1}</span>
@@ -2259,6 +2824,7 @@
                                 <span>${ev.time}</span>
                                 <i class="ph-bold ph-pencil-simple text-[11px] opacity-75 ml-0.5"></i>
                             </button>
+                            ${renderAuthorBadge(author)}
                             ${ev.isEdited ? `<span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg">ปรับเวลาแล้ว</span>` : ''}
                         </div>
                         ${isVisited ? `
@@ -2294,6 +2860,9 @@
                         </div>
                     ` : ''}
 
+                    <!-- Attached Photos (Up to 3) -->
+                    ${renderPhotoGalleryHtml(photos)}
+
                     <!-- Place Action Boxes (Mobile-friendly tap targets) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
                         ${ev.places.map(pl => `
@@ -2315,8 +2884,8 @@
                                 <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
                             </button>
                             <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
-                                <i class="ph-bold ph-note-pencil"></i>
-                                <span>${userNote ? 'แก้ไขโน้ต' : 'จดบันทึก'}</span>
+                                <i class="ph-bold ph-camera-plus"></i>
+                                <span>${photos.length > 0 || userNote ? 'โน้ต/รูป (' + photos.length + '/3)' : 'จดโน้ต & รูป'}</span>
                             </button>
                             <button onclick="openScheduleModal('${ev.id}')" class="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
                                 <i class="ph-bold ph-clock-clockwise"></i>
@@ -2413,11 +2982,16 @@
                             const checkVal = completedIds[item.id];
                             const isVisited = !!checkVal;
                             const userNote = checkinNotes[item.id];
+                            const photos = placePhotos[item.id] || [];
+                            const author = noteAuthors[item.id] || '';
                             return `
                             <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/20' : item.isCustom ? 'border-amber-300 bg-amber-50/15' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
                                 <div>
                                     <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
-                                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${typeBadgeStyle(item.type)}">${typeEmoji(item.type)} ${item.type}</span>
+                                        <div class="flex flex-wrap items-center gap-1">
+                                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${typeBadgeStyle(item.type)}">${typeEmoji(item.type)} ${item.type}</span>
+                                            ${renderAuthorBadge(author)}
+                                        </div>
                                         ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>` : item.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">บันทึกใหม่</span>' : ''}
                                     </div>
                                     <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
@@ -2429,6 +3003,7 @@
                                             <span class="font-bold text-amber-800">โน้ตของเรา:</span> ${userNote}
                                         </div>
                                     ` : ''}
+                                    ${renderPhotoGalleryHtml(photos)}
                                 </div>
                                 <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
                                     <div class="flex items-center gap-1">
@@ -2436,7 +3011,7 @@
                                             <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'ไปลองแล้ว' : 'เช็กอิน'}
                                         </button>
                                         <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
-                                            <i class="ph-bold ph-note-pencil"></i> โน้ต
+                                            <i class="ph-bold ph-camera-plus"></i> โน้ต/รูป ${photos.length ? '(' + photos.length + ')' : ''}
                                         </button>
                                         ${item.isCustom ? `
                                             <button onclick="openConfirmModal('ต้องการลบร้านนี้ออกจากรายการใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
@@ -2894,6 +3469,7 @@
 
         function refreshAllViews() {
             renderVersionBadge();
+            renderSoloLog();
             renderDaily();
             renderCafeTab();
             filterGroup('all');
