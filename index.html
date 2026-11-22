@@ -89,7 +89,7 @@
                     </span>
                     <button onclick="openVersionModal()" id="version-badge" class="inline-flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-200 transition cursor-pointer" title="คลิกเพื่อดูรายละเอียดเวอร์ชันและการอัปเดต">
                         <i class="ph-bold ph-git-commit text-emerald-300"></i>
-                        <span id="version-text">v4.0 • อัปเดต: 22 พ.ย. 2569</span>
+                        <span id="version-text">v5.0 • อัปเดต: 22 พ.ย. 2569</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
@@ -106,289 +106,207 @@
                 </div>
             </div>
 
-            <!-- Main Title & Check-in Collection Counter -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
+            <!-- Title & Overall Check-in Scrapbook Progress -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2 font-jakarta">
-                        <span>PP_R in KOREA 2026</span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold font-jakarta tracking-tight text-white">
+                        PP_R in KOREA <span class="text-sky-400">2026</span>
                     </h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                        <span class="inline-flex items-center gap-1"><i class="ph-fill ph-airplane-landing text-sky-300"></i> ขาไป: 6 ธ.ค. ถึง 09:00 น. (TW102)</span>
-                        <span class="inline-flex items-center gap-1"><i class="ph-fill ph-airplane-takeoff text-rose-300"></i> ขากลับ: 12 ธ.ค. ออก 19:50 น.</span>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+                        Travel Log &amp; Check-in Scrapbook &bull; คู่มือเที่ยว &amp; บันทึกการเดินทาง
                     </p>
                 </div>
-                <!-- Travel Check-in Collection Box -->
-                <div class="bg-white/10 border border-white/15 rounded-2xl px-3.5 py-2.5 min-w-[225px]">
-                    <div class="flex items-center justify-between text-xs mb-1">
-                        <span class="text-amber-200 font-semibold flex items-center gap-1"><i class="ph-fill ph-seal-check"></i> สะสมจุดเช็กอินแล้ว</span>
-                        <span id="global-progress-text" class="font-bold text-emerald-400">0 จุด (0%)</span>
+                <div class="bg-white/10 border border-white/15 rounded-2xl px-3.5 py-2.5 sm:min-w-[235px]">
+                    <div class="flex items-center justify-between text-[11px] text-slate-200 mb-1.5">
+                        <span class="font-medium flex items-center gap-1"><i class="ph-fill ph-seal-check text-emerald-400"></i> สะสมจุดเช็กอินทริปนี้</span>
+                        <span id="global-progress-text" class="font-bold text-emerald-300">0/0 จุด (0%)</span>
                     </div>
-                    <div class="w-full bg-white/15 rounded-full h-2 overflow-hidden">
-                        <div id="global-progress-bar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Accommodation Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <!-- Busan Hotel -->
-                <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex items-center justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 text-[11px] text-sky-300 font-semibold mb-0.5">
-                            <i class="ph-fill ph-bed"></i> ปูซาน (6–8 ธ.ค.) &bull; Haeundae Beach
-                        </div>
-                        <div class="font-bold text-sm truncate">Busan Yeongmu Parade Hotel</div>
-                        <div class="text-xs text-slate-300 truncate">영무파라드호텔 (สาย 2 สถานี Haeundae)</div>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="copyText('영무파라드호텔')" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white transition" title="คัดลอกชื่อเกาหลี">
-                            <i class="ph ph-copy text-base"></i>
-                        </button>
-                        <a href="https://map.naver.com/p/search/%EC%98%81%EB%AC%B4%ED%8C%8C%EB%9D%BC%EB%93%9C%ED%98%B8%ED%85%94" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
-                            <i class="ph-bold ph-map-pin"></i> Map
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Seoul Hotel -->
-                <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex items-center justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 text-[11px] text-indigo-300 font-semibold mb-0.5">
-                            <i class="ph-fill ph-bed"></i> โซล (8–12 ธ.ค.) &bull; Gangdong
-                        </div>
-                        <div class="font-bold text-sm truncate">STAYMIN Gangdong</div>
-                        <div class="text-xs text-slate-300 truncate">สายสีม่วง (Line 5) สถานี Gangdong / Cheonho</div>
-                    </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="copyText('강동역')" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white transition" title="คัดลอกชื่อสถานี">
-                            <i class="ph ph-copy text-base"></i>
-                        </button>
-                        <a href="https://map.naver.com/p/search/%EA%B0%95%EB%8F%99%EC%97%AD" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
-                            <i class="ph-bold ph-map-pin"></i> Map
-                        </a>
+                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div id="global-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-sky-400 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Sticky Navigation Bar -->
+    <!-- Sticky Main Navigation Tabs -->
     <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-xs">
-        <div class="max-w-5xl mx-auto px-2 sm:px-6">
-            <div class="flex overflow-x-auto no-scrollbar py-2.5 gap-1.5 sm:gap-2" id="main-tabs">
-                <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn active flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-900 text-white shadow-sm">
-                    <i class="ph-fill ph-notebook text-base"></i>
-                    <span>1. บันทึกรายวัน</span>
-                </button>
-                <button onclick="switchTab('cafe')" data-tab="cafe" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
-                    <i class="ph-fill ph-coffee text-base"></i>
-                    <span id="nav-cafe-label">2. คาเฟ่ & ร้านอาหาร</span>
-                </button>
-                <button onclick="switchTab('group')" data-tab="group" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
-                    <i class="ph-fill ph-map-trifold text-base"></i>
-                    <span>3. โซน & ไฮไลต์</span>
-                </button>
-                <button onclick="switchTab('stamps')" data-tab="stamps" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
-                    <i class="ph-fill ph-stamp text-base"></i>
-                    <span>4. เก็บ Stamp</span>
-                </button>
-                <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
-                    <i class="ph-fill ph-gift text-base"></i>
-                    <span>5. กาชา & ของฟรี</span>
-                </button>
-                <button onclick="switchTab('navermap')" data-tab="navermap" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
-                    <i class="ph-fill ph-compass text-base"></i>
-                    <span id="nav-map-label">6. พิกัดทั้งหมด</span>
-                </button>
-            </div>
+        <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold">
+                1. สมุดเดินทาง 7 วัน
+            </button>
+            <button onclick="switchTab('cafe')" data-tab="cafe" id="nav-cafe-label" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                2. คาเฟ่ &amp; ร้านอาหาร
+            </button>
+            <button onclick="switchTab('group')" data-tab="group" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                3. โซน &amp; ไฮไลต์
+            </button>
+            <button onclick="switchTab('stamp')" data-tab="stamp" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                4. เก็บ Stamp
+            </button>
+            <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                5. กาชาปอง &amp; ของฟรี
+            </button>
+            <button onclick="switchTab('navermap')" data-tab="navermap" id="nav-map-label" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                6. พิกัดทั้งหมด
+            </button>
         </div>
     </nav>
 
     <!-- Main Content Container -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5 space-y-5">
 
-        <!-- ========================================================= -->
-        <!-- TAB 1: DAILY TRAVEL LOG & CHECK-IN CARDS                  -->
-        <!-- ========================================================= -->
+        <!-- TAB 1: 7-DAY TRAVEL SCRAPBOOK -->
         <section id="tab-daily" class="tab-content space-y-4">
-            <div id="day-pills" class="flex overflow-x-auto no-scrollbar gap-2 pb-1"></div>
+            <div id="day-pills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1"></div>
             <div id="day-header-card" class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs"></div>
             <div id="day-timeline" class="space-y-3.5"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 2: CAFE, DESSERT & RESTAURANTS (BY NEIGHBORHOOD)      -->
-        <!-- ========================================================= -->
+        <!-- TAB 2: CAFE, DESSERT & RESTAURANT GUIDE -->
         <section id="tab-cafe" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                        <h2 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">
-                            <i class="ph-fill ph-coffee text-amber-600 text-lg"></i> คาเฟ่ • ร้านกาแฟ • ร้านขนม • ร้านอาหาร (แยกตามย่าน)
-                        </h2>
-                        <p class="text-xs text-slate-500">กดเช็กอินร้านที่ไปลองแล้ว พร้อมจดบันทึกเมนูโปรดไว้ดูย้อนหลังได้ครับ</p>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">☕ คาเฟ่ ร้านขนม &amp; ร้านอาหาร (แยกตามย่าน)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">กดเช็กอินร้านที่ไปลองแล้ว พร้อมจดโน้ตเมนูโปรดได้ทันที</p>
                     </div>
-                    <button onclick="openAddCafeModal()" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition">
-                        <i class="ph-bold ph-plus"></i> บันทึกร้านใหม่
-                    </button>
-                </div>
-
-                <!-- Search & Type Filter -->
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <div class="relative flex-1">
-                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="cafe-search" oninput="renderCafeTab()" placeholder="ค้นหาชื่อร้าน เมนูแนะนำ หรือย่าน..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-                    </div>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button onclick="setCafeType('ALL')" data-ctype="ALL" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-900 text-white font-semibold transition">ทั้งหมด</button>
-                        <button onclick="setCafeType('คาเฟ่ / กาแฟ')" data-ctype="คาเฟ่ / กาแฟ" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">☕ คาเฟ่ / กาแฟ</button>
-                        <button onclick="setCafeType('ร้านขนม / เบเกอรี')" data-ctype="ร้านขนม / เบเกอรี" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🥐 ร้านขนม</button>
-                        <button onclick="setCafeType('ร้านอาหาร')" data-ctype="ร้านอาหาร" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🍲 ร้านอาหาร</button>
+                    <div class="flex items-center gap-2">
+                        <span id="cafe-visited-count" class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">เช็กอินแล้ว 0/0 ร้าน</span>
+                        <button onclick="openAddCafeModal()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition">
+                            <i class="ph-bold ph-plus"></i> เพิ่มร้าน
+                        </button>
                     </div>
                 </div>
-
-                <!-- Neighborhood Pills -->
-                <div id="cafe-zone-pills" class="flex overflow-x-auto no-scrollbar gap-1.5 pb-1"></div>
-                <div class="text-xs text-slate-500 pt-0.5 flex items-center justify-between">
-                    <span id="cafe-result-count">แสดงทั้งหมด</span>
-                    <span id="cafe-visited-count" class="font-bold text-emerald-600">เช็กอินแล้ว 0 ร้าน</span>
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="cafe-search" oninput="renderCafeTab()" placeholder="ค้นหาชื่อร้าน เมนูแนะนำ หรือย่าน เช่น Bagel, Salt Bread, แฮบังชน..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-amber-400">
                 </div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <button onclick="setCafeType('ALL')" data-ctype="ALL" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-900 text-white font-semibold transition">ทั้งหมด</button>
+                    <button onclick="setCafeType('คาเฟ่ / กาแฟ')" data-ctype="คาเฟ่ / กาแฟ" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">☕ คาเฟ่ / กาแฟ</button>
+                    <button onclick="setCafeType('ร้านขนม / เบเกอรี')" data-ctype="ร้านขนม / เบเกอรี" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🥐 ร้านขนม / เบเกอรี</button>
+                    <button onclick="setCafeType('ร้านอาหาร')" data-ctype="ร้านอาหาร" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🍲 ร้านอาหาร</button>
+                </div>
+                <div id="cafe-zone-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"></div>
+                <div id="cafe-result-count" class="text-[11px] text-slate-400 font-medium"></div>
             </div>
-
-            <div id="cafe-list-container" class="space-y-6"></div>
+            <div id="cafe-list-container" class="space-y-5"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 3: ZONES & HIGHLIGHTS                                 -->
-        <!-- ========================================================= -->
+        <!-- TAB 3: ZONES, ROUTES & HIGHLIGHTS -->
         <section id="tab-group" class="tab-content hidden space-y-4">
-            <div class="flex flex-wrap gap-1.5">
-                <button onclick="filterGroup('all')" data-gfilter="all" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition">ทั้งหมด</button>
-                <button onclick="filterGroup('haebangchon')" data-gfilter="haebangchon" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">📸 Route แฮบังชน</button>
-                <button onclick="filterGroup('aquarium')" data-gfilter="aquarium" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🐋 Aquarium</button>
-                <button onclick="filterGroup('christmas')" data-gfilter="christmas" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🎄 Christmas Spots</button>
-                <button onclick="filterGroup('gallery')" data-gfilter="gallery" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🖼️ Free Galleries</button>
-                <button onclick="filterGroup('zones')" data-gfilter="zones" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🗺️ โซนท่องเที่ยว (10 โซน)</button>
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                <button onclick="filterGroup('all')" data-gfilter="all" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition whitespace-nowrap">ทั้งหมด</button>
+                <button onclick="filterGroup('haebangchon')" data-gfilter="haebangchon" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">📸 Route แฮบังชน–ฮูอัมดง</button>
+                <button onclick="filterGroup('photobooth')" data-gfilter="photobooth" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🎞️ Photobooth &amp; ช้อปปิ้ง</button>
+                <button onclick="filterGroup('sunset')" data-gfilter="sunset" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🌇 จุดชมวิว &amp; สถาปัตย์</button>
+                <button onclick="filterGroup('christmas')" data-gfilter="christmas" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🎄 จุดไฟคริสต์มาส</button>
+                <button onclick="filterGroup('aquarium')" data-gfilter="aquarium" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🐋 Lotte Aquarium</button>
+                <button onclick="filterGroup('gallery')" data-gfilter="gallery" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🖼️ Free Galleries</button>
+                <button onclick="filterGroup('zones')" data-gfilter="zones" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap">🗺️ 10 โซนเที่ยว</button>
             </div>
-            <div id="group-content" class="space-y-5"></div>
+            <div id="group-content" class="space-y-4"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 4: STAMP TRACKER                                      -->
-        <!-- ========================================================= -->
-        <section id="tab-stamps" class="tab-content hidden space-y-4">
-            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs">
-                <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-slate-800">ความคืบหน้าการเก็บ Stamp (<span id="stamp-total-label">14</span> จุด)</span>
-                    <span id="stamp-count" class="font-bold text-amber-600">0/14</span>
+        <!-- TAB 4: STAMP COLLECTION -->
+        <section id="tab-stamp" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">📮 จุดเก็บ Stamp ที่ระลึก (<span id="stamp-total-label">14</span> จุด)</h2>
+                        <p class="text-xs text-slate-500">พกสมุดโน้ตเล็กๆ ไปปั๊มตราประทับตามศูนย์ข้อมูลท่องเที่ยวและแลนด์มาร์ก</p>
+                    </div>
+                    <span id="stamp-count" class="text-xs font-extrabold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">0/14</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                    <div id="stamp-progress-bar" class="bg-amber-400 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="stamp-progress-bar" class="h-full bg-amber-400 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
             <div id="stamp-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 5: GACHA & FREEBIES                                   -->
-        <!-- ========================================================= -->
-        <section id="tab-gacha" class="tab-content hidden space-y-5">
+        <!-- TAB 5: GACHA & FREEBIES -->
+        <section id="tab-gacha" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-800">สะสมกาชาปอง & ของฟรีที่ไปเก็บมาแล้ว</span>
-                <span id="gacha-count" class="text-xs font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">0/15</span>
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900">🎰 พิกัดตู้กาชาปอง &amp; จุดรับของที่ระลึกฟรี</h2>
+                    <p class="text-xs text-slate-500">แหล่งรวมตู้สุ่ม Pop Mart / Gachapon และโปสการ์ดแจกฟรี</p>
+                </div>
+                <span id="gacha-count" class="text-xs font-extrabold text-pink-700 bg-pink-50 border border-pink-200 px-3 py-1 rounded-full">0/15</span>
             </div>
-            <div>
-                <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-2.5 flex items-center gap-1.5">
-                    <i class="ph-fill ph-sparkle text-pink-500"></i> พิกัดตู้กาชาปอง (Gachapon)
-                </h3>
-                <div id="gacha-spots-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-            </div>
-            <div>
-                <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-2.5 flex items-center gap-1.5">
-                    <i class="ph-fill ph-gift text-emerald-500"></i> ของแจกฟรี & โปสการ์ด (Freebies)
-                </h3>
-                <div id="freebies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-            </div>
+            <h3 class="font-bold text-sm text-slate-800 px-1">🎯 พิกัดตู้กาชาปอง &amp; Art Toys</h3>
+            <div id="gacha-spots-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+            <h3 class="font-bold text-sm text-slate-800 px-1 pt-2">🎁 จุดรับโปสการ์ด &amp; ของที่ระลึกฟรี</h3>
+            <div id="freebies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 6: MASTER NAVER MAP DIRECTORY                         -->
-        <!-- ========================================================= -->
+        <!-- TAB 6: ALL NAVER MAP DIRECTORY -->
         <section id="tab-navermap" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3">
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <div class="relative flex-1">
-                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="map-search" oninput="renderNaverDirectory()" placeholder="ค้นหาชื่อร้าน, ย่าน หรือชื่อเกาหลี..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-royal">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">🗺️ คลังพิกัด Naver Map ทั้งหมด</h2>
+                        <p class="text-xs text-slate-500">กดปุ่ม Map เพื่อเปิดนำทางใน Naver Map หรือกดคัดลอกชื่อเกาหลี</p>
                     </div>
-                    <label class="inline-flex items-center gap-2 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-700 cursor-pointer shrink-0">
+                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-royal bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-xl cursor-pointer">
                         <input type="checkbox" id="filter-custom-only" onchange="renderNaverDirectory()" class="rounded accent-royal">
-                        <span>เฉพาะที่เพิ่มใหม่ (<span id="custom-count-badge">0</span>)</span>
+                        <span>เฉพาะที่บันทึกใหม่ (<span id="custom-count-badge">0</span>)</span>
                     </label>
                 </div>
-                <div id="map-zone-pills" class="flex overflow-x-auto no-scrollbar gap-1.5 pb-1"></div>
-                <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
-                    <span id="map-result-count">แสดงทั้งหมด</span>
-                    <button onclick="openAddModal()" class="text-royal font-semibold hover:underline flex items-center gap-1">
-                        <i class="ph-bold ph-plus"></i> บันทึกพิกัดใหม่
-                    </button>
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="map-search" oninput="renderNaverDirectory()" placeholder="ค้นหาสถานที่ เช่น Sweet Bottle, แฮบังชน, ซองซู, ปูซาน..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
+                <div id="map-zone-pills" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"></div>
+                <div id="map-result-count" class="text-[11px] text-slate-400 font-medium"></div>
             </div>
             <div id="naver-directory-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- TAB 7: TRAVELER INFO & PASSPORT (OPENED FROM HEADER ICON) -->
-        <!-- ========================================================= -->
-        <section id="tab-traveler" class="tab-content hidden space-y-5">
-            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-3xl p-4 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
-                        <i class="ph-fill ph-identification-card text-xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-base text-slate-900">ข้อมูลผู้เดินทาง & เอกสารสำคัญ</h2>
-                        <p class="text-xs text-slate-600" id="traveler-last-saved">กรอกข้อมูลและอัปโหลดรูปพาสปอร์ตเพื่อความสะดวกในการเปิดดูระหว่างเดินทาง</p>
-                    </div>
+        <!-- TAB 7: TRAVELER INFO & PASSPORTS (PIN PROTECTED) -->
+        <section id="tab-traveler" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                        <i class="ph-fill ph-identification-card text-amber-500 text-xl"></i> ข้อมูลผู้เดินทาง &amp; เอกสารสำคัญ
+                    </h2>
+                    <p id="traveler-last-saved" class="text-xs text-slate-500 mt-0.5">ข้อมูลพาสปอร์ต เที่ยวบิน ไป–กลับ และบันทึกสำคัญของทริป</p>
                 </div>
-                <button onclick="switchTab('daily')" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1 transition">
-                    <i class="ph-bold ph-arrow-left"></i> กลับหน้าบันทึกทริป
-                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="saveTravelerInfo()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition">
+                        <i class="ph-bold ph-floppy-disk"></i> บันทึกข้อมูล
+                    </button>
+                </div>
             </div>
 
             <div id="travelers-container" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
 
-            <!-- Additional Travel Notes -->
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3 text-xs">
-                <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-                    <i class="ph-fill ph-note-pencil text-emerald-600 text-lg"></i> ข้อมูลสำคัญอื่นๆ (รหัสที่พัก / ประกัน / eSIM)
+                <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                    <i class="ph-fill ph-notebook text-royal text-lg"></i> บันทึกที่พัก ประกันเดินทาง &amp; eSIM
                 </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Booking / รหัสห้องพักปูซาน (Yeongmu Parade)</label>
-                        <input type="text" id="note-busan-hotel" placeholder="เลขการจอง / รหัสประตู / หมายเหตุ" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <label class="block font-semibold text-slate-700 mb-1">ที่พักปูซาน (6–8 ธ.ค. 2569)</label>
+                        <input type="text" id="note-busan-hotel" placeholder="Busan Yeongmu Parade Hotel / Booking No." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Booking / รหัสประตูที่พักโซล (STAYMIN Gangdong)</label>
-                        <input type="text" id="note-seoul-hotel" placeholder="Door Lock Code / ชั้น / รหัส Wi-Fi" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <label class="block font-semibold text-slate-700 mb-1">ที่พักโซล (8–12 ธ.ค. 2569)</label>
+                        <input type="text" id="note-seoul-hotel" placeholder="STAYMIN Gangdong / รหัสเข้าห้อง" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">เลขกรมธรรม์ประกันเดินทาง & เบอร์ฉุกเฉิน</label>
-                        <input type="text" id="note-insurance" placeholder="บริษัทประกัน / เลขกรมธรรม์" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <label class="block font-semibold text-slate-700 mb-1">ประกันการเดินทาง (เลขกรมธรรม์ / เบอร์ฉุกเฉิน)</label>
+                        <input type="text" id="note-insurance" placeholder="ระบุบริษัทประกันและเลขกรมธรรม์" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">ข้อมูล eSIM / Pocket Wi-Fi / K-ETA / Q-Code</label>
-                        <input type="text" id="note-esim" placeholder="รหัสอ้างอิงหรือเบอร์โทรเกาหลี" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <label class="block font-semibold text-slate-700 mb-1">ซิม / eSIM &amp; WOWPASS</label>
+                        <input type="text" id="note-esim" placeholder="เบอร์เกาหลี / หมายเลขบัตร WOWPASS" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
                     </div>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">บันทึกเพิ่มเติมสำหรับผู้เดินทาง</label>
-                    <textarea id="note-general" rows="2" placeholder="บันทึกข้อมูลสำคัญอื่นๆ ที่ต้องการเปิดดูระหว่างทริป..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
-                </div>
-                <div class="pt-2 flex justify-end">
-                    <button type="button" onclick="saveTravelerInfo()" class="w-full sm:w-auto px-6 py-3 bg-royal hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2 transition">
-                        <i class="ph-bold ph-floppy-disk"></i> บันทึกและอัปเดตข้อมูลผู้เดินทาง
-                    </button>
+                    <div class="sm:col-span-2">
+                        <label class="block font-semibold text-slate-700 mb-1">บันทึกเพิ่มเติมอื่นๆ</label>
+                        <textarea id="note-general" rows="2" placeholder="เช่น รหัส K-ETA / Q-CODE / เบอร์ติดต่อฉุกเฉิน..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
+                    </div>
                 </div>
             </div>
         </section>
@@ -396,28 +314,28 @@
     </main>
 
     <!-- ========================================================= -->
-    <!-- MODAL: TRAVEL MEMORY / CHECK-IN NOTE                      -->
+    <!-- MODAL: CHECK-IN MEMORY NOTE                               -->
     <!-- ========================================================= -->
     <div id="note-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-notebook text-emerald-600 text-xl"></i> บันทึกความทรงจำ / รีวิวจุดเช็กอิน
+                    <i class="ph-fill ph-note-pencil text-amber-500 text-xl"></i> บันทึกความทรงจำ
                 </h3>
                 <button onclick="closeNoteModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
-            <p id="note-modal-place-title" class="text-xs font-bold text-slate-700 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 mb-3"></p>
+            <p id="note-modal-place-title" class="text-xs font-bold text-slate-700 bg-slate-50 px-3 py-2 rounded-xl mb-3"></p>
             <form onsubmit="saveCheckinNote(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="note-modal-item-id">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">ความประทับใจ / เมนูที่สั่ง / สิ่งที่ไปเจอมา</label>
-                    <textarea id="note-modal-text" rows="4" placeholder="เช่น วิวสวยมาก แสงบ่าย 3 กำลังดี, สั่งขนมปังเกลืออร่อยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                    <label class="block font-semibold text-slate-700 mb-1">เขียนความประทับใจ เมนูที่สั่ง หรือเรื่องราวระหว่างวัน</label>
+                    <textarea id="note-modal-text" rows="4" placeholder="เช่น อากาศหนาวกำลังดี กาแฟอร่อยมาก ถ่ายรูปมุมนี้แสงสวยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                 </div>
-                <label class="flex items-center gap-2 font-semibold text-emerald-800 bg-emerald-50 px-3 py-2.5 rounded-xl border border-emerald-200 cursor-pointer">
-                    <input type="checkbox" id="note-modal-mark-visited" checked class="w-4 h-4 rounded accent-emerald-600">
-                    <span>ประทับตรา "เช็กอินแล้ว (VISITED)" สำหรับจุดนี้</span>
+                <label class="flex items-center gap-2 font-semibold text-emerald-800 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200 cursor-pointer">
+                    <input type="checkbox" id="note-modal-mark-visited" checked class="rounded accent-emerald-600">
+                    <span>ประทับตรา "เช็กอินแล้ว (VISITED)" ให้จุดนี้ด้วย</span>
                 </label>
                 <div class="pt-2 flex gap-2">
                     <button type="button" onclick="closeNoteModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
@@ -428,49 +346,44 @@
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODAL: EDIT KTX SCHEDULE (BUSAN -> SEOUL DAY 3)           -->
+    <!-- MODAL: EDIT SCHEDULE FOR ANY DAY 1-7 EVENT & KTX          -->
     <!-- ========================================================= -->
-    <div id="ktx-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
+    <div id="schedule-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-train text-indigo-600 text-xl"></i> แก้ไขตารางเวลา KTX (ปูซาน → โซล)
+                    <i class="ph-fill ph-clock-clockwise text-royal text-xl"></i> แก้ไขตารางเวลา & รายละเอียดกิจกรรม
                 </h3>
-                <button onclick="closeKtxModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+                <button onclick="closeScheduleModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
-            <form onsubmit="saveKtxSchedule(event)" class="space-y-3 text-xs">
-                <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-2.5 text-[11px] text-indigo-900">
-                    <i class="ph-fill ph-info"></i> กรอกรอบเวลาขบวนรถไฟ KTX ที่จองไว้ เมื่อบันทึกแล้วจะอัปเดตลงในแพลน <strong>Day 3 (อ. 8 ธ.ค.)</strong> อัตโนมัติครับ
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">เวลาออกจาก Busan *</label>
-                        <input type="text" id="ktx-depart" required placeholder="เช่น 10:30" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">เวลาถึง Seoul Station *</label>
-                        <input type="text" id="ktx-arrive" required placeholder="เช่น 13:15" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">ขบวนรถไฟ (Train No.)</label>
-                        <input type="text" id="ktx-train-no" placeholder="เช่น KTX 024" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl uppercase">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">ตู้โดยสาร / ที่นั่ง (Car / Seat)</label>
-                        <input type="text" id="ktx-seat" placeholder="เช่น Car 5 / 4A, 4B" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                    </div>
+            <form onsubmit="saveEventSchedule(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="sched-event-id">
+                <input type="hidden" id="sched-is-custom">
+                <div class="bg-blue-50/80 border border-blue-100 rounded-xl p-2.5 text-[11px] text-blue-900">
+                    <i class="ph-fill ph-info"></i> ปรับเปลี่ยนช่วงเวลา ขบวนรถไฟ KTX หรือรายละเอียดได้ตามต้องการ เมื่อบันทึกแล้วตารางจะอัปเดตทันทีครับ
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">หมายเหตุเพิ่มเติม / เลขการจอง</label>
-                    <input type="text" id="ktx-note" placeholder="เช่น ควรไปถึงสถานี Busan ก่อนเวลาออก 20 นาที" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    <label class="block font-semibold text-slate-700 mb-1">ช่วงเวลา (Time) *</label>
+                    <input type="text" id="sched-time" required placeholder="เช่น 11:30 – 14:15 น." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
-                <div class="pt-3 flex gap-2">
-                    <button type="button" onclick="closeKtxModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md">บันทึกตาราง KTX</button>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">การเดินทาง / ขบวนรถไฟ KTX / ที่นั่ง</label>
+                    <input type="text" id="sched-transit" placeholder="เช่น KTX 025 (Seoul → Busan) • Car 4 / 5A, 5B" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">หัวข้อกิจกรรม / สถานที่หลัก *</label>
+                    <input type="text" id="sched-title" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-royal">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">รายละเอียด / หมายเหตุเพิ่มเติม</label>
+                    <textarea id="sched-desc" rows="3" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal"></textarea>
+                </div>
+                <div class="pt-2 flex flex-wrap gap-2">
+                    <button type="button" id="sched-reset-btn" onclick="resetSingleEventSchedule()" class="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl font-semibold transition hidden">คืนค่าเดิม</button>
+                    <button type="button" onclick="closeScheduleModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-royal hover:bg-blue-700 text-white rounded-xl font-bold shadow-md">บันทึกตารางเวลา</button>
                 </div>
             </form>
         </div>
@@ -597,7 +510,15 @@
                 </div>
                 <div class="space-y-2">
                     <div class="border-l-2 border-emerald-500 pl-3">
-                        <div class="font-bold text-slate-900">v4.0 • 22 พ.ย. 2569</div>
+                        <div class="font-bold text-slate-900">v5.0 • 22 พ.ย. 2569</div>
+                        <p>นำเข้าข้อมูลทั้งหมดจากโน้ต PP_R KOREA 2026.txt ครบทุกหมวด: เพิ่มร้านกาแฟ/ขนม/อาหารรวมกว่า 55 ร้านแยกตามย่าน, เพิ่มจุดเช็กอิน K-Heritage Passport ที่อินชอน T1, เทศกาลไฟ Deep Dive Haeundae, จุดชมวิว Seongsu Skywalk / Ttukseom Sunset, พิกัดตู้ Photobooth & ร้าน NYUNYU / Daiso 12 ชั้น</p>
+                    </div>
+                    <div class="border-l-2 border-slate-300 pl-3">
+                        <div class="font-bold text-slate-700">v4.1 • 22 พ.ย. 2569</div>
+                        <p>เพิ่มปุ่มแก้ไขและบันทึกตารางเวลาใหม่ได้ทุกรายการในทั้ง 7 วัน (Day 1 – Day 7) รวมถึงปรับแก้ตารางเวลาและขบวนรถไฟ KTX ทั้งขาไปปูซานและขากลับโซลได้โดยตรง</p>
+                    </div>
+                    <div class="border-l-2 border-slate-300 pl-3">
+                        <div class="font-bold text-slate-700">v4.0 • 22 พ.ย. 2569</div>
                         <p>ปรับโฉม UI เป็น Mobile Travel Cards & Check-in Scrapbook กดเช็กอินพร้อมประทับตรา VISITED และจดโน้ตความทรงจำได้ทุกจุด, เพิ่มเส้นทางเดินแฮบังชน–ฮูอัมดงแบบละเอียดใน Day 6 และเพิ่มรายการคาเฟ่/ร้านขนม/ร้านอาหารครบ 34+ ร้านแยกตามย่าน</p>
                     </div>
                     <div class="border-l-2 border-slate-300 pl-3">
@@ -695,20 +616,33 @@
         const TRAVELER_PIN = '070910';
         let isTravelerUnlocked = false;
 
-        const defaultKtxData = {
-            departTime: '',
-            arriveTime: '',
-            trainNo: '',
-            seat: '',
-            note: ''
-        };
-
-        let ktxSchedule = (() => {
+        // Stores custom schedule edits for ANY event in Day 1 - Day 7 (keyed by event id)
+        let eventOverrides = (() => {
             try {
-                const saved = JSON.parse(localStorage.getItem('ppr2026_ktx_schedule'));
-                if (saved && typeof saved === 'object') return { ...defaultKtxData, ...saved };
+                const saved = JSON.parse(localStorage.getItem('ppr2026_event_overrides'));
+                if (saved && typeof saved === 'object') return saved;
             } catch (e) {}
-            return { ...defaultKtxData };
+            return {};
+        })();
+
+        // Migrate legacy KTX schedule into eventOverrides['d3_e1'] if present
+        (() => {
+            try {
+                const legacyKtx = JSON.parse(localStorage.getItem('ppr2026_ktx_schedule'));
+                if (legacyKtx && (legacyKtx.departTime || legacyKtx.arriveTime) && !eventOverrides['d3_e1']) {
+                    const extra = [
+                        legacyKtx.trainNo ? `ขบวน: ${legacyKtx.trainNo}` : '',
+                        legacyKtx.seat ? `ที่นั่ง: ${legacyKtx.seat}` : '',
+                        legacyKtx.note ? `หมายเหตุ: ${legacyKtx.note}` : ''
+                    ].filter(Boolean).join(' • ');
+                    eventOverrides['d3_e1'] = {
+                        time: `${legacyKtx.departTime || '?'} – ${legacyKtx.arriveTime || '?'}`,
+                        transit: `KTX ${legacyKtx.trainNo ? legacyKtx.trainNo + ' ' : ''}(Busan → Seoul Station)`,
+                        title: 'เช็กเอาต์ปูซาน & นั่ง KTX กลับเข้ากรุงโซล',
+                        desc: `รถไฟความเร็วสูง KTX ออกจากสถานี Busan เวลา ${legacyKtx.departTime || '-'} น. ถึง Seoul Station เวลา ${legacyKtx.arriveTime || '-'} น.${extra ? ' (' + extra + ')' : ''} จากนั้นต่อรถไฟใต้ดินสาย 5 ไปสถานี Gangdong`
+                    };
+                }
+            } catch (e) {}
         })();
 
         const defaultTravelerData = {
@@ -722,7 +656,7 @@
                     dob: '',
                     expiryDate: '',
                     passportImg: '',
-                    flights: { outNo: '', outPnr: '', outTime: '', outSeat: '', inNo: '', inPnr: '', inTime: '', inSeat: '' }
+                    flights: { outNo: '', outPnr: '', outTime: 'เดินทาง 30 พ.ย. 2569', outSeat: '', inNo: 'TW101 (หรือรอบ 19:50/20:15)', inPnr: '', inTime: 'ออก ICN 19:50 / 20:15 น.', inSeat: 'Terminal 1' }
                 },
                 {
                     label: 'ผู้เดินทางคนที่ 2',
@@ -732,15 +666,15 @@
                     dob: '',
                     expiryDate: '',
                     passportImg: '',
-                    flights: { outNo: '', outPnr: '', outTime: '', outSeat: '', inNo: '', inPnr: '', inTime: '', inSeat: '' }
+                    flights: { outNo: 'TW102', outPnr: '', outTime: 'ถึง ICN 09:00 น. (6 ธ.ค.)', outSeat: 'Terminal 1', inNo: 'TW101 (หรือรอบ 19:50/20:15)', inPnr: '', inTime: 'ออก ICN 19:50 / 20:15 น.', inSeat: 'Terminal 1' }
                 }
             ],
             notes: {
-                busanHotel: '',
-                seoulHotel: '',
+                busanHotel: 'Busan Yeongmu Parade Hotel Haeundae Beach (6–8 ธ.ค. 2569)',
+                seoulHotel: 'STAYMIN Gangdong Hosted by Mama Jin (8–12 ธ.ค. 2569)',
                 insurance: '',
                 esim: '',
-                general: ''
+                general: 'K-Heritage Visitor Passport รับได้ที่ ICN T1 ชั้น B1 Transportation Center (แถว Burger King)'
             }
         };
 
@@ -769,7 +703,7 @@
         let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
         let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
         let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
-            major: 4,
+            major: 5,
             minor: 0,
             updatedAt: '22 พ.ย. 2569'
         }));
@@ -781,89 +715,77 @@
         let lastAddedId = null;
 
         // ---------------------------------------------------------
-        // VERSIONING & DATE HELPERS
-        // ---------------------------------------------------------
-        function getThaiDateShort() {
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = new Date();
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
-        }
-
-        function getCheckinTimestamp() {
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = new Date();
-            const hh = String(d.getHours()).padStart(2, '0');
-            const mm = String(d.getMinutes()).padStart(2, '0');
-            return `${d.getDate()} ${months[d.getMonth()]} ${hh}:${mm} น.`;
-        }
-
-        function renderVersionBadge() {
-            const el = document.getElementById('version-text');
-            if (el && versionState) {
-                el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
-            }
-        }
-
-        function bumpMinorVersion() {
-            versionState.minor = (Number(versionState.minor) || 0) + 1;
-            versionState.updatedAt = getThaiDateShort();
-        }
-
-        // ---------------------------------------------------------
-        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (34+ SPOTS)
+        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (55+ SPOTS FROM USER LIST)
         // ---------------------------------------------------------
         const baseCafeFoodItems = [
             // ปูซาน (Busan)
-            { id: 'cf_b1', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ตลาดแฮอุนแด (Haeundae Traditional Market)', kr: '해운대전통시장', menu: 'ต๊อกบกกี, โอเด้ง, ปลาไหลย่าง, ซีฟู้ด, โฮต็อกน้ำผึ้ง', note: 'เดินจากหาดแฮอุนแด 3 นาที (Day 1)' },
-            { id: 'cf_b2', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Miryang Sundae Dwaeji Gukbap (ซุปหมูแฮอุนแด)', kr: '밀양순대돼지국밥 해운대점', menu: 'ซุปหมูต้มกระดูก (Dwaeji Gukbap), ซุนแด', note: 'ร้านดังเปิด 24 ชม. ใกล้หาดแฮอุนแด' },
-            { id: 'cf_b3', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Rendeja-Vous Haeundae (คาเฟ่วิวทะเล)', kr: '랑데자뷰 해운대점', menu: 'กาแฟดริป, ลาเต้, วิวทะเลแฮอุนแดมุมสูง', note: 'ใกล้จุดเริ่มต้นทางเดิน Blueline Park Mipo' },
-            { id: 'cf_b4', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'H.US Coffee (คาเฟ่ริมทางรถไฟ Cheongsapo)', kr: '에이치어스커피', menu: 'อเมริกาโน่, ลาเต้, วิวรางรถไฟและประภาคารแฝด', note: 'จุดแวะพักช่วงเดินชมวิว Blueline Park (Day 2)' },
-            { id: 'cf_b5', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Coralani (코랄라니 คาเฟ่วิวทะเล Gijang)', kr: '코랄라니', menu: 'เบเกอรีอบสด, กาแฟ, วิวทะเลแบบพาโนรามา', note: 'โซน Gijang ใกล้วัดแฮดงยงกุงซา (Day 2)' },
-            { id: 'cf_b6', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리', menu: 'Specialty Coffee, คาเฟ่สไตล์มินิมอลและวินเทจ', note: 'ย่านซอมยอน (Day 2 ช่วงค่ำ)' },
-            { id: 'cf_b7', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ย่านซอมยอน (Seomyeon Food Alley)', kr: '서면 먹자골목', menu: 'หมูย่างเกาหลี, ไก่ทอด, ซุปหมูซอมยอน', note: 'สถานี Seomyeon (Day 2)' },
+            { id: 'cf_b1', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ตลาดแฮอุนแด (Haeundae Traditional Market)', kr: '해운대전통시장', menu: 'ต๊อกบกกี, โอเด้ง, ปลาไหลย่าง, ซีฟู้ด, โฮต็อกน้ำผึ้ง', note: 'เปิด 09:00–22:00 น. สาย 2 สถานี Haeundae ทางออก 3/5 เดิน 350 ม.' },
+            { id: 'cf_b2', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Baro Haejang (바로해장 ใกล้หาดกวางอัลลี)', kr: '바로해장 광안점', menu: 'ซุปเนื้อวัว (Beef Haejangguk), ก๋วยเตี๋ยวอูด้งซุปเนื้อ', note: 'เปิด 09:00–22:00 น. สาย 2 สถานี Geumnyeonsan ทางออก 1 (2 Gwangnam-ro 94beon-gil)' },
+            { id: 'cf_b3', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Having Moment (해빙모먼트 ยองโด)', kr: '해빙모먼트', menu: 'กาแฟสเปเชียลตี้ ขนมอบ และวิวทะเลเกาะยองโด', note: 'เปิด 09:00–20:00 น. สาย 1 สถานี Nampo ทางออก 6 ต่อรถบัสสาย 71 (ใกล้หมู่บ้านฮึนยออุล)' },
+            { id: 'cf_b4', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ATELIER:O Coffee Shop (ยองโด)', kr: '아뜰리에오 영도', menu: 'กาแฟดริป ขนมโฮมเมด วิวทะเลมุมสูงยองโด', note: 'เปิด 10:00–20:00 น. (Last order 19:30) 204 Jeoryeong-ro, Yeongdo-gu' },
+            { id: 'cf_b5', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Thrill On The Mug (스릴온더머그 ยองโด)', kr: '스릴온더머그', menu: 'คาเฟ่วิวทะเลและหน้าผาสุดอลังการบนเกาะยองโด', note: 'เปิด 10:00–22:00 น. Dongsam-dong, Yeongdo-gu' },
+            { id: 'cf_b6', zone: 'ปูซาน (Busan)', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Sogeumppang & Jayeondo Hae (자연도소금빵 ปูซาน)', kr: '자연도소금빵 해운대', menu: 'ขนมปังเกลืออบสดใหม่ (Salt Bread) ใกล้ Blueline Park Mipo', note: 'เปิด 09:00–22:00 น. สถานี Jungdong ทางออก 7 เดิน 7 นาที (12-1 Dalmaji-gil 62beon-gil)' },
+            { id: 'cf_b7', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Junggunanbang (중구난방 ย่านจุงกู)', kr: '중구난방', menu: 'อาหารเกาหลีฟิวชัน / กับแกล้มบรรยากาศอบอุ่น', note: '9 Daecheong-ro 138beon-gil, Jung-gu, Busan (ใกล้นัมโพดง)' },
+            { id: 'cf_b8', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'H.US Coffee (คาเฟ่ริมทางรถไฟ Cheongsapo)', kr: '에이치어스커피', menu: 'อเมริกาโน่, ลาเต้, วิวรางรถไฟและประภาคารแฝด', note: 'จุดแวะพักช่วงเดินชมวิว Blueline Park Cheongsapo' },
+            { id: 'cf_b9', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리', menu: 'Specialty Coffee, คาเฟ่สไตล์มินิมอลและตู้สติกเกอร์ Cambag', note: 'ย่านซอมยอน (สถานี Jeonpo / Seomyeon)' },
 
             // โซล: Anguk & Bukchon
-            { id: 'cf_s1', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Anguk', kr: '런던베이글뮤지엄 안국점', menu: 'Potato Cheese Bagel, Spring Onion Pretzel Bagel', note: 'สถานี Anguk ทางออก 2 (ควรไปเช้าหรือกดคิว CatchTable)' },
-            { id: 'cf_s2', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery (อาติสต์ เบเกอรี)', kr: '아티스트베이커리 안국', menu: 'ขนมปังเกลือ (Salt Bread) หลากไส้ เช่น Earl Grey, Lemon', note: 'หน้าสถานี Anguk ทางออก 1 (Day 4)' },
-            { id: 'cf_s3', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Anguk (คาเฟ่ออเนียน อันกุก)', kr: '카페 어니언 안국점', menu: 'Pandoro ขนมปังภูเขาหิมะ, อเมริกาโน่', note: 'คาเฟ่บ้านฮันอกโบราณ สถานี Anguk ทางออก 3' },
-            { id: 'cf_s4', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Fritz Coffee Company Wonseo (ฟริตซ์ คอฟฟี่)', kr: '프릳츠 원서점', menu: 'กาแฟคั่วเอง, ครัวซองต์ครีม, โลโก้แมวน้ำสุดคลาสสิก', note: 'ใกล้พระราชวังชางด็อกกุง สถานี Anguk' },
-            { id: 'cf_s5', zone: 'โซล: Anguk & Bukchon', type: 'ร้านอาหาร', name: 'Hwangsaengga Kalguksu (บะหมี่เกี๊ยวซัมชองดง)', kr: '황생가칼국수', menu: 'คัลกุกซู (บะหมี่น้ำซุปกระดูก), มันดูเกี๊ยวนึ่ง', note: 'มิชลินไกด์ ย่านซัมชองดง' },
+            { id: 'cf_s1', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Anguk (런던 베이글 뮤지엄)', kr: '런던베이글뮤지엄 안국점', menu: 'Potato Cheese Bagel, Spring Onion Pretzel Bagel', note: 'เปิด 08:00–18:00 น. สถานี Anguk ทางออก 2 (จองคิวแอป CatchTable ได้ จ.–พฤ. ตั้งแต่ 09:00 น.)' },
+            { id: 'cf_s2', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery Anguk (아티스트 베이커리)', kr: '아티스트베이커리 안국', menu: 'ขนมปังเกลือ (Salt Bread) หลากไส้ เช่น Earl Grey, Lemon, Potato', note: 'เปิดทุกวัน 07:30–20:00 น. สถานี Anguk ทางออก 1' },
+            { id: 'cf_s3', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Thanks, Oat Bukchon (땡스오트 안국)', kr: '땡스오트 안국', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สดและกราโนล่า', note: 'เปิด 08:00–19:30 น. สถานี Anguk ทางออก 2 เดิน 3–5 นาที (21-10 Bukchon-ro)' },
+            { id: 'cf_s4', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Dotori Garden Anguk (도토리 가든)', kr: '도토리 가든 안국', menu: 'กรีกโยเกิร์ตน้ำผึ้งรังผึ้ง, ขนมปังรูปผลโอ๊ค (บรรยากาศสวนสไตล์ Ghibli)', note: 'เปิดทุกวัน 08:00–23:00 น. สถานี Anguk ทางออก 3 (19-8 Gyedong-gil)' },
+            { id: 'cf_s5', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Blue Bottle Samcheong Cafe (블루보틀 삼청)', kr: '블루보틀 삼청 카페', menu: 'New Orleans Iced Coffee, Gibraltar Latte วิวหลังคาบ้านฮันอก', note: 'สถานี Anguk ทางออก 1 เดินผ่านหมู่บ้านฮันอก 10–15 นาที (76 Bukchon-ro 5-gil)' },
+            { id: 'cf_s6', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Layered Bukchon (레이어드 안국)', kr: '카페 레이어드 안국점', menu: 'สโคนหลากหลายรส, เค้กสไตล์อังกฤษในบ้านฮันอก', note: 'เปิดทุกวัน 08:00–22:00 น. 2-3 Bukchon-ro 2-gil, Jongno' },
+            { id: 'cf_s7', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Anguk (카페 어니언 안국점)', kr: '카페 어니언 안국점', menu: 'Pandoro ขนมปังภูเขาหิมะ, อเมริกาโน่', note: 'คาเฟ่บ้านฮันอกโบราณ สถานี Anguk ทางออก 3' },
 
-            // โซล: Jongno & Myeongdong
-            { id: 'cf_s6', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Cheongsudang Bakery (ชองซูดัง อิกซอนดง)', kr: '청수당 베이커리', menu: 'Souffle Castella, Matcha Cream Milk, สวนไผ่', note: 'หมู่บ้านฮันอกอิกซอนดง (Day 3)' },
-            { id: 'cf_s7', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Salt Bread Ikseon-dong (ขนมปังเกลือ)', kr: '자연도소금빵 익선', menu: 'ขนมปังเกลืออบสดใหม่ (เซ็ต 4 ชิ้น)', note: 'อิกซอนดง สถานี Jongno 3-ga' },
-            { id: 'cf_s8', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Mil Toast House Ikseon-dong (มิล โทสต์)', kr: '밀토스트 익선점', menu: 'ขนมปังนึ่งในเข่งไม้ไผ่ (Souffle French Toast)', note: 'อิกซอนดง (Day 3)' },
-            { id: 'cf_s9', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'Myeongdong Kyoja (เมียงดงเคียวจา)', kr: '명동교자 본점', menu: 'บะหมี่คัลกุกซู, เกี๊ยวนึ่งมันดู (มิชลินไกด์)', note: 'ย่านเมียงดง (Day 4)' },
-            { id: 'cf_s10', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'สตรีทฟู้ดเมียงดง (Myeongdong Street Food)', kr: '명동거리', menu: 'ต๊อกบกกี, ขนมไข่, โฮต็อก, สตรอว์เบอร์รีเคลือบน้ำตาล', note: 'เปิดช่วงเย็นถึงค่ำ ย่านเมียงดง' },
+            // โซล: Jongno, Hyehwa & Myeongdong
+            { id: 'cf_s8', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Fikee (피키 ย่าน Seosulla-gil)', kr: '피키 서순라길', menu: 'กาแฟและขนมในย่านสุดฮิต Seosulla-gil ใกล้อิกซอนดง', note: 'สถานี Jongno 3-ga ทางออก 8 (แนะนำมาช่วงร้านเปิด แสงหน้าร้านสวย)' },
+            { id: 'cf_s9', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'MeBut (미벗 โมจิผลไม้ย่านทงแดมุน)', kr: '미벗 동대문', menu: 'Chapssaltteok Cake / ไดฟุกุโมจิสอดไส้ครีมและผลไม้สด', note: 'อ.–ส. 10:00–21:30 น. / อา. 10:00–18:00 น. (ปิดวันจันทร์) สถานี Dongdaemun ทางออก 1 หรือ 3' },
+            { id: 'cf_s10', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Gobongdang Hyehwa (고봉당 혜화대학로본점)', kr: '고봉당 혜화대학로본점', menu: 'Grilled Injeolmi Rice Cake (ต๊อกย่างโรยผงถั่ว), บิงซู', note: 'สาย 4 สถานี Hyehwa ทางออก 4 เดินเข้าซอยข้างร้าน Shoe Marker (1F, 8 Daemyeong 1-gil)' },
+            { id: 'cf_s11', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Baskin Robbins Jongno Branch (배스킨라빈스 종로)', kr: '배스킨라빈스 종로', menu: 'ไอศกรีมรสพิเศษเฉพาะเกาหลี', note: 'ย่านจงโน (Jongno)' },
+            { id: 'cf_s12', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Eoreumkkot Ice Cream / Ppungeodang / Chidish / Les Amis Honnêtes', kr: '붕어빵 맛집', menu: 'ขนมปังปลา Bungeoppang ไส้ครีม ถั่วแดง และ Salt Bread Bungeoppang', note: 'ลิสต์ร้านขนมปังปลา Bungeoppang ในโซล' },
+            { id: 'cf_s13', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Cheongsudang Bakery (청수당 อิกซอนดง)', kr: '청수당 베이커리', menu: 'Souffle Castella, Matcha Cream Milk, สวนไผ่', note: 'หมู่บ้านฮันอกอิกซอนดง (Day 3)' },
+            { id: 'cf_s14', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'Myeongdong Kyoja & สตรีทฟู้ดเมียงดง', kr: '명동교자 본점', menu: 'บะหมี่คัลกุกซู, เกี๊ยวนึ่งมันดู, ต๊อกบกกี, ขนมไข่', note: 'ย่านเมียงดง (Day 4)' },
 
             // โซล: Yongsan, Hannam & Haebangchon
-            { id: 'cf_s11', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Passion 5 (แพชชั่น 5 ฮันนัมดง)', kr: '패션5', menu: 'เบเกอรี เค้ก พุดดิ้ง และขนมหวานระดับพรีเมียม', note: 'สถานี Hangangjin ทางออก 3 (Day 6)' },
-            { id: 'cf_s12', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Anthracite Coffee Hannam', kr: '앤트러사이트 한남점', menu: 'กาแฟคั่วสดโรงคั่วดังในฮันนัมดง', note: 'ย่านฮันนัมดง (Day 6 ช่วงเช้า)' },
-            { id: 'cf_s13', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'MTL Hannam (More Than Less)', kr: 'MTL 한남', menu: 'กาแฟ Bonanza Coffee จากเบอร์ลิน และขนมอบ', note: 'ย่านฮันนัมดง' },
-            { id: 'cf_s14', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', menu: 'Gamtae Salmon Roll (18,000₩), Galchi Sokjeot Pasta (23,000₩)', note: 'จุดแวะที่ 2 บนเส้นทางแฮบังชน ใกล้ตลาดชินฮึง (Day 6)' },
-            { id: 'cf_s15', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', menu: 'เจลาโต้มัทฉะโรยเกลือ Maldon, บาแก็ตจิ้ม Kaymak & น้ำผึ้ง', note: 'จุดแวะที่ 4 บนเส้นทางแฮบังชน (บาร์ไอศกรีมตอนกลางวัน)' },
-            { id: 'cf_s16', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', menu: 'อเมริกาโน่, วานิลลาลาเต้ (คาเฟ่ธีมร้านซักผ้ามีระเบียงนั่งชิล)', note: 'จุดแวะที่ 6 เดินลงเนินจากตรอก Sweet Bottle มาทางฮูอัมดง' },
-            { id: 'cf_s17', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์ 10 ปีซ้อน)', kr: '구복만두', menu: 'เกี๊ยวทอดน้ำกรอบนอกนุ่มใน (Gubok Traditional Mandu), เกี๊ยวกุ้ง', note: 'จุดปิดท้ายเส้นทางแฮบังชน ใกล้สถานี Sookmyung Women\'s Univ.' },
+            { id: 'cf_s15', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Tortoise Haebangchon (토터스 แฮบังชน)', kr: '토터스 해방촌', menu: 'ซูเฟล่แพนเค้กนุ่มฟู, เค้กโฮมเมด และกาแฟ', note: 'ย่านแฮบังชน (นั่งสาย 6 ลง Noksapyeong ทางออก 2 ต่อรถบัส Yongsan 02)' },
+            { id: 'cf_s16', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Haus Bakery Service (하우스베이커리서비스 แฮบังชน)', kr: '하우스베이커리서비스', menu: 'เบเกอรีอบสดใหม่ ครัวซองต์ และกาแฟในซอยเนินเขาแฮบังชน', note: 'เปิด 10:00–19:00 น. (เสาร์ถึง 20:00 น. / ปิดวันพุธ) สถานี Noksapyeong ทางออก 2' },
+            { id: 'cf_s17', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'CURVE HILL (커브힐 Brunch & Cafe ยงซาน)', kr: '커브힐', menu: 'เมนูบรันช์ ขนมปังซาวโดวจ์ และกาแฟ', note: 'จ.–ศ. 08:30–19:00 / ส. 09:00–19:00 น. สถานี Noksapyeong ทางออก 1/3 เดินขึ้นเนิน 2–6 นาที' },
+            { id: 'cf_s18', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'SAAN (산 เดิม FODI by SAAN ยงซาน)', kr: '산 용산', menu: 'กาแฟและขนมบรรยากาศสงบติดรางรถไฟ', note: 'เปิด 10:00–20:30 น. สาย 4 สถานี Ichon ทางออก 5 เดินเข้าซอยสุดทางติดรางรถไฟ' },
+            { id: 'cf_s19', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'mahā hannam (마하한남 คาเฟ่ตามรอยบยอนอูซอก)', kr: '마하한남', menu: 'ขนมและเครื่องดื่มจัด Display สวย ดีไซน์ร้านโดดเด่นชั้น 4', note: '4F, 85 Seobinggo-ro 91na-gil, Yongsan (แนะนำนั่งบัสหรือแท็กซี่มาสะดวกสุด)' },
+            { id: 'cf_s20', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Joosic (주식 ย่านอิแทวอน)', kr: '주식 이태원', menu: 'อาหารเกาหลีร่วมสมัยและเครื่องดื่ม', note: 'สาย 6 สถานี Itaewon ทางออก 1 เดินเข้าซอย Noksapyeong-daero 32-gil' },
+            { id: 'cf_s21', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', menu: 'Gamtae Salmon Roll, Galchi Sokjeot Pasta', note: 'ย่านแฮบังชน ใกล้ตลาดชินฮึง' },
+            { id: 'cf_s22', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', menu: 'เจลาโต้มัทฉะโรยเกลือ Maldon, บาแก็ตจิ้ม Kaymak & น้ำผึ้ง', note: 'ย่านแฮบังชน (บาร์ไอศกรีมตอนกลางวัน / ไวน์ตอนกลางคืน)' },
+            { id: 'cf_s23', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', menu: 'อเมริกาโน่, วานิลลาลาเต้ (คาเฟ่ธีมร้านซักผ้ามีระเบียงนั่งชิล)', note: 'เดินลงเนินจากตรอก Sweet Bottle มาทางฮูอัมดง' },
+            { id: 'cf_s24', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์ 10 ปีซ้อน)', kr: '구복만두', menu: 'เกี๊ยวทอดน้ำกรอบนอกนุ่มใน (Gubok Traditional Mandu), เกี๊ยวกุ้ง', note: 'ใกล้สถานี Sookmyung Women\'s Univ.' },
 
             // โซล: Seongsu & Ttukseom
-            { id: 'cf_s18', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Seongsu (คาเฟ่ออเนียน ซองซู)', kr: '카페 어니언 성수점', menu: 'กาแฟดริป, ขนมปังอบ, คาเฟ่สไตล์โกดังอิฐปูนเปลือย', note: 'สถานี Seongsu ทางออก 2 (Day 5)' },
-            { id: 'cf_s19', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Nudake Seongsu (นูเดค ซองซู)', kr: '누데이크 성수', menu: 'Peak Cake ครัวซองต์ครีมมัทฉะ', note: 'ร้านขนมสุดอาร์ตเครือ Gentle Monster / Tamburins' },
-            { id: 'cf_s20', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Salt Bread Seongsu (ขนมปังเกลือซองซู)', kr: '자연도소금빵 성수', menu: 'ขนมปังเกลืออบใหม่หอมเนย', note: 'ย่านซองซู' },
-            { id: 'cf_s21', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านอาหาร', name: 'Somunnan Seongsu Gamjatang (ซุปกระดูกหมูซองซู)', kr: '소문난성수감자탕', menu: 'คัมจาทัง (ซุปกระดูกหมูต้มมันฝรั่ง) ร้านดังคิวยาว', note: 'สถานี Seongsu ทางออก 4' },
+            { id: 'cf_s25', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Sesam House (세삼하우스 ไอศกรีมซองซู)', kr: '세삼하우스 성수', menu: 'ไอศกรีมโฮมเมดรสชาติพิเศษสไตล์เกาหลี', note: 'เปิดทุกวัน 12:00–21:00 น. สถานี Seongsu ทางออก 4 (49 Seongsu-ilro 4-gil)' },
+            { id: 'cf_s26', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Turtlehip (터틀힙 เค้กโมจิ Chapssaltteok ซองซู)', kr: '터틀힙 성수', menu: 'Chapssaltteok Cake เค้กโมจิไส้แน่นสุดฮิตในซองซู', note: 'เปิดทุกวัน 11:00–20:30 น. สถานี Ttukseom ทางออก 2 เดิน 2 นาที' },
+            { id: 'cf_s27', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Lazy Yogurt Seongsu (레이지요거트 성수점)', kr: '레이지요거트 성수점', menu: 'กรีกโยเกิร์ตเนื้อแน่น ผลไม้สด และกราโนล่า', note: 'โซน Seongsu Yeonbang ตึก B ห้อง 102 (สถานี Seongsu ทางออก 3)' },
+            { id: 'cf_s28', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'CafeCite (카페사이트 ซองซู)', kr: '카페사이트 성수', menu: 'กาแฟและขนม บรรยากาศเงียบสงบ 2 ชั้น (ชั้น 2 ถ่ายรูปสวย)', note: 'สถานี Seongsu ทางออก 3 (แนะนำวันธรรมดาคนไม่พลุกพล่าน)' },
+            { id: 'cf_s29', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'POINTTWOFIVE·SECOND (025S) Seongsu Haus', kr: '포인트투파이브세컨드 성수', menu: 'สเปซและสถาปัตยกรรมสุดเท่ พร้อมเครื่องดื่มและของดีไซน์', note: 'เปิดทุกวัน 12:00–19:00 น. สถานี Seoul Forest / Ttukseom / Seongsu' },
+            { id: 'cf_s30', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Starbucks Ttukseom Hangang Park (วิวพระอาทิตย์ตก)', kr: '스타벅스 뚝섬한강공원점', menu: 'กาแฟชมวิวพระอาทิตย์ตกริมแม่น้ำฮันและตึก Lotte World Tower', note: 'สถานี Jayang (Ttukseom Resort) ทางออก 2 หรือ 3' },
+            { id: 'cf_s31', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Seongsu & Nudake Seongsu', kr: '카페 어니언 성수점', menu: 'Pandoro, Peak Cake ครัวซองต์มัทฉะ', note: 'ย่านซองซู (Day 5)' },
 
-            // โซล: Hongdae & Yeonnam
-            { id: 'cf_s22', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Layered Yeonnam (คาเฟ่เลเยอร์ ยอนนัมดง)', kr: '카페 레이어드 연남점', menu: 'สโคนหลากหลายรส, เค้กสไตล์อังกฤษน่ารักๆ', note: 'ย่านยอนนัมดง (Day 6)' },
-            { id: 'cf_s23', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Randy\'s Donuts Yeonnam (โดนัทยอนนัมดง)', kr: '랜디스도넛 연남점', menu: 'โดนัทโฮมเมดชิ้นใหญ่สไตล์อเมริกัน', note: 'ย่านยอนนัมดง' },
-            { id: 'cf_s24', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'Thanks, Oat Yeonnam (แต๊งส์ โอ๊ต กรีกโยเกิร์ต)', kr: '땡스오트 연남', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สดและกราโนล่า', note: 'ย่านยอนนัมดง' },
-            { id: 'cf_s25', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'Myth Jokbal Hongdae (ขาหมูเกาหลีฮงแด)', kr: '미쓰족발 홍대본점', menu: 'ขาหมูเกาหลีราดซอสกระเทียม (Garlic Jokbal)', note: 'ย่านฮงแด (Day 6 มื้อเย็น)' },
+            // โซล: Hongdae, Yeonnam & Hapjeong
+            { id: 'cf_s32', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'JangJakJip (장작집 ยอนนัมดง)', kr: '장작집 연남', menu: 'ไก่ย่างเตาฟืนสอดไส้ข้าวเหนียว / อาหารเกาหลี', note: '570-38 Yeonnam-dong, Mapo-gu (สถานี Hongik Univ. ทางออก 3)' },
+            { id: 'cf_s33', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'Kukbogam Hongdae Main Branch (국보감 홍대본점)', kr: '국보감 홍대본점', menu: 'อาหารเกาหลีต้นตำรับย่านฮงแด', note: '1F, 21 Wausan-ro 21-gil, Mapo-gu, Seoul' },
+            { id: 'cf_s34', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'RUF Tap Beer (러프 ยอนนัมดง)', kr: '러프 연남', menu: 'คราฟต์เบียร์สด (Tap Beer) และกับแกล้มนั่งชิลย่านยอนนัมดง', note: '276 Donggyo-ro, Mapo-gu, Seoul (สถานี Hongik Univ. ทางออก 3)' },
+            { id: 'cf_s35', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Yuki Mochi Yeonnam (유키모찌 ยอนนัมดง)', kr: '유키모찌 연남', menu: 'ไอศกรีมโมจิแป้งนุ่มหลากรส เดินเล่นเลียบสวนป่า ยอนทรัลพาร์ค', note: 'เปิด 11:30–22:30 น. สถานี Hongik Univ. ทางออก 3 (240 Donggyo-ro)' },
+            { id: 'cf_s36', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'BEANBROTHERS COFFEEHOUSE SEOUL (ซังซู)', kr: '빈브라더스 합정', menu: 'กาแฟสเปเชียลตี้ ชั้น 7 และ Rooftop ชมวิวแม่น้ำฮันสวยมาก', note: 'สถานี Sangsu ทางออก 3 (แนะนำมาช่วงร้านเปิด แสงสวยคนน้อย)' },
+            { id: 'cf_s37', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'POLY CAFE (폴리카페 ฮับจอง)', kr: '폴리카페 합정', menu: 'กาแฟและขนมโฮมเมดบรรยากาศอบอุ่นย่านฮับจอง', note: 'เปิดทุกวัน 09:00–21:00 น. สถานี Hapjeong ทางออก 8 เดิน 5–10 นาที (2F, 14 Poeun-ro)' },
+            { id: 'cf_s38', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Miss Dore Dore (미스도레도레)', kr: '도레도레', menu: 'เค้กสายรุ้งและเบเกอรีสีสันสดใส', note: 'มีหลายสาขาในโซล (ฮงแด / ชินซา)' },
 
             // โซล: Gangnam & Jamsil
-            { id: 'cf_s26', zone: 'โซล: Gangnam & Jamsil', type: 'คาเฟ่ / กาแฟ', name: '% Arabica Starfield COEX', kr: '응커피 코엑스', menu: 'Kyoto Latte, Spanish Latte (ข้างห้องสมุด Starfield)', note: 'COEX Mall (Day 5)' },
-            { id: 'cf_s27', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'Knotted Donut Jamsil (โดนัทครีมสด Lotte World Mall)', kr: '노티드 월드', menu: 'Milk Cream Donut, Earl Grey Donut', note: 'ชั้น 5–6 Lotte World Mall (Day 5)' },
+            { id: 'cf_s39', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านอาหาร', name: 'Shaburo 21 Gangnam (샤브로21 강남)', kr: '샤브로21 강남', menu: 'ชาบูหม้อเดี่ยว (Individual Shabu-shabu) ราคาคุ้มค่า', note: 'สถานี Sinnonhyeon ทางออก 6 หรือ Gangnam ทางออก 11 (หลัง CGV)' },
+            { id: 'cf_s40', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'Lazy Yogurt Gangnam (레이지요거트 강남점)', kr: '레이지요거트 강남점', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สด', note: 'สถานี Gangnam ทางออก 4 เดิน 4 นาที (109 Yeoksam-ro #105)' },
+            { id: 'cf_s41', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Dosan / Lotte World Mall Jamsil', kr: '런던베이글뮤지엄 잠실점', menu: 'เบเกิลอบสดใหม่ สาขาโดซาน (Apgujeong Rodeo ทางออก 5) และสาขาจัมชิล', note: 'สาขาจัมชิลเปิด 10:30 น. (ไปกดคิวก่อนห้างเปิดได้ตั้งแต่ 09:30 น.)' },
+            { id: 'cf_s42', zone: 'โซล: Gangnam & Jamsil', type: 'คาเฟ่ / กาแฟ', name: '% Arabica Starfield COEX & Knotted Donut Jamsil', kr: '응커피 코엑스', menu: 'Kyoto Latte, Milk Cream Donut', note: 'COEX Mall / Lotte World Mall (Day 5)' },
 
             // โซล: Yeouido
-            { id: 'cf_s28', zone: 'โซล: Yeouido', type: 'คาเฟ่ / กาแฟ', name: 'Camel Coffee The Hyundai Seoul', kr: '카멜커피 더현대서울', menu: 'Camel Coffee (กาแฟครีมนมซิกเนเจอร์)', note: 'ชั้น B1 The Hyundai Seoul (Day 6)' },
-            { id: 'cf_s29', zone: 'โซล: Yeouido', type: 'ร้านขนม / เบเกอรี', name: 'Teddy Beurre House (ครัวซองต์ The Hyundai Seoul)', kr: '테디뵈르하우스 더현대서울', menu: 'ครัวซองต์เนยสด, Pistachio Kouign-Amann', note: 'ชั้น B1 โซนอาหาร The Hyundai Seoul' }
+            { id: 'cf_s43', zone: 'โซล: Yeouido', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery The Hyundai Seoul (아티스트 베이커리 여의도)', kr: '아티스트베이커리 더현대서울', menu: 'ขนมปังเกลือ (Salt Bread) สาขาห้าง The Hyundai Seoul', note: 'จ.–พฤ. 10:30–20:00 น. / ศ.–อา. 10:30–20:30 น.' },
+            { id: 'cf_s44', zone: 'โซล: Yeouido', type: 'คาเฟ่ / กาแฟ', name: 'Camel Coffee & Teddy Beurre House (The Hyundai Seoul)', kr: '카멜커피 더현대서울', menu: 'Camel Coffee, ครัวซองต์เนยสดชั้น B1', note: 'ชั้น B1 The Hyundai Seoul (Day 6)' }
         ];
 
         // ---------------------------------------------------------
@@ -880,45 +802,45 @@
                 events: [
                     {
                         id: 'd1_e1',
-                        time: '09:00 – 12:00',
-                        transit: 'AREX Express → Seoul Station',
-                        title: 'ถึงสนามบินอินชอน (ICN) & นั่ง AREX เข้า Seoul Station',
-                        desc: 'ผ่าน ตม. รับกระเป๋า ซื้อบัตร T-money / WOWPASS แล้วนั่งรถไฟความเร็วสูง AREX Express เข้าสถานี Seoul Station เพื่อต่อรถไฟ KTX ไปปูซาน',
+                        time: '09:00 – 11:00',
+                        transit: 'ICN Terminal 1 ชั้น B1 → AREX Express',
+                        title: 'ถึงสนามบินอินชอน (TW102 09:00) • รับ K-Heritage Passport & ขึ้น AREX',
+                        desc: 'ผ่าน ตม. รับกระเป๋า แวะรับสมุด <strong>Korean Heritage Visitor Passport</strong> ฟรีที่ K-Heritage Visitor Center (ICN T1 ชั้น B1 ศูนย์คมนาคม แถว Burger King ใกล้ทางไปรถไฟ AREX) แล้วนั่ง AREX (11:00–12:00 น.) เข้า Seoul Station',
                         places: [
-                            { name: 'สนามบินอินชอน (ICN)', kr: '인천국제공항' },
+                            { name: 'สนามบินอินชอน ICN T1 (K-Heritage Center ชั้น B1)', kr: '인천국제공항' },
                             { name: 'สถานี Seoul Station', kr: '서울역' }
                         ]
                     },
                     {
                         id: 'd1_e2',
-                        time: '12:00 – 15:30',
-                        transit: 'KTX (Seoul → Busan) ~2 ชม. 45 นาที',
-                        title: 'นั่งรถไฟ KTX มุ่งหน้าสู่ปูซาน & เช็กอินที่พักแฮอุนแด',
-                        desc: 'ถึงสถานี Busan Station ต่อรถไฟใต้ดินสาย 1 ไปเปลี่ยนสาย 2 ลงสถานี Haeundae ฝากกระเป๋าที่โรงแรม Busan Yeongmu Parade Hotel',
+                        time: '12:00 – 18:30',
+                        transit: 'KTX (Seoul Station → Busan Station)',
+                        title: 'พักทานมื้อเที่ยง Seoul Station • นั่ง KTX สู่ปูซาน & เช็กอินที่พัก',
+                        desc: 'ช่วง 12:00–14:30 น. พักทานอาหารที่ Seoul Station จากนั้นนั่งรถไฟ KTX (15:00–18:30 น.) มุ่งหน้าสู่สถานี Busan Station ต่อรถไฟใต้ดินสาย 2 ลงสถานี Haeundae เช็กอินที่พัก <strong>Busan Yeongmu Parade Hotel Haeundae Beach</strong>',
                         places: [
                             { name: 'สถานี Busan Station', kr: '부산역' },
-                            { name: 'Busan Yeongmu Parade Hotel', kr: '영무파라드호텔' }
+                            { name: 'Busan Yeongmu Parade Hotel Haeundae Beach', kr: '영무파라드호텔' }
                         ]
                     },
                     {
                         id: 'd1_e3',
-                        time: '16:00 – 18:30',
-                        transit: 'เดินริมหาด Haeundae',
-                        title: 'เดินเล่นหาดแฮอุนแด & ตลาดแฮอุนแด (Haeundae Traditional Market)',
-                        desc: 'เดินรับลมหนาวริมทะเลแฮอุนแด แวะหาของกินสตรีทฟู้ด ต๊อกบกกี โอเด้ง และของหวานในตลาดแฮอุนแด',
+                        time: '19:00 – 21:30',
+                        transit: 'เดินริมหาด Haeundae & ถนน Gunam-ro',
+                        title: 'ชมเทศกาลไฟ Deep Dive Haeundae (18:00–23:00 น.) & ตลาดแฮอุนแด',
+                        desc: 'เดินชมงานแสดงไฟ <strong>“Deep Dive Haeundae”</strong> ริมหาดแฮอุนแดและถนน Gunam-ro (อุโมงค์ไฟยาว 30 ม., เรือประดับไฟ, โซนใต้ทะเล เข้าชมฟรีถึง 23:00 น.) และแวะหาของกินที่ตลาดแฮอุนแด (เปิดถึง 22:00 น.)',
                         places: [
-                            { name: 'หาดแฮอุนแด (Haeundae Beach)', kr: '해운대해수욕장' },
-                            { name: 'ตลาดแฮอุนแด', kr: '해운대전통시장' }
+                            { name: 'หาดแฮอุนแด (เทศกาลไฟ Deep Dive Haeundae)', kr: '해운대해수욕장' },
+                            { name: 'ตลาดแฮอุนแด (Haeundae Traditional Market)', kr: '해운대전통시장' }
                         ]
                     },
                     {
                         id: 'd1_e4',
-                        time: '19:00 – 21:30',
+                        time: '21:30 – 22:30',
                         transit: 'รถไฟสาย 2 → สถานี Centum City',
-                        title: 'ชมไฟคริสต์มาส Christmas Village Busan (Shinsegae Centum City)',
-                        desc: 'ไฮไลต์คืนวันอาทิตย์! งานตลาดคริสต์มาสสุดอลังการหน้าห้าง Shinsegae Centum City ถ่ายรูปต้นคริสต์มาสยักษ์และไฟประดับ',
+                        title: 'Christmas Village Busan (Movie Hall Outdoor Theater / Centum City)',
+                        desc: 'งานตลาดคริสต์มาส Christmas Village Busan (จัดถึง 22:00/23:00 น. เฉพาะ พฤ.–อา.) บริเวณ Busan Cinema Center / Centum City',
                         places: [
-                            { name: 'Shinsegae Centum City', kr: '신세계백화점 센텀시티점' }
+                            { name: 'Christmas Village Busan (Busan Cinema Center)', kr: '영화의전당' }
                         ]
                     }
                 ]
@@ -928,49 +850,50 @@
                 city: 'ปูซาน',
                 badgeColor: 'bg-sky-100 text-sky-700',
                 date: 'จ. 7 ธ.ค.',
-                title: 'เดินชมวิว Blueline Park • วัดแฮดงยงกุงซา • หมู่บ้านคัมชอน & ซอมยอน',
-                highlightNote: '📸 แวะเดินเล่นชมวิวทางรถไฟเลียบทะเลโซน Blueline Park และจุดทางข้ามรถไฟวิวทะเลที่ Cheongsapo (เน้นเดินเล่นถ่ายรูปวิว ไม่นั่ง Sky Capsule)',
+                title: 'Blueline Park • หมู่บ้านคัมชอน • BIFF Square & หาดกวางอัลลี (Gwangalli)',
+                highlightNote: '📸 แวะเดินชมวิว Blueline Park แฮอุนแด (แวะซื้อขนมปังเกลือ Jayeondo Sogeumppang) ต่อด้วยหมู่บ้านคัมชอน BIFF Square และปิดท้ายวิวสะพาน Gwangan ยามค่ำที่หาดกวางอัลลี',
                 events: [
                     {
                         id: 'd2_e1',
                         time: '09:30 – 11:30',
-                        transit: 'เดินเลียบทางเดินไม้ Green Railway / แท็กซี่ไป Cheongsapo',
-                        title: 'เดินชมวิวเลียบทะเล Haeundae Blueline Park & จุดถ่ายรูป Cheongsapo',
-                        desc: 'เดินเล่นทางเดินเลียบชายฝั่ง Green Railway ชมวิวทะเลและรางรถไฟปุ๊กปิ๊ก แวะถ่ายรูปมุมทางข้ามรถไฟวิวทะเลสไตล์ญี่ปุ่น (คล้าย Kamakura) ที่สถานี Cheongsapo และประภาคารแฝดแดง-ขาว',
+                        transit: 'เดินเลียบทางเดินไม้ Green Railway / สถานี Jungdong ทางออก 7',
+                        title: 'เดินชมวิว Blueline Park แฮอุนแด & ขนมปังเกลือ Jayeondo Sogeumppang',
+                        desc: 'เดินเล่นชมวิวทางรถไฟเลียบทะเลโซน Mipo – Cheongsapo (เน้นเดินชมวิว ไม่นั่ง Sky Capsule) และแวะซื้อขนมปังเกลือเจ้าดัง <strong>Jayeondo Sogeumppang & Jayeondo Hae</strong>',
                         places: [
-                            { name: 'Blueline Park Mipo (จุดเริ่มต้นทางเดินชมวิว)', kr: '해운대블루라인파크 미포정거장' },
-                            { name: 'Cheongsapo Daritdol Observatory & ทางข้ามรถไฟวิวทะเล', kr: '청사포다릿돌전망대' }
+                            { name: 'Blueline Park Mipo (ทางเดินชมวิวเลียบทะเล)', kr: '해운대블루라인파크 미포정거장' },
+                            { name: 'Jayeondo Sogeumppang (ขนมปังเกลือแฮอุนแด)', kr: '자연도소금빵 해운대' }
                         ]
                     },
                     {
                         id: 'd2_e2',
-                        time: '12:00 – 14:00',
-                        transit: 'แท็กซี่ / รถบัสสาย 1001',
-                        title: 'วัดแฮดงยงกุงซา (Haedong Yonggungsa Temple)',
-                        desc: 'วัดพุทธริมโขดหินชายทะเลที่สวยที่สุดในเกาหลี ไหว้พระขอพรและชมวิวคลื่นกระทบโขดหิน',
-                        places: [
-                            { name: 'วัดแฮดงยงกุงซา', kr: '해동용궁사' }
-                        ]
-                    },
-                    {
-                        id: 'd2_e3',
-                        time: '15:00 – 17:30',
-                        transit: 'รถไฟสาย 1 สถานี Toseong → รถบัสสาย 2 / 2-2',
+                        time: '12:30 – 15:00',
+                        transit: 'สาย 1 สถานี Toseong ทางออก 6 → รถบัสสาย Saha 1-1 / Seogu 2, 2-2',
                         title: 'หมู่บ้านวัฒนธรรมคัมชอน (Gamcheon Culture Village)',
-                        desc: 'เดินเล่นหมู่บ้านสีพาสเทล ถ่ายรูปคู่กับเจ้าชายน้อย (The Little Prince) และสะสมตราปั๊มตามจุดต่างๆ',
+                        desc: 'ออกทางออก 6 สถานี Toseong เลี้ยวขวาเดินผ่านหน้า รพ.มหาวิทยาลัยปูซาน ขึ้นรถมินิบัสสีเขียวสาย Saha 1-1 หรือ Seogu 2 / 2-2 ลงป้าย Gamjeong Elementary School เดินถ่ายรูปและสะสมตราปั๊ม',
                         places: [
                             { name: 'หมู่บ้านวัฒนธรรมคัมชอน', kr: '감천문화마을' }
                         ]
                     },
                     {
+                        id: 'd2_e3',
+                        time: '15:30 – 17:30',
+                        transit: 'สาย 1 สถานี Jagalchi ทางออก 7 (หรือ Nampo ทางออก 7)',
+                        title: 'เดินเล่นย่าน BIFF Square & นัมโพดง (หรือข้ามไปคาเฟ่เกาะยองโด)',
+                        desc: 'เดินหาของกินสตรีทฟู้ด โฮต็อกเมล็ดธัญพืชที่ BIFF Square หรือนั่งบัสสาย 7 / 71 ข้ามไปคาเฟ่วิวทะเลเกาะยองโด (Having Moment / ATELIER:O / Thrill On The Mug)',
+                        places: [
+                            { name: 'BIFF Square (นัมโพดง)', kr: '비프광장' },
+                            { name: 'Having Moment (คาเฟ่ยองโด)', kr: '해빙모먼트' }
+                        ]
+                    },
+                    {
                         id: 'd2_e4',
                         time: '18:30 – 21:00',
-                        transit: 'รถไฟสาย 1 → สถานี Seomyeon',
-                        title: 'ช้อปปิ้งและมื้อเย็นย่านซอมยอน (Seomyeon) & Jeonpo Cafe Street',
-                        desc: 'เดินเล่นย่านวัยรุ่นใจกลางปูซาน แวะคาเฟ่ย่าน Jeonpo ตู้กาชาปอง และทานหมูย่างเกาหลีหรือซุปหมู (Dwaeji Gukbap)',
+                        transit: 'สาย 2 สถานี Gwangan (ทางออก 3/5) หรือ Geumnyeonsan (ทางออก 1)',
+                        title: 'ชมวิวสะพานหาดกวางอัลลี (Gwangalli Beach) & ซุปเนื้อ Baro Haejang',
+                        desc: 'เดินชมวิวสะพานเพชร Gwangan Bridge ยามค่ำคืนที่หาดกวางอัลลี และแวะทานซุปเนื้อร้อนๆ ที่ร้าน <strong>Baro Haejang (바로해장)</strong> ใกล้สถานี Geumnyeonsan ทางออก 1',
                         places: [
-                            { name: 'ย่านซอมยอน (Seomyeon)', kr: '서면역' },
-                            { name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리' }
+                            { name: 'หาดกวางอัลลี (Gwangalli Beach)', kr: '광안리해수욕장' },
+                            { name: 'Baro Haejang (ซุปเนื้อกวางอัลลี)', kr: '바로해장 광안점' }
                         ]
                     }
                 ]
@@ -1125,17 +1048,16 @@
                     {
                         id: 'd6_e1b',
                         time: '13:00 – 15:45',
-                        transit: 'แท็กซี่จากฮันนัมดง ~8 นาที / หรือสาย 4 สถานี Sookmyung Women\'s Univ. ขึ้นลิฟต์เอียง 108 ขั้น',
-                        title: 'Route เดินเที่ยวย่านแฮบังชน – ฮูอัมดง (Haebangchon Downhill Walk)',
-                        desc: 'เส้นทางเดินลงเนินสุดชิลบนเชิงเขานัมซาน:<br><strong>① ลิฟต์เอียงบันได 108 ขั้น (108계단)</strong> นั่งลิฟต์ขึ้นจุดชมวิวหลังคาบ้านแฮบังชน<br><strong>② HBC Restaurant (해방식당) & ตลาดชินฮึง (Sinheung Market)</strong> แวะมื้อเที่ยงและเดินเล่นตรอกตลาดเก่าสไตล์วินเทจ<br><strong>③ A Glass Of (어글라스오브)</strong> แวะทานเจลาโต้มัทฉะเกลือ Maldon หรือบาแก็ต Kaymak<br><strong>④ มุมถ่ายรูปตรอกบันได Sweet Bottle (스윗보틀)</strong> ถ่ายรูปช่องตึกเห็นวิวเมืองโซลช่วงแสงบ่าย 15:00 น.<br><strong>⑤ เดินลงเนินสู่ฮูอัมดง (Huam-dong)</strong> แวะคาเฟ่ <strong>Laundry Project (론드리프로젝트)</strong> หรือเกี๊ยวมิชลิน <strong>Gubok Mandu (구복만두)</strong> ก่อนขึ้นรถไฟไปต่อ',
+                        transit: 'สาย 6 สถานี Noksapyeong ทางออก 2 (ต่อบัส Yongsan 02) หรือแท็กซี่จากฮันนัมดง',
+                        title: 'Route เดินเที่ยวย่านแฮบังชน – ฮูอัมดง (Haebangchon Walking Route)',
+                        desc: 'เส้นทางเดินเที่ยวแฮบังชน (เริ่มจาก Noksapyeong ทางออก 2 ต่อบัส Yongsan 02 หรือขึ้นลิฟต์เอียง 108 ขั้น):<br><strong>① ตลาดชินฮึง (Sinheung Market) & HBC Restaurant</strong> เดินเล่นตรอกตลาดเก่าและคาเฟ่ในซอย Sinheung-ro<br><strong>② Tortoise (토터스) & Haus Bakery Service</strong> แวะทานซูเฟล่แพนเค้กหรือเบเกอรีอบสดในแฮบังชน<br><strong>③ ถ่ายรูปตู้สติกเกอร์ Stiikers (스티커즈 해방촌점)</strong> & เดินชมวิวเส้น <strong>Sowol-ro / Namsan Sky Forest Trail / Noeul Observatory</strong><br><strong>④ มุมถ่ายรูปตรอกบันได Sweet Bottle (스윗보틀)</strong> ถ่ายรูปช่องตึกเห็นวิวเมืองโซลช่วงแสงบ่าย 15:00 น.<br><strong>⑤ เดินลงเนินสู่ฮูอัมดง (Huam-dong)</strong> แวะคาเฟ่ <strong>Laundry Project</strong> หรือเกี๊ยวมิชลิน <strong>Gubok Mandu</strong>',
                         places: [
-                            { name: '① ลิฟต์เอียงบันได 108 ขั้น (108 Steps)', kr: '해방촌 108계단' },
-                            { name: '② HBC Restaurant (해방식당)', kr: '해방식당' },
-                            { name: '② ตลาดชินฮึง (Sinheung Market)', kr: '해방촌 신흥시장' },
-                            { name: '③ A Glass Of (어글라스오브)', kr: '어글라스오브' },
+                            { name: '① ตลาดชินฮึง แฮบังชน (Sinheung Market)', kr: '해방촌 신흥시장' },
+                            { name: '② Tortoise (토터스 ซูเฟล่แพนเค้ก)', kr: '토터스 해방촌' },
+                            { name: '② Haus Bakery Service (แฮบังชน)', kr: '하우스베이커리서비스' },
+                            { name: '③ Stiikers Photobooth (แฮบังชน)', kr: '스티커즈 해방촌점' },
                             { name: '④ ตรอกบันได Sweet Bottle (มุมถ่ายรูป)', kr: '스윗보틀' },
-                            { name: '⑤ Laundry Project (ฮูอัมดง)', kr: '론드리프로젝트' },
-                            { name: '⑤ Gubok Mandu (มิชลิน บิบ กูร์มองด์)', kr: '구복만두' }
+                            { name: '⑤ Laundry Project & Gubok Mandu (ฮูอัมดง)', kr: '구복만두' }
                         ]
                     },
                     {
@@ -1182,9 +1104,9 @@
                     {
                         id: 'd7_e2',
                         time: '15:30 – 19:50',
-                        transit: 'AREX Express (Seoul Station → Incheon Airport)',
-                        title: 'เดินทางสู่สนามบินอินชอน (ICN) & บินกลับกรุงเทพฯ',
-                        desc: 'นั่งรถไฟ AREX Express ไปสนามบินอินชอน รับเงินคืนภาษี (Tax Refund) เช็กอินโหลดกระเป๋า เตรียมตัวเดินทางกลับโดยสวัสดิภาพ',
+                        transit: 'AREX Express (Seoul Station → Incheon Airport T1)',
+                        title: 'เดินทางสู่สนามบินอินชอน (ICN) • แวะจุดถ่ายรูป & บินกลับกรุงเทพฯ (19:50/20:15)',
+                        desc: 'นั่งรถไฟ AREX Express ไปสนามบินอินชอน รับเงินคืนภาษี (Tax Refund) เช็กอินโหลดกระเป๋า เตรียมตัวเดินทางกลับโดยสวัสดิภาพ (เที่ยวบินออก 19:50 / 20:15 น.)',
                         places: [
                             { name: 'สนามบินนานาชาติอินชอน (ICN)', kr: '인천국제공항' }
                         ]
@@ -1194,20 +1116,42 @@
         ];
 
         const christmasSpots = [
-            { city: 'ปูซาน', name: 'Christmas Village Busan (Shinsegae Centum City)', kr: '신세계백화점 센텀시티점', transit: 'สาย 2 สถานี Centum City', info: 'ตลาดคริสต์มาสและไฟประดับสุดอลังการ เปิดเฉพาะ พฤ.–อา. (ต้องไปคืนวันอาทิตย์ที่ 6 ธ.ค.)' },
+            { city: 'ปูซาน', name: 'Deep Dive Haeundae Light Festival (หาดแฮอุนแด & Gunam-ro)', kr: '해운대해수욕장', transit: 'สาย 2 สถานี Haeundae (เปิดไฟ 18:00–23:00 น.)', info: 'ธีมโลกใต้ทะเลปี 2026 อุโมงค์ไฟยาว 30 เมตร เรือประดับไฟ และต้นคริสต์มาสริมทะเล เข้าชมฟรีถึง 10 ม.ค. 2027' },
+            { city: 'ปูซาน', name: 'Christmas Village Busan (Movie Hall Outdoor Theater / Centum City)', kr: '영화의전당', transit: 'สาย 2 สถานี Centum City', info: 'ตลาดคริสต์มาสและไฟประดับสุดอลังการ เปิดเฉพาะ พฤ.–อา. (26 พ.ย. – 25 ธ.ค. 2026)' },
             { city: 'โซล', name: 'Shinsegae Department Store Main (Myeongdong)', kr: '신세계백화점 본점', transit: 'สาย 4 สถานี Hoehyeon ทางออก 7', info: 'จอ LED โชว์ไฟคริสต์มาสขนาดยักษ์หน้าห้าง แลนด์มาร์กอันดับ 1 ของโซล' },
             { city: 'โซล', name: 'Lotte Department Store Main & Young Plaza', kr: '롯데백화점 본점', transit: 'สาย 2 สถานี Euljiro 1-ga', info: 'อุโมงค์ไฟคริสต์มาสและดิสเพลย์หน้าร้านธีมฤดูหนาวสุดโรแมนติก' },
             { city: 'โซล', name: 'The Hyundai Seoul (Sounds Forest ชั้น 5)', kr: '더현대 서울', transit: 'สาย 5 สถานี Yeouinaru ทางออก 1', info: 'หมู่บ้านคริสต์มาสในร่มธีม Le Grand Theatre สวยอลังการทุกมุม' },
-            { city: 'โซล', name: 'Starfield Library (COEX Mall)', kr: '별마당도서관', transit: 'สาย 2 สถานี Samseong ทางออก 5', info: 'ต้นคริสต์มาสสีทองขนาดใหญ่ตั้งเด่นกลางห้องสมุดชั้นหนังสือยักษ์' },
+            { city: 'โซล', name: 'Starfield Library (COEX Mall) & สถานี Apgujeong ทางออก 5', kr: '별마당도서관', transit: 'สาย 2 สถานี Samseong ทางออก 5 / สาย 3 Apgujeong ทางออก 5', info: 'ต้นคริสต์มาสสีทองขนาดใหญ่กลางห้องสมุด COEX และจุดเช็กอินไฟคริสต์มาสแถว Apgujeong' },
             { city: 'โซล', name: 'คลองชองกเยชอน & จัตุรัสควางฮวามุน', kr: '청계천', transit: 'สาย 5 สถานี Gwanghwamun', info: 'เทศกาลโคมไฟ Seoul Lantern Festival และตลาดคริสต์มาสกลางแจ้ง' }
         ];
 
         const freeGalleries = [
+            { zone: 'Anguk & Samcheong', name: 'MMCA Seoul (พิพิธภัณฑ์ศิลปะร่วมสมัยแห่งชาติ โซล)', kr: '국립현대미술관 서울', transit: 'สถานี Anguk ทางออก 1', info: 'นิทรรศการพิเศษจัดถึง 9 ก.พ. 2027 (โซน B1 Galleries 3–5 + 2F MMCA Studio)' },
             { zone: 'Anguk & Samcheong', name: 'Kukje Gallery (국제갤러리)', kr: '국제갤러리', transit: 'สถานี Anguk ทางออก 1', info: 'แกลเลอรีศิลปะร่วมสมัยระดับโลก เข้าชมฟรี (ปิดวันจันทร์)' },
-            { zone: 'Anguk & Samcheong', name: 'Gallery Hyundai (갤러리현대)', kr: '갤러리현대', transit: 'สถานี Anguk ทางออก 1', info: 'แกลเลอรีเก่าแก่ย่านซัมชองดง จัดแสดงงานศิลปะหมุนเวียนฟรี' },
-            { zone: 'Anguk & Samcheong', name: 'Arario Museum / Space', kr: '아라리오갤러리 서울', transit: 'สถานี Anguk ทางออก 2', info: 'แกลเลอรีศิลปะร่วมสมัยใกล้พระราชวังชางด็อกกุง' },
-            { zone: 'Hannam-dong', name: 'Pace Gallery Seoul (페이스갤러리)', kr: '페이스갤러리 서울', transit: 'สถานี Hangangjin ทางออก 3', info: 'แกลเลอรีดังในย่านฮันนัมดง มีดาดฟ้าชมวิวและจัดแสดงงานฟรี' },
-            { zone: 'Hannam-dong', name: 'Lehmann Maupin Seoul', kr: '리만머핀 서울', transit: 'สถานี Hangangjin ทางออก 3', info: 'แกลเลอรีศิลปะร่วมสมัยบรรยากาศเงียบสงบ เข้าชมฟรี' }
+            { zone: 'Anguk & Samcheong', name: 'Gallery Hyundai & Hyundai Hwarang (갤러리현대 / 현대화랑)', kr: '갤러리현대', transit: 'สถานี Anguk ทางออก 1', info: 'แกลเลอรีเก่าแก่ย่านซัมชองดง จัดแสดงงานศิลปะหมุนเวียนฟรี' },
+            { zone: 'Anguk & Samcheong', name: 'Gallery 41 & Arario Gallery', kr: '아라리오갤러리 서울', transit: 'สถานี Anguk ทางออก 2', info: 'แกลเลอรีศิลปะร่วมสมัยใกล้พระราชวังชางด็อกกุง' },
+            { zone: 'Hannam-dong', name: 'Leeum Museum of Art (리움미술관) & Pace Gallery Seoul', kr: '리움미술관', transit: 'สถานี Hangangjin ทางออก 1 / ทางออก 3', info: 'พิพิธภัณฑ์ศิลปะสถาปัตยกรรมสุดไอคอนิกในฮันนัมดง (โซนโถงบันไดวนถ่ายรูปสวยมาก)' }
+        ];
+
+        const photoboothAndShops = [
+            { cat: 'Photobooth', name: 'Stiikers Haebangchon (스티커즈 해방촌점)', kr: '스티커즈 해방촌점', loc: 'ย่านแฮบังชน (Yongsan-dong 2-ga 17-10)', info: 'ตู้ถ่ายรูปสติกเกอร์สุดฮิตในย่านแฮบังชน' },
+            { cat: 'Photobooth', name: 'Eternalog Seongsu (이터널로그 성수)', kr: '이터널로그 성수', loc: 'ซองซู (สถานี Seongsu ทางออก 3/4 ถนน Yeonmujang-gil)', info: 'ตู้โฟโต้บูธสไตล์มินิมอลใจกลางถนนคาเฟ่ซองซู' },
+            { cat: 'Photobooth', name: 'Photomaniac Classic Seongsu', kr: '포토매니악 성수', loc: 'ย่านซองซู (Seongdong-gu)', info: 'ตู้ถ่ายรูปฟิล์มคลาสสิกย่านซองซู' },
+            { cat: 'Photobooth', name: 'Photolab+ Library Itaewon', kr: '포토랩플러스 이태원', loc: 'อิแทวอน (สถานี Itaewon ทางออก 4 / 125 Bogwang-ro)', info: 'ตู้ถ่ายรูปธีมห้องสมุดสุดเท่ในอิแทวอน' },
+            { cat: 'Photobooth', name: 'Automatico Seochon (오토매티코 서촌)', kr: '오토매티코 서촌', loc: 'ซอชน (สถานี Gyeongbokgung ทางออก 2 เดิน 5 นาที)', info: 'เปิด 11:00–21:00 น. ตู้ถ่ายรูปยอดนิยมย่านซอชน' },
+            { cat: 'Photobooth', name: 'Cambag (캠백 หลายสาขา)', kr: '캠백', loc: 'ฮงแด, ฮับจอง, ซองซู, ฮันนัม, ซอซุนรากิล, จอนโพ (ปูซาน)', info: 'ตู้สติกเกอร์ยอดฮิต มีสาขาตามย่านช้อปปิ้งหลักครบ' },
+            { cat: 'Shopping', name: 'NYUNYU Mansion Anguk & Giftshop (뉴뉴맨션 안국)', kr: '뉴뉴맨션 안국점', loc: 'สถานี Anguk ทางออก 2 (Bukchon-ro 5-1) / สาขาซองซู & เมียงดง', info: 'เปิด จ.–พฤ. 10:00–22:00 / ศ.–ส. 10:00–22:45 น. แหล่งรวมเครื่องประดับและของกุ๊กกิ๊ก' },
+            { cat: 'Shopping', name: 'Daiso Myeongdong 12 ชั้น (다이소 명동역점)', kr: '다이소 명동역점', loc: 'สถานี Myeongdong (134-1 Toegye-ro)', info: 'เปิด 10:00–22:00 น. ไดโซะตึก 12 ชั้นใจกลางเมียงดง' },
+            { cat: 'Shopping', name: 'Miffy Store Seoul & Marithe x Peanuts / Matsui Dogs', kr: '미피스토어 성수', loc: 'ซองซู (5 Yeonmujang 13-gil) & ฮันนัมดง', info: 'ช็อป Miffy สาขาซองซู และคอลเลกชันพิเศษ Marithe / Matsui Dogs' }
+        ];
+
+        const sunsetAndArchSpots = [
+            { tag: 'Sunset Spot', name: 'Starbucks Ttukseom Hangang Park (วิวพระอาทิตย์ตกริมแม่น้ำฮัน)', kr: '스타벅스 뚝섬한강공원점', loc: 'สถานี Jayang (Ttukseom Resort) ทางออก 2 หรือ 3', info: 'จุดชมพระอาทิตย์ตกริมแม่น้ำฮัน มองเห็นวิวตึก Lotte World Tower และสะพาน' },
+            { tag: 'Sunset & View', name: 'Seongsu Skywalk / Cloud Bridge (สะพานลอยฟ้าซองซู)', kr: '성수구름다리', loc: 'สถานี Seoul Forest ทางออก 3 เดิน 5 นาที (Seongsu Suspension Bridge)', info: 'จุดชมวิวซองซูและแม่น้ำฮันมุมลับที่ไม่ค่อยมีคนพลุกพล่าน' },
+            { tag: 'Architecture', name: 'Chroma, Paradise City Incheon (ติดสนามบินอินชอน)', kr: '파라다이스시티 크로마', loc: 'นั่ง Shuttle Bus ฟรีจาก ICN T1 ป้าย 3C หรือ 14C (5–10 นาที)', info: 'อาคารดีไซน์สุดล้ำใกล้สนามบินอินชอน' },
+            { tag: 'Architecture', name: 'Marine City Busan (ย่านแฮอุนแด)', kr: '마린시티', loc: 'สาย 2 สถานี Dongbaek ทางออก 1 เดินเลียบทะเล 5–15 นาที', info: 'วิวตึกระฟ้าริมทะเลปูซานและสะพาน Gwangan' },
+            { tag: 'Architecture', name: 'Dongdaemun Design Plaza (DDP)', kr: '동대문디자인플라자', loc: 'สถานี Dongdaemun History & Culture Park ทางออก 1', info: 'แลนด์มาร์กสถาปัตยกรรมโค้งมนสุดล้ำใจกลางโซล' },
+            { tag: 'Architecture', name: 'Seoul Sky / Lotte World Tower (จัมซิล)', kr: '서울스카이', loc: 'สถานี Jamsil ทางออก 1, 2 (สาย 2) หรือ 10, 11 (สาย 8)', info: 'จุดชมวิวกรุงโซลมุมสูงจากตึก Lotte World Tower' }
         ];
 
         const zoneGroups = [
@@ -1224,6 +1168,7 @@
         ];
 
         const baseStampItems = [
+            { id: 'st_0', day: 'Day 1 • อินชอน', name: 'Korean Heritage Visitor Passport (ICN T1 ชั้น B1)', loc: 'K-Heritage Visitor Center ศูนย์คมนาคม ICN T1 ชั้น B1 (แถว Burger King ใกล้ทางไป AREX)', kr: '인천국제공항' },
             { id: 'st_1', day: 'Day 1 • ปูซาน', name: 'Incheon Airport Tourist Info Stamp', loc: 'ศูนย์ข้อมูลท่องเที่ยว สนามบินอินชอน (ICN)', kr: '인천국제공항' },
             { id: 'st_2', day: 'Day 1 • ปูซาน', name: 'Busan Station Tourist Center Stamp', loc: 'ศูนย์บริการนักท่องเที่ยว สถานี Busan Station', kr: '부산역' },
             { id: 'st_3', day: 'Day 1 • ปูซาน', name: 'Haeundae Tourist Information Center', loc: 'จุดบริการนักท่องเที่ยวหน้าหาดแฮอุนแด', kr: '해운대관광안내소' },
@@ -1262,48 +1207,48 @@
         ];
 
         const baseNaverPlaces = [
-            { name: 'Busan Yeongmu Parade Hotel (ที่พักปูซาน)', kr: '영무파라드호텔', zone: 'ปูซาน (Busan)', addr: 'Haeundae Beach (สาย 2 สถานี Haeundae)' },
-            { name: 'หาดแฮอุนแด (Haeundae Beach)', kr: '해운대해수욕장', zone: 'ปูซาน (Busan)', addr: 'สถานี Haeundae ทางออก 3, 5' },
-            { name: 'ตลาดแฮอุนแด (Haeundae Market)', kr: '해운대전통시장', zone: 'ปูซาน (Busan)', addr: 'เดินจากหาดแฮอุนแด 3 นาที' },
-            { name: 'Shinsegae Centum City (Christmas Village)', kr: '신세계백화점 센텀시티점', zone: 'ปูซาน (Busan)', addr: 'สาย 2 สถานี Centum City' },
+            { name: 'Busan Yeongmu Parade Hotel Haeundae Beach (ที่พักปูซาน)', kr: '영무파라드호텔', zone: 'ปูซาน (Busan)', addr: '25 Haeundaehaebyeon-ro 298beon-gil, Haeundae-gu' },
+            { name: 'หาดแฮอุนแด (เทศกาลไฟ Deep Dive Haeundae)', kr: '해운대해수욕장', zone: 'ปูซาน (Busan)', addr: 'สถานี Haeundae ทางออก 3, 5 (ไฟประดับ 18:00–23:00 น.)' },
+            { name: 'ตลาดแฮอุนแด (Haeundae Market)', kr: '해운대전통시장', zone: 'ปูซาน (Busan)', addr: 'เปิด 09:00–22:00 น. เดินจากหาดแฮอุนแด 3 นาที' },
+            { name: 'Christmas Village Busan (Busan Cinema Center)', kr: '영화의전당', zone: 'ปูซาน (Busan)', addr: 'สาย 2 สถานี Centum City (เปิด พฤ.–อา.)' },
             { name: 'Blueline Park Mipo (ทางเดินชมวิวเลียบทะเล)', kr: '해운대블루라인파크 미포정거장', zone: 'ปูซาน (Busan)', addr: 'สุดหาดแฮอุนแดฝั่งตะวันออก (เดินชมวิวเลียบทางรถไฟ)' },
-            { name: 'Cheongsapo Daritdol Observatory & ทางข้ามรถไฟวิวทะเล', kr: '청사포다릿돌전망대', zone: 'ปูซาน (Busan)', addr: 'จุดถ่ายรูปทางข้ามรถไฟวิวทะเล Cheongsapo' },
-            { name: 'วัดแฮดงยงกุงซา (Haedong Yonggungsa)', kr: '해동용궁사', zone: 'ปูซาน (Busan)', addr: 'โซน Gijang นั่งแท็กซี่จากแฮอุนแด ~15 นาที' },
-            { name: 'หมู่บ้านวัฒนธรรมคัมชอน (Gamcheon Village)', kr: '감천문화마을', zone: 'ปูซาน (Busan)', addr: 'สถานี Toseong ทางออก 6 ต่อรถบัสสาย 2' },
-            { name: 'ย่านซอมยอน (Seomyeon)', kr: '서면역', zone: 'ปูซาน (Busan)', addr: 'จุดตัดรถไฟใต้ดินสาย 1 และสาย 2' },
-            { name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리', zone: 'ปูซาน (Busan)', addr: 'สถานี Jeonpo ทางออก 7' },
-            { name: 'STAYMIN Gangdong (ที่พักโซล)', kr: '강동역', zone: 'โซล: Gangdong (ที่พัก)', addr: 'สาย 5 (สีม่วง) สถานี Gangdong / Cheonho' },
+            { name: 'Jayeondo Sogeumppang (ขนมปังเกลือแฮอุนแด)', kr: '자연도소금빵 해운대', zone: 'ปูซาน (Busan)', addr: 'สถานี Jungdong ทางออก 7 (12-1 Dalmaji-gil 62beon-gil)' },
+            { name: 'หาดกวางอัลลี (Gwangalli Beach)', kr: '광안리해수욕장', zone: 'ปูซาน (Busan)', addr: 'สาย 2 สถานี Gwangan ทางออก 3/5 หรือ Geumnyeonsan ทางออก 1' },
+            { name: 'Baro Haejang (ซุปเนื้อกวางอัลลี)', kr: '바로해장 광안점', zone: 'ปูซาน (Busan)', addr: '2 Gwangnam-ro 94beon-gil, Suyeong-gu' },
+            { name: 'BIFF Square (นัมโพดง)', kr: '비프광장', zone: 'ปูซาน (Busan)', addr: 'สาย 1 สถานี Jagalchi ทางออก 7' },
+            { name: 'Having Moment (คาเฟ่เกาะยองโด)', kr: '해빙모먼트', zone: 'ปูซาน (Busan)', addr: '196 Cheekyeong-ro, Yeongdo-gu (ใกล้หมู่บ้านฮึนยออุล)' },
+            { name: 'ATELIER:O Coffee Shop (เกาะยองโด)', kr: '아뜰리에오 영도', zone: 'ปูซาน (Busan)', addr: '204 Jeoryeong-ro, Yeongdo-gu' },
+            { name: 'Thrill On The Mug (คาเฟ่เกาะยองโด)', kr: '스릴온더머그', zone: 'ปูซาน (Busan)', addr: 'Dongsam-dong, Yeongdo-gu' },
+            { name: 'หมู่บ้านวัฒนธรรมคัมชอน (Gamcheon Village)', kr: '감천문화마을', zone: 'ปูซาน (Busan)', addr: 'สถานี Toseong ทางออก 6 ต่อรถบัสสาย Saha 1-1 / Seogu 2' },
+            { name: 'ย่านซอมยอน & ถนนคาเฟ่จอนโพ (Seomyeon / Jeonpo)', kr: '전포카페거리', zone: 'ปูซาน (Busan)', addr: 'จุดตัดรถไฟใต้ดินสาย 1 และสาย 2' },
+            { name: 'STAYMIN Gangdong (ที่พักโซล)', kr: '강동역', zone: 'โซล: Gangdong (ที่พัก)', addr: 'สาย 5 (สีม่วง) สถานี Gangdong' },
             { name: 'หมู่บ้านบุกชอนฮันอก (Bukchon Hanok Village)', kr: '북촌한옥마을', zone: 'โซล: Anguk & Bukchon', addr: 'สาย 3 สถานี Anguk ทางออก 2' },
-            { name: 'ถนนซัมชองดง (Samcheong-dong)', kr: '삼청동길', zone: 'โซล: Anguk & Bukchon', addr: 'เดินต่อจากบุกชอนฮันอก' },
-            { name: 'Kukje Gallery (แกลเลอรีฟรี)', kr: '국제갤러리', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 1 (ปิดวันจันทร์)' },
+            { name: 'MMCA Seoul (พิพิธภัณฑ์ศิลปะร่วมสมัยแห่งชาติ)', kr: '국립현대미술관 서울', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 1' },
+            { name: 'Kukje Gallery & Gallery Hyundai', kr: '국제갤러리', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 1' },
             { name: 'London Bagel Museum Anguk', kr: '런던베이글뮤지엄 안국점', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 2' },
-            { name: 'หมู่บ้านฮันอกอิกซอนดง (Ikseon-dong)', kr: '익선동한옥거리', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Jongno 3-ga ทางออก 4' },
-            { name: 'คลองชองกเยชอน (Cheonggyecheon)', kr: '청계천', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Gwanghwamun ทางออก 5' },
-            { name: 'HiKR Ground (ศูนย์ท่องเที่ยวเกาหลี)', kr: '하이커그라운드', zone: 'โซล: Jongno & Myeongdong', addr: 'ริมคลองชองกเยชอน สถานี Jonggak' },
-            { name: 'ถนนคนเดินเมียงดง (Myeongdong)', kr: '명동거리', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 4 สถานี Myeongdong ทางออก 6' },
-            { name: 'โบสถ์เมียงดง (Myeongdong Cathedral)', kr: '명동대성당', zone: 'โซล: Jongno & Myeongdong', addr: 'ย่านเมียงดง' },
-            { name: 'Shinsegae Department Store Main (โชว์ไฟคริสต์มาส)', kr: '신세계백화점 본점', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 4 สถานี Hoehyeon ทางออก 7' },
-            { name: 'Lotte Department Store Main', kr: '롯데백화점 본점', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 2 สถานี Euljiro 1-ga ทางออก 7' },
-            { name: 'ย่านฮันนัมดง (Hannam-dong)', kr: '한남동', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สาย 6 สถานี Hangangjin ทางออก 3' },
-            { name: 'Pace Gallery Seoul', kr: '페이스갤러리 서울', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สถานี Hangangjin ทางออก 3' },
-            { name: 'ลิฟต์เอียงบันได 108 ขั้น แฮบังชน (108 Steps)', kr: '해방촌 108계단', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'จุดเริ่มต้นเดินลงเนินย่านแฮบังชน' },
-            { name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '5 Sinheung-ro 22-gil, Yongsan-gu' },
-            { name: 'ตลาดชินฮึง แฮบังชน (Sinheung Market)', kr: '해방촌 신흥시장', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'ย่านแฮบังชน (ใกล้บันได 108 ขั้น)' },
-            { name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '63 Sinheung-ro 11-gil, Yongsan-gu' },
+            { name: 'Artist Bakery Anguk (ขนมปังเกลือ)', kr: '아티스트베이커리 안국', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 1' },
+            { name: 'Thanks, Oat & Dotori Garden (กรีกโยเกิร์ต Anguk)', kr: '도토리 가든 안국', zone: 'โซล: Anguk & Bukchon', addr: 'สถานี Anguk ทางออก 2 / ทางออก 3' },
+            { name: 'NYUNYU Mansion Anguk (뉴뉴맨션)', kr: '뉴뉴맨션 안국점', zone: 'โซล: Anguk & Bukchon', addr: '5-1 Bukchon-ro, Jongno-gu (สถานี Anguk ทางออก 2)' },
+            { name: 'หมู่บ้านฮันอกอิกซอนดง & Fikee (Seosulla-gil)', kr: '익선동한옥거리', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Jongno 3-ga ทางออก 4 / 8' },
+            { name: 'คลองชองกเยชอน & HiKR Ground', kr: '청계천', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Gwanghwamun ทางออก 5' },
+            { name: 'Daiso Myeongdong 12 ชั้น (다이소 명동역점)', kr: '다이소 명동역점', zone: 'โซล: Jongno & Myeongdong', addr: '134-1 Toegye-ro, Jung-gu (สถานี Myeongdong)' },
+            { name: 'Shinsegae Main & Lotte Main (โชว์ไฟคริสต์มาส)', kr: '신세계백화점 본점', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 4 สถานี Hoehyeon ทางออก 7' },
+            { name: 'Dongdaemun Design Plaza (DDP) & MeBut', kr: '동대문디자인플라자', zone: 'โซล: Jongno & Myeongdong', addr: 'สถานี Dongdaemun History & Culture Park ทางออก 1' },
+            { name: 'ย่านฮันนัมดง & Leeum Museum of Art', kr: '리움미술관', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สาย 6 สถานี Hangangjin ทางออก 1 / ทางออก 3' },
+            { name: 'ตลาดชินฮึง แฮบังชน (Sinheung Market)', kr: '해방촌 신흥시장', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สถานี Noksapyeong ทางออก 2 ต่อบัส Yongsan 02' },
+            { name: 'Tortoise (토터스 ซูเฟล่แพนเค้ก แฮบังชน)', kr: '토터스 해방촌', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'ย่านแฮบังชน ถนน Sinheung-ro' },
+            { name: 'Haus Bakery Service (แฮบังชน)', kr: '하우스베이커리서비스', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '37-5 Yongsan-dong 2-ga, Yongsan-gu' },
+            { name: 'Stiikers Photobooth (แฮบังชน)', kr: '스티커즈 해방촌점', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'Yongsan-dong 2-ga 17-10' },
             { name: 'ตรอกบันได Sweet Bottle (แฮบังชน / ฮูอัมดง)', kr: '스윗보틀', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '28-15 Dutteopbawi-ro 40-gil (มุมถ่ายรูปวิวเมืองโซล)' },
-            { name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '127 Dutteopbawi-ro, Huam-dong' },
-            { name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์)', kr: '구복만두', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '7 Dutteopbawi-ro (ใกล้สถานี Sookmyung Women\'s Univ.)' },
-            { name: 'ถนนคาเฟ่ซองซู (Seongsu-dong)', kr: '성수동카페거리', zone: 'โซล: Seongsu & Ttukseom', addr: 'สาย 2 สถานี Seongsu ทางออก 3, 4' },
-            { name: 'Dior Seongsu', kr: '디올 성수', zone: 'โซล: Seongsu & Ttukseom', addr: 'สถานี Seongsu ทางออก 4' },
-            { name: 'Tamburins Flagship Store Seongsu', kr: '탬버린즈 성수', zone: 'โซล: Seongsu & Ttukseom', addr: 'ย่านซองซู' },
-            { name: 'ย่านฮงแด (Hongdae)', kr: '홍대입구역', zone: 'โซล: Hongdae & Yeonnam', addr: 'สาย 2 / AREX สถานี Hongik Univ. ทางออก 9' },
-            { name: 'AK Plaza Hongdae (กาชาปอง & Pop Mart)', kr: 'AK플라자 홍대', zone: 'โซล: Hongdae & Yeonnam', addr: 'สถานี Hongik Univ. ทางออก 4' },
-            { name: 'ย่านยอนนัมดง (Yeonnam-dong)', kr: '연남동', zone: 'โซล: Hongdae & Yeonnam', addr: 'สถานี Hongik Univ. ทางออก 3' },
-            { name: 'Lotte World Aquarium', kr: '롯데월드 아쿠아리움', zone: 'โซล: Gangnam & Jamsil', addr: 'ชั้น B1 Lotte World Mall สถานี Jamsil' },
-            { name: 'Lotte World Mall (จัมซิล)', kr: '롯데월드몰', zone: 'โซล: Gangnam & Jamsil', addr: 'สาย 2 / สาย 8 สถานี Jamsil ทางออก 10, 11' },
-            { name: 'ห้องสมุด Starfield Library (COEX)', kr: '별마당도서관', zone: 'โซล: Gangnam & Jamsil', addr: 'สาย 2 สถานี Samseong ทางออก 5, 6' },
-            { name: 'The Hyundai Seoul (หมู่บ้านคริสต์มาส)', kr: '더현대 서울', zone: 'โซล: Yeouido', addr: 'สาย 5 สถานี Yeouinaru ทางออก 1' },
-            { name: 'Lotte Mart ZETTAPLEX Seoul Station', kr: '롯데마트 제타플렉스 서울역점', zone: 'โซล: Jongno & Myeongdong', addr: 'สถานี Seoul Station ทางออก 1' }
+            { name: 'Laundry Project & Gubok Mandu (ฮูอัมดง)', kr: '구복만두', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '7 Dutteopbawi-ro (ใกล้สถานี Sookmyung Women\'s Univ.)' },
+            { name: 'ถนนคาเฟ่ซองซู & Miffy Store Seoul', kr: '성수동카페거리', zone: 'โซล: Seongsu & Ttukseom', addr: 'สาย 2 สถานี Seongsu ทางออก 3, 4' },
+            { name: 'Seongsu Skywalk / Cloud Bridge & Starbucks Ttukseom', kr: '스타벅스 뚝섬한강공원점', zone: 'โซล: Seongsu & Ttukseom', addr: 'สถานี Seoul Forest ทางออก 3 / Jayang ทางออก 2' },
+            { name: 'ย่านฮงแด & ยอนนัมดง (JangJakJip / Yuki Mochi / RUF)', kr: '연남동', zone: 'โซล: Hongdae & Yeonnam', addr: 'สถานี Hongik Univ. ทางออก 3' },
+            { name: 'BEANBROTHERS Coffeehouse Seoul (วิวแม่น้ำฮัน)', kr: '빈브라더스 합정', zone: 'โซล: Hongdae & Yeonnam', addr: 'สถานี Sangsu ทางออก 3 (ชั้น 7 + Rooftop)' },
+            { name: 'Lotte World Aquarium & Seoul Sky (จัมซิล)', kr: '롯데월드 아쿠아리움', zone: 'โซล: Gangnam & Jamsil', addr: 'สถานี Jamsil ทางออก 10, 11' },
+            { name: 'Starfield Library (COEX) & Shaburo 21 Gangnam', kr: '별마당도서관', zone: 'โซล: Gangnam & Jamsil', addr: 'สถานี Samseong / Sinnonhyeon / Gangnam' },
+            { name: 'The Hyundai Seoul (หมู่บ้านคริสต์มาส & Artist Bakery)', kr: '더현대 서울', zone: 'โซล: Yeouido', addr: 'สาย 5 สถานี Yeouinaru ทางออก 1' },
+            { name: 'Chroma, Paradise City (ติดสนามบินอินชอน)', kr: '파라다이스시티 크로마', zone: 'อินชอน (Incheon Airport)', addr: 'Shuttle Bus ฟรีจาก ICN T1 ป้าย 3C / 14C' }
         ];
 
         // ---------------------------------------------------------
@@ -1349,39 +1294,86 @@
         }
 
         // ---------------------------------------------------------
-        // KTX SCHEDULE EDIT MODAL & HANDLERS (DAY 3)
+        // UNIVERSAL SCHEDULE EDIT MODAL FOR ANY DAY 1-7 EVENT & KTX
         // ---------------------------------------------------------
-        function openKtxModal() {
-            document.getElementById('ktx-depart').value = ktxSchedule.departTime || '';
-            document.getElementById('ktx-arrive').value = ktxSchedule.arriveTime || '';
-            document.getElementById('ktx-train-no').value = ktxSchedule.trainNo || '';
-            document.getElementById('ktx-seat').value = ktxSchedule.seat || '';
-            document.getElementById('ktx-note').value = ktxSchedule.note || '';
-            const modal = document.getElementById('ktx-modal');
+        function openScheduleModal(eventId) {
+            const plans = getDailyPlanWithCustom();
+            let targetEv = null;
+            for (const dayObj of plans) {
+                const found = dayObj.events.find(e => e.id === eventId);
+                if (found) {
+                    targetEv = found;
+                    break;
+                }
+            }
+            if (!targetEv) return;
+
+            document.getElementById('sched-event-id').value = targetEv.id;
+            document.getElementById('sched-is-custom').value = targetEv.isCustom ? targetEv.customId : '';
+            document.getElementById('sched-time').value = targetEv.time || '';
+            document.getElementById('sched-transit').value = targetEv.transit || '';
+            document.getElementById('sched-title').value = targetEv.title || '';
+            // Strip HTML tags if editing rich text
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = targetEv.desc || '';
+            document.getElementById('sched-desc').value = tempDiv.textContent || tempDiv.innerText || '';
+
+            const resetBtn = document.getElementById('sched-reset-btn');
+            if (!targetEv.isCustom && eventOverrides[targetEv.id]) {
+                resetBtn.classList.remove('hidden');
+            } else {
+                resetBtn.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('schedule-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
 
-        function closeKtxModal() {
-            const modal = document.getElementById('ktx-modal');
+        function closeScheduleModal() {
+            const modal = document.getElementById('schedule-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
 
-        function saveKtxSchedule(e) {
+        function saveEventSchedule(e) {
             e.preventDefault();
-            ktxSchedule = {
-                departTime: document.getElementById('ktx-depart').value.trim(),
-                arriveTime: document.getElementById('ktx-arrive').value.trim(),
-                trainNo: document.getElementById('ktx-train-no').value.trim().toUpperCase(),
-                seat: document.getElementById('ktx-seat').value.trim(),
-                note: document.getElementById('ktx-note').value.trim()
-            };
+            const eventId = document.getElementById('sched-event-id').value;
+            const customId = document.getElementById('sched-is-custom').value;
+            const time = document.getElementById('sched-time').value.trim();
+            const transit = document.getElementById('sched-transit').value.trim();
+            const title = document.getElementById('sched-title').value.trim();
+            const desc = document.getElementById('sched-desc').value.trim();
+
+            if (customId) {
+                const idx = userCustomPlaces.findIndex(p => p.id === customId);
+                if (idx !== -1) {
+                    userCustomPlaces[idx].time = time;
+                    userCustomPlaces[idx].zone = transit || userCustomPlaces[idx].zone;
+                    userCustomPlaces[idx].name = title;
+                    userCustomPlaces[idx].addr = desc;
+                }
+            } else {
+                eventOverrides[eventId] = { time, transit, title, desc };
+            }
+
             bumpMinorVersion();
             saveState();
-            closeKtxModal();
+            closeScheduleModal();
             renderDaily();
-            showToast('บันทึกและอัปเดตตารางเวลา KTX เรียบร้อยแล้ว!');
+            showToast('อัปเดตตารางเวลาและรายละเอียดเรียบร้อยแล้ว!');
+        }
+
+        function resetSingleEventSchedule() {
+            const eventId = document.getElementById('sched-event-id').value;
+            if (eventOverrides[eventId]) {
+                delete eventOverrides[eventId];
+                bumpMinorVersion();
+                saveState();
+                closeScheduleModal();
+                renderDaily();
+                showToast('คืนค่าตารางเวลาเริ่มต้นเรียบร้อยแล้ว');
+            }
         }
 
         // ---------------------------------------------------------
@@ -1560,7 +1552,7 @@
                 checkinNotes: checkinNotes,
                 customPlaces: userCustomPlaces,
                 travelerData: travelerData,
-                ktxSchedule: ktxSchedule,
+                eventOverrides: eventOverrides,
                 version: versionState
             });
             copyText(payload);
@@ -1578,7 +1570,7 @@
                 if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
                 if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
                 if (parsed.travelerData) travelerData = parsed.travelerData;
-                if (parsed.ktxSchedule) ktxSchedule = parsed.ktxSchedule;
+                if (parsed.eventOverrides) eventOverrides = parsed.eventOverrides;
                 if (parsed.version) versionState = parsed.version;
                 saveState();
                 refreshAllViews();
@@ -1595,8 +1587,35 @@
         }
 
         function closeVersionModal() {
-            document.getElementById('version-modal').classList.add('hidden');
-            document.getElementById('version-modal').classList.remove('flex');
+            const modal = document.getElementById('version-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function getThaiDateShort() {
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const d = new Date();
+            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
+        }
+
+        function getCheckinTimestamp() {
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const d = new Date();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${d.getDate()} ${months[d.getMonth()]} ${hh}:${mm}`;
+        }
+
+        function renderVersionBadge() {
+            const el = document.getElementById('version-text');
+            if (el) {
+                el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
+            }
+        }
+
+        function bumpMinorVersion() {
+            versionState.minor = (Number(versionState.minor) || 0) + 1;
+            versionState.updatedAt = getThaiDateShort();
         }
 
         function saveState() {
@@ -1604,7 +1623,7 @@
             localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
             localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
-            localStorage.setItem('ppr2026_ktx_schedule', JSON.stringify(ktxSchedule));
+            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
             localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
             renderVersionBadge();
             updateProgressUI();
@@ -1662,21 +1681,19 @@
         function getDailyPlanWithCustom() {
             const cloned = JSON.parse(JSON.stringify(baseDailyPlans));
 
-            // Inject saved KTX schedule into Day 3 Event 1
-            const day3 = cloned.find(d => d.day === 3);
-            if (day3) {
-                const ktxEv = day3.events.find(e => e.isKtxEvent);
-                if (ktxEv && (ktxSchedule.departTime || ktxSchedule.arriveTime)) {
-                    ktxEv.time = `${ktxSchedule.departTime || '?'} – ${ktxSchedule.arriveTime || '?'}`;
-                    ktxEv.transit = `KTX ${ktxSchedule.trainNo ? ktxSchedule.trainNo + ' ' : ''}(Busan → Seoul Station)`;
-                    const extraDetails = [
-                        ktxSchedule.trainNo ? `ขบวน: ${ktxSchedule.trainNo}` : '',
-                        ktxSchedule.seat ? `ที่นั่ง: ${ktxSchedule.seat}` : '',
-                        ktxSchedule.note ? `หมายเหตุ: ${ktxSchedule.note}` : ''
-                    ].filter(Boolean).join(' • ');
-                    ktxEv.desc = `รถไฟความเร็วสูง KTX ออกจากสถานี Busan เวลา ${ktxSchedule.departTime || '-'} น. ถึง Seoul Station เวลา ${ktxSchedule.arriveTime || '-'} น.${extraDetails ? ' (' + extraDetails + ')' : ''} จากนั้นต่อรถไฟใต้ดินสาย 5 ไปสถานี Gangdong`;
-                }
-            }
+            // Apply custom schedule/time/KTX overrides across ALL days (Day 1 - Day 7)
+            cloned.forEach(dayObj => {
+                dayObj.events.forEach(ev => {
+                    if (eventOverrides[ev.id]) {
+                        const ov = eventOverrides[ev.id];
+                        ev.isEdited = true;
+                        if (ov.time) ev.time = ov.time;
+                        if (ov.transit) ev.transit = ov.transit;
+                        if (ov.title) ev.title = ov.title;
+                        if (ov.desc !== undefined) ev.desc = ov.desc;
+                    }
+                });
+            });
 
             userCustomPlaces.forEach(cp => {
                 if (cp.addDaily) {
@@ -1992,20 +2009,19 @@
                 const isVisited = !!checkVal;
                 const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 const isNew = ev.customId && ev.customId === lastAddedId;
-                const hasKtxTime = ev.isKtxEvent && (ktxSchedule.departTime || ktxSchedule.arriveTime);
                 const userNote = checkinNotes[ev.id];
 
-                return `<div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-emerald-300/90 bg-gradient-to-br from-white to-emerald-50/30' : ev.isKtxEvent ? 'border-indigo-200' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
-                    <!-- Top Card Bar: Step/Time + Visited Stamp -->
+                return `<div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-emerald-300/90 bg-gradient-to-br from-white to-emerald-50/30' : ev.isEdited ? 'border-indigo-200' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
+                    <!-- Top Card Bar: Step/Time + Edit Schedule + Visited Stamp -->
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <div class="flex flex-wrap items-center gap-1.5">
                             <span class="w-6 h-6 rounded-full ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'} text-[11px] font-bold inline-flex items-center justify-center shrink-0">${idx + 1}</span>
-                            <span class="text-xs font-bold ${ev.isKtxEvent && !hasKtxTime ? 'text-amber-700 bg-amber-100' : 'text-royal bg-blue-50'} px-2.5 py-1 rounded-xl"><i class="ph-bold ph-clock"></i> ${ev.time}</span>
-                            ${ev.isKtxEvent ? `
-                                <button onclick="openKtxModal()" class="text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-xs transition cursor-pointer">
-                                    <i class="ph-bold ph-pencil-simple"></i> ${hasKtxTime ? 'แก้ไขเวลา KTX' : 'ลงตารางเวลา KTX'}
-                                </button>
-                            ` : ''}
+                            <button onclick="openScheduleModal('${ev.id}')" class="text-xs font-bold ${ev.isEdited ? 'text-indigo-700 bg-indigo-50 border-indigo-200' : 'text-royal bg-blue-50 border-blue-100'} hover:bg-blue-100 border px-2.5 py-1 rounded-xl inline-flex items-center gap-1 transition cursor-pointer" title="คลิกเพื่อแก้ไขตารางเวลาและขบวนรถไฟ">
+                                <i class="ph-bold ph-clock"></i>
+                                <span>${ev.time}</span>
+                                <i class="ph-bold ph-pencil-simple text-[11px] opacity-75 ml-0.5"></i>
+                            </button>
+                            ${ev.isEdited ? `<span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg">ปรับเวลาแล้ว</span>` : ''}
                         </div>
                         ${isVisited ? `
                             <span class="visited-stamp px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold tracking-wide uppercase flex items-center gap-1">
@@ -2055,7 +2071,7 @@
 
                     <!-- Bottom Scrapbook Check-in & Note Action Bar -->
                     <div class="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100">
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex flex-wrap items-center gap-1.5">
                             <button onclick="toggleCheck('${ev.id}');renderDaily()" class="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-900 hover:bg-slate-800 text-white'}">
                                 <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'} text-base"></i>
                                 <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
@@ -2064,10 +2080,14 @@
                                 <i class="ph-bold ph-note-pencil"></i>
                                 <span>${userNote ? 'แก้ไขโน้ต' : 'จดบันทึก'}</span>
                             </button>
+                            <button onclick="openScheduleModal('${ev.id}')" class="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
+                                <i class="ph-bold ph-clock-clockwise"></i>
+                                <span>แก้เวลา</span>
+                            </button>
                         </div>
                         ${ev.isCustom ? `
                             <div class="flex items-center gap-1">
-                                <button onclick="openAddModal(null, '${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-royal rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไข</button>
+                                <button onclick="openAddModal(null, '${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-royal rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไขสถานที่</button>
                                 <button onclick="deleteCustomPlace('${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-rose-500 rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
                             </div>
                         ` : ''}
@@ -2245,6 +2265,46 @@
                             <div class="font-bold text-amber-900">6. Gubok Mandu (구복만두)</div>
                             <p class="text-slate-600 mt-0.5">ร้านเกี๊ยวมิชลิน บิบ กูร์มองด์ 10 ปีซ้อน ใกล้สถานี Sookmyung Women's Univ. ก่อนเดินทางต่อ</p>
                         </div>
+                    </div>
+                </div>`;
+            }
+
+            if (type === 'all' || type === 'photobooth') {
+                html += `<div class="space-y-2.5">
+                    <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🎞️ พิกัดตู้ Photobooth &amp; แหล่งช้อปปิ้งจากโน้ต</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${photoboothAndShops.map(p => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
+                            <div>
+                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${p.cat === 'Photobooth' ? 'bg-pink-100 text-pink-700' : 'bg-amber-100 text-amber-800'}">${p.cat}</span>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${p.name}</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">${p.info}</p>
+                                <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-map-pin"></i> ${p.loc}</p>
+                            </div>
+                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
+                                <button onclick="copyText('${p.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
+                                <a href="${nMap(p.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>`;
+            }
+
+            if (type === 'all' || type === 'sunset') {
+                html += `<div class="space-y-2.5">
+                    <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🌇 จุดชมพระอาทิตย์ตก (Sunset Spots) &amp; สถาปัตยกรรมน่าถ่ายรูป</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${sunsetAndArchSpots.map(s => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
+                            <div>
+                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-orange-100 text-orange-800">${s.tag}</span>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${s.name}</h4>
+                                <p class="text-xs text-slate-600 mt-0.5">${s.info}</p>
+                                <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-train"></i> ${s.loc}</p>
+                            </div>
+                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
+                                <button onclick="copyText('${s.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
+                                <a href="${nMap(s.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                            </div>
+                        </div>`).join('')}
                     </div>
                 </div>`;
             }
