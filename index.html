@@ -11,36 +11,64 @@
     <link id="apple-touch-icon-link" rel="apple-touch-icon" href="">
     <script>
         (function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d');
-            const grad = ctx.createLinearGradient(0, 0, 512, 512);
-            grad.addColorStop(0, '#090D16');
-            grad.addColorStop(0.55, '#172554');
-            grad.addColorStop(1, '#2563EB');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 512, 512);
-            ctx.beginPath();
-            ctx.arc(430, 80, 140, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.16)';
-            ctx.fill();
-            ctx.font = '82px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('🇰🇷📸', 256, 145);
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = '800 94px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('PP_R', 256, 275);
-            ctx.fillStyle = '#38BDF8';
-            ctx.beginPath();
-            ctx.roundRect(146, 345, 220, 64, 32);
-            ctx.fill();
-            ctx.fillStyle = '#0F172A';
-            ctx.font = '800 38px "Plus Jakarta Sans", sans-serif';
-            ctx.fillText('2026', 256, 379);
-            const iconLink = document.getElementById('apple-touch-icon-link');
-            if (iconLink) iconLink.href = canvas.toDataURL('image/png');
+            function drawHomeIcon() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 512;
+                const ctx = canvas.getContext('2d');
+
+                // พื้นหลังไล่เฉดสีน้ำเงินเข้ม-คราม
+                const grad = ctx.createLinearGradient(0, 0, 512, 512);
+                grad.addColorStop(0, '#090D16');
+                grad.addColorStop(0.55, '#172554');
+                grad.addColorStop(1, '#2563EB');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 512, 512);
+
+                // วงกลมแสงตกแต่งตรงกลางด้านหลังให้สมมาตร
+                ctx.beginPath();
+                ctx.arc(256, 256, 200, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
+                ctx.fill();
+
+                // วาดอิโมจิ 🇰🇷 และ 📸 แยกตำแหน่งซ้าย-ขวาสมมาตรจากจุดกึ่งกลาง (256)
+                ctx.font = '76px "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🇰🇷', 202, 138);
+                ctx.fillText('📸', 310, 138);
+
+                // ข้อความหลัก PP_R จัดกึ่งกลางแนวตั้งและแนวนอน
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '800 92px "Plus Jakarta Sans", -apple-system, sans-serif';
+                ctx.fillText('PP_R', 256, 266);
+
+                // แถบป้ายปี 2026 กึ่งกลางด้านล่าง
+                const pillW = 216;
+                const pillH = 62;
+                const pillX = (512 - pillW) / 2;
+                const pillY = 344;
+                ctx.fillStyle = '#38BDF8';
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(pillX, pillY, pillW, pillH, 31);
+                } else {
+                    ctx.rect(pillX, pillY, pillW, pillH);
+                }
+                ctx.fill();
+
+                ctx.fillStyle = '#0F172A';
+                ctx.font = '800 38px "Plus Jakarta Sans", -apple-system, sans-serif';
+                ctx.fillText('2026', 256, pillY + (pillH / 2) + 2);
+
+                const iconLink = document.getElementById('apple-touch-icon-link');
+                if (iconLink) iconLink.href = canvas.toDataURL('image/png');
+            }
+
+            drawHomeIcon();
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(drawHomeIcon);
+            }
         })();
     </script>
     <!-- Tailwind CSS -->
