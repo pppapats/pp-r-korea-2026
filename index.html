@@ -31,14 +31,20 @@
                 ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
                 ctx.fill();
 
-                // วาดอิโมจิ 🇰🇷 และ 📸 แยกตำแหน่งซ้าย-ขวาสมมาตรจากจุดกึ่งกลาง (256)
+                // วัดความกว้างจริงของอิโมจิด้วย measureText เพื่อวางกึ่งกลางซ้าย-ขวาเป๊ะ
                 ctx.font = '76px "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
-                ctx.textAlign = 'center';
+                ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('🇰🇷', 202, 138);
-                ctx.fillText('📸', 310, 138);
+                const flagW = ctx.measureText('🇰🇷').width;
+                const camW = ctx.measureText('📸').width;
+                const gap = 22;
+                const totalEmojiW = flagW + gap + camW;
+                const startEmojiX = (512 - totalEmojiW) / 2;
+                ctx.fillText('🇰🇷', startEmojiX, 138);
+                ctx.fillText('📸', startEmojiX + flagW + gap, 138);
 
                 // ข้อความหลัก PP_R จัดกึ่งกลางแนวตั้งและแนวนอน
+                ctx.textAlign = 'center';
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = '800 92px "Plus Jakarta Sans", -apple-system, sans-serif';
                 ctx.fillText('PP_R', 256, 266);
