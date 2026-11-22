@@ -4,6 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PP_R in KOREA 2026 | Travel Log & Companion</title>
+    <!-- App Icon & PWA Mobile App Experience -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PP_R Korea">
+    <link id="apple-touch-icon-link" rel="apple-touch-icon" href="">
+    <script>
+        // สร้างภาพไอคอนแอปความละเอียดสูง 512x512 อัตโนมัติสำหรับ iOS Home Screen
+        (function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // พื้นหลังไล่เฉดสีน้ำเงินเข้ม-ครามสไตล์เดียวกับ Header
+            const grad = ctx.createLinearGradient(0, 0, 512, 512);
+            grad.addColorStop(0, '#090D16');
+            grad.addColorStop(0.55, '#172554');
+            grad.addColorStop(1, '#2563EB');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 512, 512);
+
+            // วงกลมแสงตกแต่งมุมขวาบน
+            ctx.beginPath();
+            ctx.arc(430, 80, 140, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.16)';
+            ctx.fill();
+
+            // ไอคอนธงชาติเกาหลี & เกล็ดหิมะด้านบน
+            ctx.font = '88px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🇰🇷', 256, 145);
+
+            // ข้อความหลัก PP_R
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '800 94px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('PP_R', 256, 275);
+
+            // แถบป้ายปี 2026 ด้านล่าง
+            ctx.fillStyle = '#38BDF8';
+            ctx.beginPath();
+            ctx.roundRect(146, 345, 220, 64, 32);
+            ctx.fill();
+
+            ctx.fillStyle = '#0F172A';
+            ctx.font = '800 38px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText('2026', 256, 379);
+
+            const iconLink = document.getElementById('apple-touch-icon-link');
+            if (iconLink) {
+                iconLink.href = canvas.toDataURL('image/png');
+            }
+        })();
+    </script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Noto Sans Thai & Plus Jakarta Sans -->
