@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PP_R in KOREA 2026 | Travel Companion Dashboard</title>
+    <title>PP_R in KOREA 2026 | Travel Log & Companion</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Noto Sans Thai & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
@@ -32,7 +32,7 @@
     </script>
     <style>
         body {
-            background-color: #F8FAFC;
+            background-color: #F1F5F9;
             color: #0F172A;
             -webkit-tap-highlight-color: transparent;
         }
@@ -44,9 +44,15 @@
             scrollbar-width: none;
         }
         .glass-header {
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+        }
+        .visited-stamp {
+            transform: rotate(-3deg);
+            border: 2px solid #059669;
+            color: #059669;
+            background: rgba(236, 253, 245, 0.9);
         }
         @keyframes highlightPulse {
             0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5); border-color: #2563EB; }
@@ -58,22 +64,22 @@
         }
     </style>
 </head>
-<body class="pb-24 sm:pb-12">
+<body class="pb-28 sm:pb-14">
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-full shadow-xl text-sm font-medium flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-4">
+    <div id="toast" class="fixed bottom-24 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-full shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-4">
         <i class="ph-fill ph-check-circle text-naver text-lg"></i>
         <span id="toast-msg">ดำเนินการเรียบร้อยแล้ว!</span>
     </div>
 
-    <!-- Floating Action Button (Mobile) -->
-    <button onclick="openAddModal()" class="sm:hidden fixed bottom-5 right-5 z-40 bg-royal hover:bg-blue-700 text-white px-4 py-3.5 rounded-full shadow-xl flex items-center gap-2 font-semibold text-sm active:scale-95 transition">
-        <i class="ph-bold ph-plus text-lg"></i>
-        <span>เพิ่มสถานที่</span>
+    <!-- Floating Quick Check-in / Add Button (Mobile) -->
+    <button onclick="openAddModal()" class="sm:hidden fixed bottom-5 right-4 z-40 bg-slate-900 hover:bg-slate-800 text-white px-4 py-3.5 rounded-2xl shadow-2xl border border-white/15 flex items-center gap-2 font-bold text-xs active:scale-95 transition">
+        <i class="ph-fill ph-map-pin-plus text-amber-400 text-lg"></i>
+        <span>บันทึกจุดแวะใหม่</span>
     </button>
 
     <!-- Header -->
-    <header class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white pt-5 pb-6 px-4 sm:px-6 shadow-lg">
+    <header class="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white pt-5 pb-6 px-4 sm:px-6 shadow-lg">
         <div class="max-w-5xl mx-auto">
             <!-- Top Row: Date Badge + Version Badge + Action Buttons -->
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -83,27 +89,27 @@
                     </span>
                     <button onclick="openVersionModal()" id="version-badge" class="inline-flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-200 transition cursor-pointer" title="คลิกเพื่อดูรายละเอียดเวอร์ชันและการอัปเดต">
                         <i class="ph-bold ph-git-commit text-emerald-300"></i>
-                        <span id="version-text">v2.0 • อัปเดต: 21 พ.ย. 2569</span>
+                        <span id="version-text">v4.0 • อัปเดต: 22 พ.ย. 2569</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="switchTab('traveler')" id="top-traveler-btn" class="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1 rounded-full text-xs font-bold shadow-sm transition cursor-pointer" title="เปิดดู/แก้ไขข้อมูลผู้เดินทางและพาสปอร์ต">
+                    <button onclick="switchTab('traveler')" id="top-traveler-btn" class="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm transition cursor-pointer" title="เปิดดู/แก้ไขข้อมูลผู้เดินทางและพาสปอร์ต">
                         <i class="ph-fill ph-identification-card text-sm"></i>
                         <span>ข้อมูลผู้เดินทาง</span>
                     </button>
-                    <button onclick="openBackupModal()" class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1 rounded-full text-xs text-slate-200 transition" title="สำรอง/กู้คืนข้อมูลทั้งหมด">
+                    <button onclick="openBackupModal()" class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1.5 rounded-full text-xs text-slate-200 transition" title="สำรอง/กู้คืนข้อมูลทั้งหมด">
                         <i class="ph ph-arrows-left-right"></i> <span class="hidden xs:inline">Backup</span>
                     </button>
                     <button onclick="openAddModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-royal hover:bg-blue-500 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-md transition">
-                        <i class="ph-bold ph-plus"></i> เพิ่มสถานที่ใหม่
+                        <i class="ph-bold ph-plus"></i> บันทึกจุดแวะใหม่
                     </button>
                 </div>
             </div>
 
-            <!-- Main Title & Flight Info -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-4">
+            <!-- Main Title & Check-in Collection Counter -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2 font-jakarta">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2 font-jakarta">
                         <span>PP_R in KOREA 2026</span>
                     </h1>
                     <p class="text-slate-300 text-xs sm:text-sm mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -111,34 +117,34 @@
                         <span class="inline-flex items-center gap-1"><i class="ph-fill ph-airplane-takeoff text-rose-300"></i> ขากลับ: 12 ธ.ค. ออก 19:50 น.</span>
                     </p>
                 </div>
-                <!-- Overall Trip Progress Bar -->
-                <div class="bg-white/10 border border-white/15 rounded-xl px-3 py-2 min-w-[200px]">
-                    <div class="flex items-center justify-between text-[11px] mb-1">
-                        <span class="text-slate-300">ความคืบหน้าทริป</span>
-                        <span id="global-progress-text" class="font-bold text-emerald-400">0%</span>
+                <!-- Travel Check-in Collection Box -->
+                <div class="bg-white/10 border border-white/15 rounded-2xl px-3.5 py-2.5 min-w-[225px]">
+                    <div class="flex items-center justify-between text-xs mb-1">
+                        <span class="text-amber-200 font-semibold flex items-center gap-1"><i class="ph-fill ph-seal-check"></i> สะสมจุดเช็กอินแล้ว</span>
+                        <span id="global-progress-text" class="font-bold text-emerald-400">0 จุด (0%)</span>
                     </div>
-                    <div class="w-full bg-white/15 rounded-full h-1.5 overflow-hidden">
-                        <div id="global-progress-bar" class="bg-emerald-400 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    <div class="w-full bg-white/15 rounded-full h-2 overflow-hidden">
+                        <div id="global-progress-bar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Accommodation Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <!-- Busan Hotel -->
                 <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex items-center justify-between gap-3">
                     <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 text-xs text-sky-300 font-medium mb-0.5">
+                        <div class="flex items-center gap-1.5 text-[11px] text-sky-300 font-semibold mb-0.5">
                             <i class="ph-fill ph-bed"></i> ปูซาน (6–8 ธ.ค.) &bull; Haeundae Beach
                         </div>
-                        <div class="font-semibold text-sm truncate">Busan Yeongmu Parade Hotel</div>
+                        <div class="font-bold text-sm truncate">Busan Yeongmu Parade Hotel</div>
                         <div class="text-xs text-slate-300 truncate">영무파라드호텔 (สาย 2 สถานี Haeundae)</div>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
                         <button onclick="copyText('영무파라드호텔')" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white transition" title="คัดลอกชื่อเกาหลี">
                             <i class="ph ph-copy text-base"></i>
                         </button>
-                        <a href="https://map.naver.com/p/search/%EC%98%81%EB%AC%B4%ED%8C%8C%EB%9D%BC%EB%93%9C%ED%98%B8%ED%85%94" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-sm transition">
+                        <a href="https://map.naver.com/p/search/%EC%98%81%EB%AC%B4%ED%8C%8C%EB%9D%BC%EB%93%9C%ED%98%B8%ED%85%94" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
                             <i class="ph-bold ph-map-pin"></i> Map
                         </a>
                     </div>
@@ -147,17 +153,17 @@
                 <!-- Seoul Hotel -->
                 <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex items-center justify-between gap-3">
                     <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 text-xs text-indigo-300 font-medium mb-0.5">
+                        <div class="flex items-center gap-1.5 text-[11px] text-indigo-300 font-semibold mb-0.5">
                             <i class="ph-fill ph-bed"></i> โซล (8–12 ธ.ค.) &bull; Gangdong
                         </div>
-                        <div class="font-semibold text-sm truncate">STAYMIN Gangdong</div>
+                        <div class="font-bold text-sm truncate">STAYMIN Gangdong</div>
                         <div class="text-xs text-slate-300 truncate">สายสีม่วง (Line 5) สถานี Gangdong / Cheonho</div>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
                         <button onclick="copyText('강동역')" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white transition" title="คัดลอกชื่อสถานี">
                             <i class="ph ph-copy text-base"></i>
                         </button>
-                        <a href="https://map.naver.com/p/search/%EA%B0%95%EB%8F%99%EC%97%AD" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-sm transition">
+                        <a href="https://map.naver.com/p/search/%EA%B0%95%EB%8F%99%EC%97%AD" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition">
                             <i class="ph-bold ph-map-pin"></i> Map
                         </a>
                     </div>
@@ -167,28 +173,32 @@
     </header>
 
     <!-- Sticky Navigation Bar -->
-    <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-sm">
+    <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-xs">
         <div class="max-w-5xl mx-auto px-2 sm:px-6">
             <div class="flex overflow-x-auto no-scrollbar py-2.5 gap-1.5 sm:gap-2" id="main-tabs">
                 <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn active flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-900 text-white shadow-sm">
-                    <i class="ph-fill ph-calendar-check text-base"></i>
-                    <span>1. แพลนรายวัน</span>
+                    <i class="ph-fill ph-notebook text-base"></i>
+                    <span>1. บันทึกรายวัน</span>
+                </button>
+                <button onclick="switchTab('cafe')" data-tab="cafe" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
+                    <i class="ph-fill ph-coffee text-base"></i>
+                    <span id="nav-cafe-label">2. คาเฟ่ & ร้านอาหาร</span>
                 </button>
                 <button onclick="switchTab('group')" data-tab="group" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
                     <i class="ph-fill ph-map-trifold text-base"></i>
-                    <span>2. โซน & ไฮไลต์</span>
+                    <span>3. โซน & ไฮไลต์</span>
                 </button>
                 <button onclick="switchTab('stamps')" data-tab="stamps" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
                     <i class="ph-fill ph-stamp text-base"></i>
-                    <span>3. เก็บ Stamp</span>
+                    <span>4. เก็บ Stamp</span>
                 </button>
                 <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
                     <i class="ph-fill ph-gift text-base"></i>
-                    <span>4. กาชา & ของฟรี</span>
+                    <span>5. กาชา & ของฟรี</span>
                 </button>
                 <button onclick="switchTab('navermap')" data-tab="navermap" class="tab-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition text-slate-600 hover:bg-slate-100">
                     <i class="ph-fill ph-compass text-base"></i>
-                    <span id="nav-map-label">5. พิกัด Naver Map (70)</span>
+                    <span id="nav-map-label">6. พิกัดทั้งหมด</span>
                 </button>
             </div>
         </div>
@@ -198,77 +208,120 @@
     <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-5">
 
         <!-- ========================================================= -->
-        <!-- TAB 1: DAILY ITINERARY                                    -->
+        <!-- TAB 1: DAILY TRAVEL LOG & CHECK-IN CARDS                  -->
         <!-- ========================================================= -->
         <section id="tab-daily" class="tab-content space-y-4">
             <div id="day-pills" class="flex overflow-x-auto no-scrollbar gap-2 pb-1"></div>
-            <div id="day-header-card" class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm"></div>
-            <div id="day-timeline" class="space-y-3"></div>
+            <div id="day-header-card" class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs"></div>
+            <div id="day-timeline" class="space-y-3.5"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- TAB 2: ZONES & HIGHLIGHTS                                 -->
+        <!-- TAB 2: CAFE, DESSERT & RESTAURANTS (BY NEIGHBORHOOD)      -->
+        <!-- ========================================================= -->
+        <section id="tab-cafe" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">
+                            <i class="ph-fill ph-coffee text-amber-600 text-lg"></i> คาเฟ่ • ร้านกาแฟ • ร้านขนม • ร้านอาหาร (แยกตามย่าน)
+                        </h2>
+                        <p class="text-xs text-slate-500">กดเช็กอินร้านที่ไปลองแล้ว พร้อมจดบันทึกเมนูโปรดไว้ดูย้อนหลังได้ครับ</p>
+                    </div>
+                    <button onclick="openAddCafeModal()" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition">
+                        <i class="ph-bold ph-plus"></i> บันทึกร้านใหม่
+                    </button>
+                </div>
+
+                <!-- Search & Type Filter -->
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-1">
+                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="cafe-search" oninput="renderCafeTab()" placeholder="ค้นหาชื่อร้าน เมนูแนะนำ หรือย่าน..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button onclick="setCafeType('ALL')" data-ctype="ALL" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-900 text-white font-semibold transition">ทั้งหมด</button>
+                        <button onclick="setCafeType('คาเฟ่ / กาแฟ')" data-ctype="คาเฟ่ / กาแฟ" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">☕ คาเฟ่ / กาแฟ</button>
+                        <button onclick="setCafeType('ร้านขนม / เบเกอรี')" data-ctype="ร้านขนม / เบเกอรี" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🥐 ร้านขนม</button>
+                        <button onclick="setCafeType('ร้านอาหาร')" data-ctype="ร้านอาหาร" class="ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition">🍲 ร้านอาหาร</button>
+                    </div>
+                </div>
+
+                <!-- Neighborhood Pills -->
+                <div id="cafe-zone-pills" class="flex overflow-x-auto no-scrollbar gap-1.5 pb-1"></div>
+                <div class="text-xs text-slate-500 pt-0.5 flex items-center justify-between">
+                    <span id="cafe-result-count">แสดงทั้งหมด</span>
+                    <span id="cafe-visited-count" class="font-bold text-emerald-600">เช็กอินแล้ว 0 ร้าน</span>
+                </div>
+            </div>
+
+            <div id="cafe-list-container" class="space-y-6"></div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 3: ZONES & HIGHLIGHTS                                 -->
         <!-- ========================================================= -->
         <section id="tab-group" class="tab-content hidden space-y-4">
             <div class="flex flex-wrap gap-1.5">
-                <button onclick="filterGroup('all')" data-gfilter="all" class="gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition">ทั้งหมด</button>
-                <button onclick="filterGroup('aquarium')" data-gfilter="aquarium" class="gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🐋 Aquarium</button>
-                <button onclick="filterGroup('christmas')" data-gfilter="christmas" class="gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🎄 Christmas Spots</button>
-                <button onclick="filterGroup('gallery')" data-gfilter="gallery" class="gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🖼️ Free Galleries</button>
-                <button onclick="filterGroup('zones')" data-gfilter="zones" class="gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🗺️ โซนท่องเที่ยว (10 โซน)</button>
+                <button onclick="filterGroup('all')" data-gfilter="all" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition">ทั้งหมด</button>
+                <button onclick="filterGroup('haebangchon')" data-gfilter="haebangchon" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">📸 Route แฮบังชน</button>
+                <button onclick="filterGroup('aquarium')" data-gfilter="aquarium" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🐋 Aquarium</button>
+                <button onclick="filterGroup('christmas')" data-gfilter="christmas" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🎄 Christmas Spots</button>
+                <button onclick="filterGroup('gallery')" data-gfilter="gallery" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🖼️ Free Galleries</button>
+                <button onclick="filterGroup('zones')" data-gfilter="zones" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition">🗺️ โซนท่องเที่ยว (10 โซน)</button>
             </div>
             <div id="group-content" class="space-y-5"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- TAB 3: STAMP TRACKER                                      -->
+        <!-- TAB 4: STAMP TRACKER                                      -->
         <!-- ========================================================= -->
         <section id="tab-stamps" class="tab-content hidden space-y-4">
-            <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs">
                 <div class="flex items-center justify-between text-xs mb-1.5">
                     <span class="font-bold text-slate-800">ความคืบหน้าการเก็บ Stamp (<span id="stamp-total-label">14</span> จุด)</span>
                     <span id="stamp-count" class="font-bold text-amber-600">0/14</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                    <div id="stamp-progress-bar" class="bg-amber-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div id="stamp-progress-bar" class="bg-amber-400 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
-            <div id="stamp-list" class="space-y-2.5"></div>
+            <div id="stamp-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- TAB 4: GACHA & FREEBIES                                   -->
+        <!-- TAB 5: GACHA & FREEBIES                                   -->
         <!-- ========================================================= -->
         <section id="tab-gacha" class="tab-content hidden space-y-5">
-            <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-800">เช็กลิสต์กาชาปอง & ของฟรีที่เก็บแล้ว</span>
-                <span id="gacha-count" class="text-xs font-bold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-full">0/15</span>
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800">สะสมกาชาปอง & ของฟรีที่ไปเก็บมาแล้ว</span>
+                <span id="gacha-count" class="text-xs font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">0/15</span>
             </div>
             <div>
                 <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-2.5 flex items-center gap-1.5">
                     <i class="ph-fill ph-sparkle text-pink-500"></i> พิกัดตู้กาชาปอง (Gachapon)
                 </h3>
-                <div id="gacha-spots-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+                <div id="gacha-spots-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
             </div>
             <div>
                 <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-2.5 flex items-center gap-1.5">
                     <i class="ph-fill ph-gift text-emerald-500"></i> ของแจกฟรี & โปสการ์ด (Freebies)
                 </h3>
-                <div id="freebies-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+                <div id="freebies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
             </div>
         </section>
 
         <!-- ========================================================= -->
-        <!-- TAB 5: MASTER NAVER MAP DIRECTORY                         -->
+        <!-- TAB 6: MASTER NAVER MAP DIRECTORY                         -->
         <!-- ========================================================= -->
         <section id="tab-navermap" class="tab-content hidden space-y-4">
-            <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm space-y-3">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3">
                 <div class="flex flex-col sm:flex-row gap-2">
                     <div class="relative flex-1">
                         <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="map-search" oninput="renderNaverDirectory()" placeholder="ค้นหาชื่อร้าน, ย่าน หรือชื่อเกาหลี..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-royal">
+                        <input type="text" id="map-search" oninput="renderNaverDirectory()" placeholder="ค้นหาชื่อร้าน, ย่าน หรือชื่อเกาหลี..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-royal">
                     </div>
-                    <label class="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 cursor-pointer shrink-0">
+                    <label class="inline-flex items-center gap-2 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-700 cursor-pointer shrink-0">
                         <input type="checkbox" id="filter-custom-only" onchange="renderNaverDirectory()" class="rounded accent-royal">
                         <span>เฉพาะที่เพิ่มใหม่ (<span id="custom-count-badge">0</span>)</span>
                     </label>
@@ -277,7 +330,7 @@
                 <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
                     <span id="map-result-count">แสดงทั้งหมด</span>
                     <button onclick="openAddModal()" class="text-royal font-semibold hover:underline flex items-center gap-1">
-                        <i class="ph-bold ph-plus"></i> เพิ่มพิกัดใหม่
+                        <i class="ph-bold ph-plus"></i> บันทึกพิกัดใหม่
                     </button>
                 </div>
             </div>
@@ -285,10 +338,10 @@
         </section>
 
         <!-- ========================================================= -->
-        <!-- TAB 6: TRAVELER INFO & PASSPORT (OPENED FROM HEADER ICON) -->
+        <!-- TAB 7: TRAVELER INFO & PASSPORT (OPENED FROM HEADER ICON) -->
         <!-- ========================================================= -->
         <section id="tab-traveler" class="tab-content hidden space-y-5">
-            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-3xl p-4 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
                         <i class="ph-fill ph-identification-card text-xl"></i>
@@ -298,15 +351,15 @@
                         <p class="text-xs text-slate-600" id="traveler-last-saved">กรอกข้อมูลและอัปโหลดรูปพาสปอร์ตเพื่อความสะดวกในการเปิดดูระหว่างเดินทาง</p>
                     </div>
                 </div>
-                <button onclick="switchTab('daily')" class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1 transition">
-                    <i class="ph-bold ph-arrow-left"></i> กลับหน้าแพลนเที่ยว
+                <button onclick="switchTab('daily')" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1 transition">
+                    <i class="ph-bold ph-arrow-left"></i> กลับหน้าบันทึกทริป
                 </button>
             </div>
 
             <div id="travelers-container" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
 
             <!-- Additional Travel Notes -->
-            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-3 text-xs">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3 text-xs">
                 <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2">
                     <i class="ph-fill ph-note-pencil text-emerald-600 text-lg"></i> ข้อมูลสำคัญอื่นๆ (รหัสที่พัก / ประกัน / eSIM)
                 </h3>
@@ -343,13 +396,94 @@
     </main>
 
     <!-- ========================================================= -->
-    <!-- MODAL: ADD / EDIT PLACE                                   -->
+    <!-- MODAL: TRAVEL MEMORY / CHECK-IN NOTE                      -->
+    <!-- ========================================================= -->
+    <div id="note-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+                <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
+                    <i class="ph-fill ph-notebook text-emerald-600 text-xl"></i> บันทึกความทรงจำ / รีวิวจุดเช็กอิน
+                </h3>
+                <button onclick="closeNoteModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <p id="note-modal-place-title" class="text-xs font-bold text-slate-700 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 mb-3"></p>
+            <form onsubmit="saveCheckinNote(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="note-modal-item-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">ความประทับใจ / เมนูที่สั่ง / สิ่งที่ไปเจอมา</label>
+                    <textarea id="note-modal-text" rows="4" placeholder="เช่น วิวสวยมาก แสงบ่าย 3 กำลังดี, สั่งขนมปังเกลืออร่อยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                </div>
+                <label class="flex items-center gap-2 font-semibold text-emerald-800 bg-emerald-50 px-3 py-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                    <input type="checkbox" id="note-modal-mark-visited" checked class="w-4 h-4 rounded accent-emerald-600">
+                    <span>ประทับตรา "เช็กอินแล้ว (VISITED)" สำหรับจุดนี้</span>
+                </label>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeNoteModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md">บันทึกความทรงจำ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL: EDIT KTX SCHEDULE (BUSAN -> SEOUL DAY 3)           -->
+    <!-- ========================================================= -->
+    <div id="ktx-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
+                    <i class="ph-fill ph-train text-indigo-600 text-xl"></i> แก้ไขตารางเวลา KTX (ปูซาน → โซล)
+                </h3>
+                <button onclick="closeKtxModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="saveKtxSchedule(event)" class="space-y-3 text-xs">
+                <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-2.5 text-[11px] text-indigo-900">
+                    <i class="ph-fill ph-info"></i> กรอกรอบเวลาขบวนรถไฟ KTX ที่จองไว้ เมื่อบันทึกแล้วจะอัปเดตลงในแพลน <strong>Day 3 (อ. 8 ธ.ค.)</strong> อัตโนมัติครับ
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">เวลาออกจาก Busan *</label>
+                        <input type="text" id="ktx-depart" required placeholder="เช่น 10:30" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">เวลาถึง Seoul Station *</label>
+                        <input type="text" id="ktx-arrive" required placeholder="เช่น 13:15" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">ขบวนรถไฟ (Train No.)</label>
+                        <input type="text" id="ktx-train-no" placeholder="เช่น KTX 024" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl uppercase">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">ตู้โดยสาร / ที่นั่ง (Car / Seat)</label>
+                        <input type="text" id="ktx-seat" placeholder="เช่น Car 5 / 4A, 4B" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">หมายเหตุเพิ่มเติม / เลขการจอง</label>
+                    <input type="text" id="ktx-note" placeholder="เช่น ควรไปถึงสถานี Busan ก่อนเวลาออก 20 นาที" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl">
+                </div>
+                <div class="pt-3 flex gap-2">
+                    <button type="button" onclick="closeKtxModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md">บันทึกตาราง KTX</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL: ADD / EDIT PLACE & CHECK-IN LOG                    -->
     <!-- ========================================================= -->
     <div id="add-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
                 <h3 id="modal-title" class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-map-pin-plus text-royal text-xl"></i> เพิ่มสถานที่ใหม่ลงในทริป
+                    <i class="ph-fill ph-map-pin-plus text-royal text-xl"></i> บันทึกจุดแวะ / สถานที่ใหม่
                 </h3>
                 <button onclick="closeAddModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -358,20 +492,20 @@
             <form id="add-place-form" onsubmit="handleSavePlace(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="edit-place-id">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">ชื่อสถานที่ (ภาษาไทย / อังกฤษ) *</label>
-                    <input type="text" id="input-name" required placeholder="เช่น ร้านหมูย่างฮงแด / คาเฟ่ซองซู" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                    <label class="block font-semibold text-slate-700 mb-1">ชื่อสถานที่ / ชื่อร้านที่แวะ *</label>
+                    <input type="text" id="input-name" required placeholder="เช่น คาเฟ่ลับในซอยฮงแด / ร้านหมูย่างซองซู" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">คำค้นหาใน Naver Map (ภาษาเกาหลี) *</label>
-                    <input type="text" id="input-kr" required placeholder="เช่น 홍대 맛집 (ใช้สร้างลิงก์เปิดแผนที่อัตโนมัติ)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                    <label class="block font-semibold text-slate-700 mb-1">คำค้นหาใน Naver Map (ภาษาเกาหลี / อังกฤษ) *</label>
+                    <input type="text" id="input-kr" required placeholder="เช่น 홍대 카페 (ใช้เปิดแผนที่ Naver Map)" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">เลือกโซน / ย่าน *</label>
-                    <select id="input-zone" onchange="toggleCustomZoneInput()" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                    <select id="input-zone" onchange="toggleCustomZoneInput()" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                         <option value="ปูซาน (Busan)">ปูซาน (Busan)</option>
                         <option value="โซล: Anguk & Bukchon">โซล: Anguk & Bukchon</option>
                         <option value="โซล: Jongno & Myeongdong">โซล: Jongno & Myeongdong</option>
-                        <option value="โซล: Yongsan & Hannam">โซล: Yongsan & Hannam</option>
+                        <option value="โซล: Yongsan, Hannam & Haebangchon">โซล: Yongsan, Hannam & Haebangchon (แฮบังชน)</option>
                         <option value="โซล: Seongsu & Ttukseom">โซล: Seongsu & Ttukseom</option>
                         <option value="โซล: Hongdae & Yeonnam">โซล: Hongdae & Yeonnam</option>
                         <option value="โซล: Gangnam & Jamsil">โซล: Gangnam & Jamsil</option>
@@ -381,15 +515,31 @@
                     <input type="text" id="input-custom-zone" placeholder="พิมพ์ชื่อโซน / ย่านเพิ่มเติม เช่น โซล: Suwon / Incheon" class="hidden mt-2 w-full px-3 py-2 bg-blue-50/40 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">ที่อยู่ / การเดินทาง / เวลาเปิด-ปิด</label>
-                    <input type="text" id="input-addr" placeholder="เช่น สถานี Hongik Univ. ทางออก 3 (เปิด 11:00–22:00)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                    <label class="block font-semibold text-slate-700 mb-1">บันทึกความทรงจำ / เมนูที่สั่ง / หมายเหตุ</label>
+                    <input type="text" id="input-addr" placeholder="เช่น อเมริกาโน่ดีมาก บรรยากาศเงียบสงบ ใกล้สถานี..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <div class="pt-2 border-t border-slate-100 space-y-2">
-                    <label class="flex items-center gap-2 font-semibold text-slate-700 cursor-pointer">
-                        <input type="checkbox" id="chk-add-daily" onchange="toggleDailyFields()" class="rounded accent-royal">
-                        <span>เพิ่มลงในตารางแพลนรายวัน (Day 1 – Day 7) ด้วย</span>
+                    <label class="flex items-center gap-2 font-bold text-emerald-800 bg-emerald-50/80 px-3 py-2 rounded-xl border border-emerald-200 cursor-pointer">
+                        <input type="checkbox" id="chk-auto-checkin" checked class="rounded accent-emerald-600">
+                        <span>ประทับตรา "เช็กอินแล้ว (VISITED)" ทันทีที่บันทึก</span>
                     </label>
-                    <div id="daily-extra-fields" class="hidden grid-cols-2 gap-2 pl-5 pt-1">
+                    <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="chk-add-cafe" onchange="toggleCafeCategoryField()" class="rounded accent-amber-500">
+                        <span>เก็บเข้าหมวด <strong>คาเฟ่ & ร้านอาหาร</strong> ด้วย</span>
+                    </label>
+                    <div id="cafe-category-box" class="hidden pl-5 pt-0.5">
+                        <label class="block text-[11px] text-slate-500 mb-0.5">ประเภทร้าน</label>
+                        <select id="input-cafe-type" class="w-full px-2.5 py-1.5 bg-amber-50/50 border border-amber-200 rounded-lg">
+                            <option value="คาเฟ่ / กาแฟ">☕ คาเฟ่ / กาแฟ</option>
+                            <option value="ร้านขนม / เบเกอรี">🥐 ร้านขนม / เบเกอรี</option>
+                            <option value="ร้านอาหาร">🍲 ร้านอาหาร</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center gap-2 font-semibold text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="chk-add-daily" checked onchange="toggleDailyFields()" class="rounded accent-royal">
+                        <span>บันทึกเข้าสมุดรายวัน (Day 1 – Day 7)</span>
+                    </label>
+                    <div id="daily-extra-fields" class="grid grid-cols-2 gap-2 pl-5 pt-1">
                         <div>
                             <label class="block text-[11px] text-slate-500 mb-0.5">เลือกวัน</label>
                             <select id="input-day" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
@@ -403,8 +553,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] text-slate-500 mb-0.5">ช่วงเวลา</label>
-                            <input type="text" id="input-time" placeholder="เช่น 15:00 – 16:30" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
+                            <label class="block text-[11px] text-slate-500 mb-0.5">เวลาที่แวะ</label>
+                            <input type="text" id="input-time" placeholder="เช่น 14:30 น." class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg">
                         </div>
                     </div>
                     <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
@@ -418,7 +568,7 @@
                 </div>
                 <div class="pt-3 flex gap-2">
                     <button type="button" onclick="closeAddModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-royal hover:bg-blue-700 text-white rounded-xl font-bold shadow-md">บันทึกสถานที่</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-royal hover:bg-blue-700 text-white rounded-xl font-bold shadow-md">บันทึกการเดินทาง</button>
                 </div>
             </form>
         </div>
@@ -437,7 +587,7 @@
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
-            <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+            <div class="space-y-3 text-xs text-slate-600 leading-relaxed max-h-[65vh] overflow-y-auto pr-1">
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
                     <div class="font-bold text-slate-800 mb-1">ความหมายของเลขเวอร์ชัน (X.Y)</div>
                     <ul class="list-disc list-inside space-y-1">
@@ -447,24 +597,16 @@
                 </div>
                 <div class="space-y-2">
                     <div class="border-l-2 border-emerald-500 pl-3">
-                        <div class="font-bold text-slate-900">v2.3 • 21 พ.ย. 2569</div>
-                        <p>ปรับวันที่เที่ยวบินขาไปของผู้เดินทางคนที่ 1 เป็น 30 พ.ย. 2569 (30 พ.ย. – 12 ธ.ค. 2569)</p>
+                        <div class="font-bold text-slate-900">v4.0 • 22 พ.ย. 2569</div>
+                        <p>ปรับโฉม UI เป็น Mobile Travel Cards & Check-in Scrapbook กดเช็กอินพร้อมประทับตรา VISITED และจดโน้ตความทรงจำได้ทุกจุด, เพิ่มเส้นทางเดินแฮบังชน–ฮูอัมดงแบบละเอียดใน Day 6 และเพิ่มรายการคาเฟ่/ร้านขนม/ร้านอาหารครบ 34+ ร้านแยกตามย่าน</p>
                     </div>
                     <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v2.2 • 21 พ.ย. 2569</div>
-                        <p>แยกข้อมูลเที่ยวบิน ไป–กลับ ออกเป็นรายบุคคลสำหรับผู้เดินทางคนที่ 1 และคนที่ 2</p>
+                        <div class="font-bold text-slate-700">v3.0 • 22 พ.ย. 2569</div>
+                        <p>เพิ่มแถบใหม่ "คาเฟ่ & ร้านอาหาร" แยกตามย่านและประเภทร้าน พร้อมปุ่มแก้ไขและบันทึกตารางเวลา KTX (ปูซาน → โซล) ใน Day 3</p>
                     </div>
                     <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v2.1 • 21 พ.ย. 2569</div>
-                        <p>เพิ่มระบบล็อกรหัสผ่าน PIN 6 หลักสำหรับเข้าดูข้อมูลผู้เดินทางและพาสปอร์ต เพื่อความปลอดภัย</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v2.0 • 21 พ.ย. 2569</div>
-                        <p>เปลี่ยนชื่อเป็น PP_R in KOREA 2026, แยกปุ่มข้อมูลผู้เดินทางไว้ด้านบนเพจ, เพิ่มตัวเลือกโซน "อื่นๆ" และระบบแสดงเวอร์ชัน</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v1.0 • 21 พ.ย. 2569</div>
-                        <p>สร้างแดชบอร์ดรวม 5 แท็บหลัก (แพลนรายวัน, โซน & ไฮไลต์, เก็บ Stamp, กาชา & ของฟรี, พิกัด Naver Map)</p>
+                        <div class="font-bold text-slate-700">v2.4 • 22 พ.ย. 2569</div>
+                        <p>เพิ่มย่านแฮบังชน (Haebangchon / Sweet Bottle) ลงในแพลน Day 6 และปรับรายละเอียด Day 2 โซน Blueline Park เป็นเดินชมวิวเลียบทะเล</p>
                     </div>
                 </div>
             </div>
@@ -507,7 +649,7 @@
                 </button>
             </div>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-                ข้อมูลสถานที่ที่เพิ่มใหม่ ข้อมูลผู้เดินทาง และการติ๊กเช็กลิสต์จะบันทึกอยู่ในเบราว์เซอร์ของเครื่องนี้ หากต้องการย้ายไปเปิดในมือถืออีกเครื่อง ให้กดคัดลอกโค้ดด้านล่างไปวางครับ
+                ข้อมูลบันทึกการเดินทาง จุดเช็กอินทั้งหมด โน้ตความทรงจำ ข้อมูลผู้เดินทาง และตารางเวลา KTX จะบันทึกอยู่ในเบราว์เซอร์ของเครื่องนี้ หากต้องการย้ายไปเปิดในมือถืออีกเครื่อง ให้กดคัดลอกโค้ดด้านล่างไปวางครับ
             </p>
             <button onclick="exportTripData()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 mb-4 transition">
                 <i class="ph-bold ph-copy"></i> 1. คัดลอกโค้ดข้อมูลทริปทั้งหมด (Export)
@@ -537,7 +679,7 @@
     <!-- Bottom Reset Progress Button -->
     <footer class="max-w-5xl mx-auto px-4 sm:px-6 mt-10 mb-6 text-center">
         <button onclick="resetAllProgress()" class="text-xs text-slate-400 hover:text-rose-500 underline transition">
-            รีเซ็ตข้อมูลการติ๊กเช็กลิสต์ทั้งหมด
+            รีเซ็ตบันทึกการเช็กอินทั้งหมด
         </button>
     </footer>
 
@@ -548,10 +690,26 @@
         const nMap = (kr) => `https://map.naver.com/p/search/${encodeURIComponent(kr)}`;
 
         // ---------------------------------------------------------
-        // DYNAMIC STATE (Base + User Added Places + Traveler Info + Versioning)
+        // DYNAMIC STATE (Travel Scrapbook, Check-ins, Notes, KTX, Versioning)
         // ---------------------------------------------------------
         const TRAVELER_PIN = '070910';
         let isTravelerUnlocked = false;
+
+        const defaultKtxData = {
+            departTime: '',
+            arriveTime: '',
+            trainNo: '',
+            seat: '',
+            note: ''
+        };
+
+        let ktxSchedule = (() => {
+            try {
+                const saved = JSON.parse(localStorage.getItem('ppr2026_ktx_schedule'));
+                if (saved && typeof saved === 'object') return { ...defaultKtxData, ...saved };
+            } catch (e) {}
+            return { ...defaultKtxData };
+        })();
 
         const defaultTravelerData = {
             lastSaved: '',
@@ -605,16 +763,21 @@
             return JSON.parse(JSON.stringify(defaultTravelerData));
         })();
 
+        // completedIds stores either true (legacy) or string timestamp e.g. "6 ธ.ค. 14:20"
         let completedIds = JSON.parse(localStorage.getItem('ppr2026_checked') || '{}');
+        // checkinNotes stores user memory notes keyed by item id
+        let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
         let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
         let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
-            major: 2,
-            minor: 3,
-            updatedAt: '21 พ.ย. 2569'
+            major: 4,
+            minor: 0,
+            updatedAt: '22 พ.ย. 2569'
         }));
 
         let currentDay = 1;
         let currentMapZone = 'ALL';
+        let currentCafeZone = 'ALL';
+        let currentCafeType = 'ALL';
         let lastAddedId = null;
 
         // ---------------------------------------------------------
@@ -624,6 +787,14 @@
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
             const d = new Date();
             return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
+        }
+
+        function getCheckinTimestamp() {
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const d = new Date();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${d.getDate()} ${months[d.getMonth()]} ${hh}:${mm} น.`;
         }
 
         function renderVersionBadge() {
@@ -637,6 +808,63 @@
             versionState.minor = (Number(versionState.minor) || 0) + 1;
             versionState.updatedAt = getThaiDateShort();
         }
+
+        // ---------------------------------------------------------
+        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (34+ SPOTS)
+        // ---------------------------------------------------------
+        const baseCafeFoodItems = [
+            // ปูซาน (Busan)
+            { id: 'cf_b1', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ตลาดแฮอุนแด (Haeundae Traditional Market)', kr: '해운대전통시장', menu: 'ต๊อกบกกี, โอเด้ง, ปลาไหลย่าง, ซีฟู้ด, โฮต็อกน้ำผึ้ง', note: 'เดินจากหาดแฮอุนแด 3 นาที (Day 1)' },
+            { id: 'cf_b2', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Miryang Sundae Dwaeji Gukbap (ซุปหมูแฮอุนแด)', kr: '밀양순대돼지국밥 해운대점', menu: 'ซุปหมูต้มกระดูก (Dwaeji Gukbap), ซุนแด', note: 'ร้านดังเปิด 24 ชม. ใกล้หาดแฮอุนแด' },
+            { id: 'cf_b3', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Rendeja-Vous Haeundae (คาเฟ่วิวทะเล)', kr: '랑데자뷰 해운대점', menu: 'กาแฟดริป, ลาเต้, วิวทะเลแฮอุนแดมุมสูง', note: 'ใกล้จุดเริ่มต้นทางเดิน Blueline Park Mipo' },
+            { id: 'cf_b4', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'H.US Coffee (คาเฟ่ริมทางรถไฟ Cheongsapo)', kr: '에이치어스커피', menu: 'อเมริกาโน่, ลาเต้, วิวรางรถไฟและประภาคารแฝด', note: 'จุดแวะพักช่วงเดินชมวิว Blueline Park (Day 2)' },
+            { id: 'cf_b5', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Coralani (코랄라니 คาเฟ่วิวทะเล Gijang)', kr: '코랄라니', menu: 'เบเกอรีอบสด, กาแฟ, วิวทะเลแบบพาโนรามา', note: 'โซน Gijang ใกล้วัดแฮดงยงกุงซา (Day 2)' },
+            { id: 'cf_b6', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리', menu: 'Specialty Coffee, คาเฟ่สไตล์มินิมอลและวินเทจ', note: 'ย่านซอมยอน (Day 2 ช่วงค่ำ)' },
+            { id: 'cf_b7', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ย่านซอมยอน (Seomyeon Food Alley)', kr: '서면 먹자골목', menu: 'หมูย่างเกาหลี, ไก่ทอด, ซุปหมูซอมยอน', note: 'สถานี Seomyeon (Day 2)' },
+
+            // โซล: Anguk & Bukchon
+            { id: 'cf_s1', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Anguk', kr: '런던베이글뮤지엄 안국점', menu: 'Potato Cheese Bagel, Spring Onion Pretzel Bagel', note: 'สถานี Anguk ทางออก 2 (ควรไปเช้าหรือกดคิว CatchTable)' },
+            { id: 'cf_s2', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery (อาติสต์ เบเกอรี)', kr: '아티스트베이커리 안국', menu: 'ขนมปังเกลือ (Salt Bread) หลากไส้ เช่น Earl Grey, Lemon', note: 'หน้าสถานี Anguk ทางออก 1 (Day 4)' },
+            { id: 'cf_s3', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Anguk (คาเฟ่ออเนียน อันกุก)', kr: '카페 어니언 안국점', menu: 'Pandoro ขนมปังภูเขาหิมะ, อเมริกาโน่', note: 'คาเฟ่บ้านฮันอกโบราณ สถานี Anguk ทางออก 3' },
+            { id: 'cf_s4', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Fritz Coffee Company Wonseo (ฟริตซ์ คอฟฟี่)', kr: '프릳츠 원서점', menu: 'กาแฟคั่วเอง, ครัวซองต์ครีม, โลโก้แมวน้ำสุดคลาสสิก', note: 'ใกล้พระราชวังชางด็อกกุง สถานี Anguk' },
+            { id: 'cf_s5', zone: 'โซล: Anguk & Bukchon', type: 'ร้านอาหาร', name: 'Hwangsaengga Kalguksu (บะหมี่เกี๊ยวซัมชองดง)', kr: '황생가칼국수', menu: 'คัลกุกซู (บะหมี่น้ำซุปกระดูก), มันดูเกี๊ยวนึ่ง', note: 'มิชลินไกด์ ย่านซัมชองดง' },
+
+            // โซล: Jongno & Myeongdong
+            { id: 'cf_s6', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Cheongsudang Bakery (ชองซูดัง อิกซอนดง)', kr: '청수당 베이커리', menu: 'Souffle Castella, Matcha Cream Milk, สวนไผ่', note: 'หมู่บ้านฮันอกอิกซอนดง (Day 3)' },
+            { id: 'cf_s7', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Salt Bread Ikseon-dong (ขนมปังเกลือ)', kr: '자연도소금빵 익선', menu: 'ขนมปังเกลืออบสดใหม่ (เซ็ต 4 ชิ้น)', note: 'อิกซอนดง สถานี Jongno 3-ga' },
+            { id: 'cf_s8', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Mil Toast House Ikseon-dong (มิล โทสต์)', kr: '밀토스트 익선점', menu: 'ขนมปังนึ่งในเข่งไม้ไผ่ (Souffle French Toast)', note: 'อิกซอนดง (Day 3)' },
+            { id: 'cf_s9', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'Myeongdong Kyoja (เมียงดงเคียวจา)', kr: '명동교자 본점', menu: 'บะหมี่คัลกุกซู, เกี๊ยวนึ่งมันดู (มิชลินไกด์)', note: 'ย่านเมียงดง (Day 4)' },
+            { id: 'cf_s10', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'สตรีทฟู้ดเมียงดง (Myeongdong Street Food)', kr: '명동거리', menu: 'ต๊อกบกกี, ขนมไข่, โฮต็อก, สตรอว์เบอร์รีเคลือบน้ำตาล', note: 'เปิดช่วงเย็นถึงค่ำ ย่านเมียงดง' },
+
+            // โซล: Yongsan, Hannam & Haebangchon
+            { id: 'cf_s11', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Passion 5 (แพชชั่น 5 ฮันนัมดง)', kr: '패션5', menu: 'เบเกอรี เค้ก พุดดิ้ง และขนมหวานระดับพรีเมียม', note: 'สถานี Hangangjin ทางออก 3 (Day 6)' },
+            { id: 'cf_s12', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Anthracite Coffee Hannam', kr: '앤트러사이트 한남점', menu: 'กาแฟคั่วสดโรงคั่วดังในฮันนัมดง', note: 'ย่านฮันนัมดง (Day 6 ช่วงเช้า)' },
+            { id: 'cf_s13', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'MTL Hannam (More Than Less)', kr: 'MTL 한남', menu: 'กาแฟ Bonanza Coffee จากเบอร์ลิน และขนมอบ', note: 'ย่านฮันนัมดง' },
+            { id: 'cf_s14', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', menu: 'Gamtae Salmon Roll (18,000₩), Galchi Sokjeot Pasta (23,000₩)', note: 'จุดแวะที่ 2 บนเส้นทางแฮบังชน ใกล้ตลาดชินฮึง (Day 6)' },
+            { id: 'cf_s15', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', menu: 'เจลาโต้มัทฉะโรยเกลือ Maldon, บาแก็ตจิ้ม Kaymak & น้ำผึ้ง', note: 'จุดแวะที่ 4 บนเส้นทางแฮบังชน (บาร์ไอศกรีมตอนกลางวัน)' },
+            { id: 'cf_s16', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', menu: 'อเมริกาโน่, วานิลลาลาเต้ (คาเฟ่ธีมร้านซักผ้ามีระเบียงนั่งชิล)', note: 'จุดแวะที่ 6 เดินลงเนินจากตรอก Sweet Bottle มาทางฮูอัมดง' },
+            { id: 'cf_s17', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์ 10 ปีซ้อน)', kr: '구복만두', menu: 'เกี๊ยวทอดน้ำกรอบนอกนุ่มใน (Gubok Traditional Mandu), เกี๊ยวกุ้ง', note: 'จุดปิดท้ายเส้นทางแฮบังชน ใกล้สถานี Sookmyung Women\'s Univ.' },
+
+            // โซล: Seongsu & Ttukseom
+            { id: 'cf_s18', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Seongsu (คาเฟ่ออเนียน ซองซู)', kr: '카페 어니언 성수점', menu: 'กาแฟดริป, ขนมปังอบ, คาเฟ่สไตล์โกดังอิฐปูนเปลือย', note: 'สถานี Seongsu ทางออก 2 (Day 5)' },
+            { id: 'cf_s19', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Nudake Seongsu (นูเดค ซองซู)', kr: '누데이크 성수', menu: 'Peak Cake ครัวซองต์ครีมมัทฉะ', note: 'ร้านขนมสุดอาร์ตเครือ Gentle Monster / Tamburins' },
+            { id: 'cf_s20', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Salt Bread Seongsu (ขนมปังเกลือซองซู)', kr: '자연도소금빵 성수', menu: 'ขนมปังเกลืออบใหม่หอมเนย', note: 'ย่านซองซู' },
+            { id: 'cf_s21', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านอาหาร', name: 'Somunnan Seongsu Gamjatang (ซุปกระดูกหมูซองซู)', kr: '소문난성수감자탕', menu: 'คัมจาทัง (ซุปกระดูกหมูต้มมันฝรั่ง) ร้านดังคิวยาว', note: 'สถานี Seongsu ทางออก 4' },
+
+            // โซล: Hongdae & Yeonnam
+            { id: 'cf_s22', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Layered Yeonnam (คาเฟ่เลเยอร์ ยอนนัมดง)', kr: '카페 레이어드 연남점', menu: 'สโคนหลากหลายรส, เค้กสไตล์อังกฤษน่ารักๆ', note: 'ย่านยอนนัมดง (Day 6)' },
+            { id: 'cf_s23', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Randy\'s Donuts Yeonnam (โดนัทยอนนัมดง)', kr: '랜디스도넛 연남점', menu: 'โดนัทโฮมเมดชิ้นใหญ่สไตล์อเมริกัน', note: 'ย่านยอนนัมดง' },
+            { id: 'cf_s24', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'Thanks, Oat Yeonnam (แต๊งส์ โอ๊ต กรีกโยเกิร์ต)', kr: '땡스오트 연남', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สดและกราโนล่า', note: 'ย่านยอนนัมดง' },
+            { id: 'cf_s25', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'Myth Jokbal Hongdae (ขาหมูเกาหลีฮงแด)', kr: '미쓰족발 홍대본점', menu: 'ขาหมูเกาหลีราดซอสกระเทียม (Garlic Jokbal)', note: 'ย่านฮงแด (Day 6 มื้อเย็น)' },
+
+            // โซล: Gangnam & Jamsil
+            { id: 'cf_s26', zone: 'โซล: Gangnam & Jamsil', type: 'คาเฟ่ / กาแฟ', name: '% Arabica Starfield COEX', kr: '응커피 코엑스', menu: 'Kyoto Latte, Spanish Latte (ข้างห้องสมุด Starfield)', note: 'COEX Mall (Day 5)' },
+            { id: 'cf_s27', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'Knotted Donut Jamsil (โดนัทครีมสด Lotte World Mall)', kr: '노티드 월드', menu: 'Milk Cream Donut, Earl Grey Donut', note: 'ชั้น 5–6 Lotte World Mall (Day 5)' },
+
+            // โซล: Yeouido
+            { id: 'cf_s28', zone: 'โซล: Yeouido', type: 'คาเฟ่ / กาแฟ', name: 'Camel Coffee The Hyundai Seoul', kr: '카멜커피 더현대서울', menu: 'Camel Coffee (กาแฟครีมนมซิกเนเจอร์)', note: 'ชั้น B1 The Hyundai Seoul (Day 6)' },
+            { id: 'cf_s29', zone: 'โซล: Yeouido', type: 'ร้านขนม / เบเกอรี', name: 'Teddy Beurre House (ครัวซองต์ The Hyundai Seoul)', kr: '테디뵈르하우스 더현대서울', menu: 'ครัวซองต์เนยสด, Pistachio Kouign-Amann', note: 'ชั้น B1 โซนอาหาร The Hyundai Seoul' }
+        ];
 
         // ---------------------------------------------------------
         // BASE DATA (ITINERARY, ZONES, STAMPS, GACHA, NAVER MAP)
@@ -700,18 +928,18 @@
                 city: 'ปูซาน',
                 badgeColor: 'bg-sky-100 text-sky-700',
                 date: 'จ. 7 ธ.ค.',
-                title: 'Sky Capsule • วัดแฮดงยงกุงซา • หมู่บ้านคัมชอน & ซอมยอน',
-                highlightNote: '💡 แนะนำจองรอบ Sky Capsule ช่วงเช้า 09:30–10:30 น. จากสถานี Mipo ไป Cheongsapo แสงสวยและคนไม่แน่น',
+                title: 'เดินชมวิว Blueline Park • วัดแฮดงยงกุงซา • หมู่บ้านคัมชอน & ซอมยอน',
+                highlightNote: '📸 แวะเดินเล่นชมวิวทางรถไฟเลียบทะเลโซน Blueline Park และจุดทางข้ามรถไฟวิวทะเลที่ Cheongsapo (เน้นเดินเล่นถ่ายรูปวิว ไม่นั่ง Sky Capsule)',
                 events: [
                     {
                         id: 'd2_e1',
                         time: '09:30 – 11:30',
-                        transit: 'เดิน / แท็กซี่ไปสถานี Mipo',
-                        title: 'นั่งรถไฟปุ๊กปิ๊ก Haeundae Blueline Park (Sky Capsule)',
-                        desc: 'ขึ้น Sky Capsule จาก Mipo เลียบชายฝั่งทะเลไปลง Cheongsapo ถ่ายรูปกับทางข้ามรถไฟวิวทะเลสไตล์ญี่ปุ่น (คล้าย Kamakura)',
+                        transit: 'เดินเลียบทางเดินไม้ Green Railway / แท็กซี่ไป Cheongsapo',
+                        title: 'เดินชมวิวเลียบทะเล Haeundae Blueline Park & จุดถ่ายรูป Cheongsapo',
+                        desc: 'เดินเล่นทางเดินเลียบชายฝั่ง Green Railway ชมวิวทะเลและรางรถไฟปุ๊กปิ๊ก แวะถ่ายรูปมุมทางข้ามรถไฟวิวทะเลสไตล์ญี่ปุ่น (คล้าย Kamakura) ที่สถานี Cheongsapo และประภาคารแฝดแดง-ขาว',
                         places: [
-                            { name: 'Blueline Park Mipo Station', kr: '해운대블루라인파크 미포정거장' },
-                            { name: 'Cheongsapo Daritdol Observatory', kr: '청사포다릿돌전망대' }
+                            { name: 'Blueline Park Mipo (จุดเริ่มต้นทางเดินชมวิว)', kr: '해운대블루라인파크 미포정거장' },
+                            { name: 'Cheongsapo Daritdol Observatory & ทางข้ามรถไฟวิวทะเล', kr: '청사포다릿돌전망대' }
                         ]
                     },
                     {
@@ -757,11 +985,13 @@
                 events: [
                     {
                         id: 'd3_e1',
-                        time: '09:30 – 13:30',
+                        isKtxEvent: true,
+                        time: 'รอลงตารางเวลา KTX',
                         transit: 'KTX (Busan → Seoul Station)',
                         title: 'เช็กเอาต์ปูซาน & นั่ง KTX กลับเข้ากรุงโซล',
-                        desc: 'นั่งรถไฟความเร็วสูง KTX กลับสู่ Seoul Station จากนั้นต่อรถไฟใต้ดินไปยังสถานี Gangdong (สาย 5)',
+                        desc: 'นั่งรถไฟความเร็วสูง KTX กลับสู่ Seoul Station จากนั้นต่อรถไฟใต้ดินสาย 5 ไปยังสถานี Gangdong (STAYMIN Gangdong)',
                         places: [
+                            { name: 'สถานี Busan Station', kr: '부산역' },
                             { name: 'STAYMIN Gangdong (สถานี Gangdong)', kr: '강동역' }
                         ]
                     },
@@ -879,12 +1109,12 @@
                 city: 'โซล',
                 badgeColor: 'bg-indigo-100 text-indigo-700',
                 date: 'ศ. 11 ธ.ค.',
-                title: 'ฮันนัมดง • The Hyundai Seoul (หมู่บ้านคริสต์มาส) • ฮงแด & ยอนนัมดง',
-                highlightNote: '🎅 The Hyundai Seoul ชั้น 5 จัดโซนหมู่บ้านคริสต์มาสสวยงามมาก แนะนำไปช่วงบ่ายแก่ๆ และต่อด้วยฮงแดช่วงค่ำ',
+                title: 'ฮันนัมดง • เส้นทางเดินแฮบังชน–ฮูอัมดง • The Hyundai Seoul • ฮงแด',
+                highlightNote: '🗺️ Route แฮบังชน–ฮูอัมดง (13:00–15:45 น.): นั่งลิฟต์เอียง 108 ขั้นขึ้นด้านบน แล้วเดินลงเนินเรื่อยๆ ผ่านตลาดชินฮึง → คาเฟ่ → มุมถ่ายรูปตรอก Sweet Bottle → ฮูอัมดง (ไม่ต้องเดินขึ้นเนินให้เหนื่อย!)',
                 events: [
                     {
                         id: 'd6_e1',
-                        time: '10:30 – 13:00',
+                        time: '10:00 – 12:30',
                         transit: 'รถไฟสาย 6 → สถานี Hangangjin ทางออก 3',
                         title: 'เดินเล่นย่านฮันนัมดง (Hannam-dong) & แกลเลอรีศิลปะ',
                         desc: 'ช้อปปิ้งแบรนด์ดีไซเนอร์เกาหลี Mardi Mercredi, Marithe, Grove และแวะชมงานศิลปะฟรีในย่านฮันนัม',
@@ -893,9 +1123,25 @@
                         ]
                     },
                     {
+                        id: 'd6_e1b',
+                        time: '13:00 – 15:45',
+                        transit: 'แท็กซี่จากฮันนัมดง ~8 นาที / หรือสาย 4 สถานี Sookmyung Women\'s Univ. ขึ้นลิฟต์เอียง 108 ขั้น',
+                        title: 'Route เดินเที่ยวย่านแฮบังชน – ฮูอัมดง (Haebangchon Downhill Walk)',
+                        desc: 'เส้นทางเดินลงเนินสุดชิลบนเชิงเขานัมซาน:<br><strong>① ลิฟต์เอียงบันได 108 ขั้น (108계단)</strong> นั่งลิฟต์ขึ้นจุดชมวิวหลังคาบ้านแฮบังชน<br><strong>② HBC Restaurant (해방식당) & ตลาดชินฮึง (Sinheung Market)</strong> แวะมื้อเที่ยงและเดินเล่นตรอกตลาดเก่าสไตล์วินเทจ<br><strong>③ A Glass Of (어글라스오브)</strong> แวะทานเจลาโต้มัทฉะเกลือ Maldon หรือบาแก็ต Kaymak<br><strong>④ มุมถ่ายรูปตรอกบันได Sweet Bottle (스윗보틀)</strong> ถ่ายรูปช่องตึกเห็นวิวเมืองโซลช่วงแสงบ่าย 15:00 น.<br><strong>⑤ เดินลงเนินสู่ฮูอัมดง (Huam-dong)</strong> แวะคาเฟ่ <strong>Laundry Project (론드리프로젝트)</strong> หรือเกี๊ยวมิชลิน <strong>Gubok Mandu (구복만두)</strong> ก่อนขึ้นรถไฟไปต่อ',
+                        places: [
+                            { name: '① ลิฟต์เอียงบันได 108 ขั้น (108 Steps)', kr: '해방촌 108계단' },
+                            { name: '② HBC Restaurant (해방식당)', kr: '해방식당' },
+                            { name: '② ตลาดชินฮึง (Sinheung Market)', kr: '해방촌 신흥시장' },
+                            { name: '③ A Glass Of (어글라스오브)', kr: '어글라스오브' },
+                            { name: '④ ตรอกบันได Sweet Bottle (มุมถ่ายรูป)', kr: '스윗보틀' },
+                            { name: '⑤ Laundry Project (ฮูอัมดง)', kr: '론드리프로젝트' },
+                            { name: '⑤ Gubok Mandu (มิชลิน บิบ กูร์มองด์)', kr: '구복만두' }
+                        ]
+                    },
+                    {
                         id: 'd6_e2',
-                        time: '14:00 – 16:30',
-                        transit: 'รถไฟสาย 5 → สถานี Yeouinaru ทางออก 1',
+                        time: '16:15 – 18:15',
+                        transit: 'แท็กซี่ / รถไฟสาย 5 → สถานี Yeouinaru ทางออก 1',
                         title: 'The Hyundai Seoul (ชมหมู่บ้านคริสต์มาสชั้น 5 Sounds Forest)',
                         desc: 'เช็กอินห้างสุดฮิตของโซล ชมการจัดแสดงธีมคริสต์มาสสุดอลังการที่ชั้น 5 และเดินช้อปปิ้งชั้น B2 Creative Ground',
                         places: [
@@ -904,7 +1150,7 @@
                     },
                     {
                         id: 'd6_e3',
-                        time: '17:30 – 21:30',
+                        time: '18:45 – 21:30',
                         transit: 'รถไฟสาย 2 / Gyeongui-Jungang → สถานี Hongik Univ.',
                         title: 'เดินเล่นย่านฮงแด (Hongdae) & ยอนนัมดง (Yeonnam-dong)',
                         desc: 'เดินช้อปปิ้งถนนคนเดินฮงแด ตู้กาชาปอง AK Plaza คาเฟ่ย่านยอนนัมดง และทานมื้อเย็นปิดท้ายคืนสุดท้ายในโซล',
@@ -965,7 +1211,7 @@
         ];
 
         const zoneGroups = [
-            { city: 'ปูซาน', line: 'สาย 2 (สีเขียว)', title: '1. Haeundae & Centum City', items: ['หาดแฮอุนแด & ตลาดแฮอุนแด', 'Blueline Park Sky Capsule (Mipo – Cheongsapo)', 'Shinsegae Centum City (Christmas Village)'] },
+            { city: 'ปูซาน', line: 'สาย 2 (สีเขียว)', title: '1. Haeundae & Centum City', items: ['หาดแฮอุนแด & ตลาดแฮอุนแด', 'เดินชมวิว Blueline Park & จุดถ่ายรูป Cheongsapo', 'Shinsegae Centum City (Christmas Village)'] },
             { city: 'ปูซาน', line: 'สาย 1 (สีส้ม)', title: '2. Gamcheon & Nampo / Seomyeon', items: ['หมู่บ้านวัฒนธรรมคัมชอน', 'ย่านช้อปปิ้งซอมยอน & Jeonpo Cafe Street', 'วัดแฮดงยงกุงซา (โซน Gijang)'] },
             { city: 'โซล', line: 'สาย 5 (สีม่วง)', title: '3. Gangdong & Cheonho (โซนที่พัก)', items: ['STAYMIN Gangdong (สถานี Gangdong)', 'ย่านช้อปปิ้ง Cheonho Rodeo Street & Hyundai Dept. Store'] },
             { city: 'โซล', line: 'สาย 3 & สาย 5', title: '4. Anguk, Bukchon & Ikseon-dong', items: ['หมู่บ้านบุกชอนฮันอก & ซัมชองดง', 'หมู่บ้านฮันอกอิกซอนดง', 'แกลเลอรีศิลปะฟรีแถว Anguk'] },
@@ -973,7 +1219,7 @@
             { city: 'โซล', line: 'สาย 2 & สาย 8', title: '6. Jamsil & Gangnam (COEX)', items: ['Lotte World Aquarium & Lotte World Mall', 'ห้องสมุด Starfield Library (COEX)'] },
             { city: 'โซล', line: 'สาย 2 (สีเขียว)', title: '7. Seongsu & Ttukseom', items: ['ถนนคาเฟ่ซองซู & Pop-up Stores', 'Dior Seongsu & Tamburins'] },
             { city: 'โซล', line: 'สาย 2 & AREX', title: '8. Hongdae & Yeonnam-dong', items: ['ถนนคนเดินฮงแด & AK Plaza', 'คาเฟ่และร้านของกุ๊กกิ๊กย่านยอนนัมดง'] },
-            { city: 'โซล', line: 'สาย 6 (สีน้ำตาล)', title: '9. Hannam-dong & Itaewon', items: ['ย่านช้อปปิ้งฮันนัมดง & แกลเลอรีศิลปะ'] },
+            { city: 'โซล', line: 'สาย 4 & สาย 6', title: '9. Hannam-dong & Haebangchon – Huam-dong', items: ['ย่านช้อปปิ้งฮันนัมดง & แกลเลอรีศิลปะ', 'Route เดินลงเนินแฮบังชน: ลิฟต์เอียง 108 ขั้น → ตลาดชินฮึง → A Glass Of → ตรอก Sweet Bottle → Laundry Project → Gubok Mandu'] },
             { city: 'โซล', line: 'สาย 5 (สีม่วง)', title: '10. Yeouido (The Hyundai Seoul)', items: ['The Hyundai Seoul หมู่บ้านคริสต์มาสชั้น 5'] }
         ];
 
@@ -981,7 +1227,7 @@
             { id: 'st_1', day: 'Day 1 • ปูซาน', name: 'Incheon Airport Tourist Info Stamp', loc: 'ศูนย์ข้อมูลท่องเที่ยว สนามบินอินชอน (ICN)', kr: '인천국제공항' },
             { id: 'st_2', day: 'Day 1 • ปูซาน', name: 'Busan Station Tourist Center Stamp', loc: 'ศูนย์บริการนักท่องเที่ยว สถานี Busan Station', kr: '부산역' },
             { id: 'st_3', day: 'Day 1 • ปูซาน', name: 'Haeundae Tourist Information Center', loc: 'จุดบริการนักท่องเที่ยวหน้าหาดแฮอุนแด', kr: '해운대관광안내소' },
-            { id: 'st_4', day: 'Day 2 • ปูซาน', name: 'Blueline Park Mipo / Cheongsapo Stamp', loc: 'สถานีรถไฟ Blueline Park แฮอุนแด', kr: '해운대블루라인파크 미포정거장' },
+            { id: 'st_4', day: 'Day 2 • ปูซาน', name: 'Blueline Park Mipo / Cheongsapo Stamp', loc: 'จุดเช็กอินทางเดินชมวิว Blueline Park แฮอุนแด', kr: '해운대블루라인파크 미포정거장' },
             { id: 'st_5', day: 'Day 2 • ปูซาน', name: 'Gamcheon Culture Village Stamp Tour', loc: 'จุดแลกแผนที่และสะสมตราปั๊มหมู่บ้านคัมชอน', kr: '감천문화마을' },
             { id: 'st_6', day: 'Day 3 • โซล', name: 'Seoul Station KTX / AREX Stamp', loc: 'สถานีรถไฟ Seoul Station', kr: '서울역' },
             { id: 'st_7', day: 'Day 3 • โซล', name: 'Gwanghwamun Tourist Info Stamp', loc: 'ศูนย์ข้อมูลท่องเที่ยว จัตุรัสควางฮวามุน', kr: '광화문광장' },
@@ -1020,8 +1266,8 @@
             { name: 'หาดแฮอุนแด (Haeundae Beach)', kr: '해운대해수욕장', zone: 'ปูซาน (Busan)', addr: 'สถานี Haeundae ทางออก 3, 5' },
             { name: 'ตลาดแฮอุนแด (Haeundae Market)', kr: '해운대전통시장', zone: 'ปูซาน (Busan)', addr: 'เดินจากหาดแฮอุนแด 3 นาที' },
             { name: 'Shinsegae Centum City (Christmas Village)', kr: '신세계백화점 센텀시티점', zone: 'ปูซาน (Busan)', addr: 'สาย 2 สถานี Centum City' },
-            { name: 'Blueline Park Mipo Station (Sky Capsule)', kr: '해운대블루라인파크 미포정거장', zone: 'ปูซาน (Busan)', addr: 'สุดหาดแฮอุนแดฝั่งตะวันออก' },
-            { name: 'Cheongsapo Daritdol Observatory', kr: '청사포다릿돌전망대', zone: 'ปูซาน (Busan)', addr: 'ปลายทางรถไฟ Sky Capsule' },
+            { name: 'Blueline Park Mipo (ทางเดินชมวิวเลียบทะเล)', kr: '해운대블루라인파크 미포정거장', zone: 'ปูซาน (Busan)', addr: 'สุดหาดแฮอุนแดฝั่งตะวันออก (เดินชมวิวเลียบทางรถไฟ)' },
+            { name: 'Cheongsapo Daritdol Observatory & ทางข้ามรถไฟวิวทะเล', kr: '청사포다릿돌전망대', zone: 'ปูซาน (Busan)', addr: 'จุดถ่ายรูปทางข้ามรถไฟวิวทะเล Cheongsapo' },
             { name: 'วัดแฮดงยงกุงซา (Haedong Yonggungsa)', kr: '해동용궁사', zone: 'ปูซาน (Busan)', addr: 'โซน Gijang นั่งแท็กซี่จากแฮอุนแด ~15 นาที' },
             { name: 'หมู่บ้านวัฒนธรรมคัมชอน (Gamcheon Village)', kr: '감천문화마을', zone: 'ปูซาน (Busan)', addr: 'สถานี Toseong ทางออก 6 ต่อรถบัสสาย 2' },
             { name: 'ย่านซอมยอน (Seomyeon)', kr: '서면역', zone: 'ปูซาน (Busan)', addr: 'จุดตัดรถไฟใต้ดินสาย 1 และสาย 2' },
@@ -1038,8 +1284,15 @@
             { name: 'โบสถ์เมียงดง (Myeongdong Cathedral)', kr: '명동대성당', zone: 'โซล: Jongno & Myeongdong', addr: 'ย่านเมียงดง' },
             { name: 'Shinsegae Department Store Main (โชว์ไฟคริสต์มาส)', kr: '신세계백화점 본점', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 4 สถานี Hoehyeon ทางออก 7' },
             { name: 'Lotte Department Store Main', kr: '롯데백화점 본점', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 2 สถานี Euljiro 1-ga ทางออก 7' },
-            { name: 'ย่านฮันนัมดง (Hannam-dong)', kr: '한남동', zone: 'โซล: Yongsan & Hannam', addr: 'สาย 6 สถานี Hangangjin ทางออก 3' },
-            { name: 'Pace Gallery Seoul', kr: '페이스갤러리 서울', zone: 'โซล: Yongsan & Hannam', addr: 'สถานี Hangangjin ทางออก 3' },
+            { name: 'ย่านฮันนัมดง (Hannam-dong)', kr: '한남동', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สาย 6 สถานี Hangangjin ทางออก 3' },
+            { name: 'Pace Gallery Seoul', kr: '페이스갤러리 서울', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'สถานี Hangangjin ทางออก 3' },
+            { name: 'ลิฟต์เอียงบันได 108 ขั้น แฮบังชน (108 Steps)', kr: '해방촌 108계단', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'จุดเริ่มต้นเดินลงเนินย่านแฮบังชน' },
+            { name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '5 Sinheung-ro 22-gil, Yongsan-gu' },
+            { name: 'ตลาดชินฮึง แฮบังชน (Sinheung Market)', kr: '해방촌 신흥시장', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: 'ย่านแฮบังชน (ใกล้บันได 108 ขั้น)' },
+            { name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '63 Sinheung-ro 11-gil, Yongsan-gu' },
+            { name: 'ตรอกบันได Sweet Bottle (แฮบังชน / ฮูอัมดง)', kr: '스윗보틀', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '28-15 Dutteopbawi-ro 40-gil (มุมถ่ายรูปวิวเมืองโซล)' },
+            { name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '127 Dutteopbawi-ro, Huam-dong' },
+            { name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์)', kr: '구복만두', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '7 Dutteopbawi-ro (ใกล้สถานี Sookmyung Women\'s Univ.)' },
             { name: 'ถนนคาเฟ่ซองซู (Seongsu-dong)', kr: '성수동카페거리', zone: 'โซล: Seongsu & Ttukseom', addr: 'สาย 2 สถานี Seongsu ทางออก 3, 4' },
             { name: 'Dior Seongsu', kr: '디올 성수', zone: 'โซล: Seongsu & Ttukseom', addr: 'สถานี Seongsu ทางออก 4' },
             { name: 'Tamburins Flagship Store Seongsu', kr: '탬버린즈 성수', zone: 'โซล: Seongsu & Ttukseom', addr: 'ย่านซองซู' },
@@ -1054,21 +1307,106 @@
         ];
 
         // ---------------------------------------------------------
+        // CHECK-IN & MEMORY NOTE HANDLERS
+        // ---------------------------------------------------------
+        function openNoteModal(itemId, title) {
+            document.getElementById('note-modal-item-id').value = itemId;
+            document.getElementById('note-modal-place-title').textContent = title;
+            document.getElementById('note-modal-text').value = checkinNotes[itemId] || '';
+            document.getElementById('note-modal-mark-visited').checked = true;
+            const modal = document.getElementById('note-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('note-modal-text').focus(), 100);
+        }
+
+        function closeNoteModal() {
+            const modal = document.getElementById('note-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveCheckinNote(e) {
+            e.preventDefault();
+            const itemId = document.getElementById('note-modal-item-id').value;
+            const text = document.getElementById('note-modal-text').value.trim();
+            const markVisited = document.getElementById('note-modal-mark-visited').checked;
+
+            if (text) {
+                checkinNotes[itemId] = text;
+            } else {
+                delete checkinNotes[itemId];
+            }
+
+            if (markVisited && !completedIds[itemId]) {
+                completedIds[itemId] = getCheckinTimestamp();
+            }
+
+            saveState();
+            closeNoteModal();
+            refreshAllViews();
+            showToast('บันทึกความทรงจำเรียบร้อยแล้ว!');
+        }
+
+        // ---------------------------------------------------------
+        // KTX SCHEDULE EDIT MODAL & HANDLERS (DAY 3)
+        // ---------------------------------------------------------
+        function openKtxModal() {
+            document.getElementById('ktx-depart').value = ktxSchedule.departTime || '';
+            document.getElementById('ktx-arrive').value = ktxSchedule.arriveTime || '';
+            document.getElementById('ktx-train-no').value = ktxSchedule.trainNo || '';
+            document.getElementById('ktx-seat').value = ktxSchedule.seat || '';
+            document.getElementById('ktx-note').value = ktxSchedule.note || '';
+            const modal = document.getElementById('ktx-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeKtxModal() {
+            const modal = document.getElementById('ktx-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveKtxSchedule(e) {
+            e.preventDefault();
+            ktxSchedule = {
+                departTime: document.getElementById('ktx-depart').value.trim(),
+                arriveTime: document.getElementById('ktx-arrive').value.trim(),
+                trainNo: document.getElementById('ktx-train-no').value.trim().toUpperCase(),
+                seat: document.getElementById('ktx-seat').value.trim(),
+                note: document.getElementById('ktx-note').value.trim()
+            };
+            bumpMinorVersion();
+            saveState();
+            closeKtxModal();
+            renderDaily();
+            showToast('บันทึกและอัปเดตตารางเวลา KTX เรียบร้อยแล้ว!');
+        }
+
+        // ---------------------------------------------------------
         // ADD / EDIT PLACE MODAL & BACKUP MODAL FUNCTIONS
         // ---------------------------------------------------------
+        function openAddCafeModal() {
+            openAddModal();
+            document.getElementById('chk-add-cafe').checked = true;
+            toggleCafeCategoryField();
+        }
+
         function openAddModal(presetDay = null, editId = null) {
             const modal = document.getElementById('add-modal');
             const form = document.getElementById('add-place-form');
             form.reset();
             document.getElementById('edit-place-id').value = editId || '';
             document.getElementById('input-custom-zone').classList.add('hidden');
-            document.getElementById('daily-extra-fields').classList.add('hidden');
-            document.getElementById('daily-extra-fields').classList.remove('grid');
+            document.getElementById('daily-extra-fields').classList.remove('hidden');
+            document.getElementById('daily-extra-fields').classList.add('grid');
+            document.getElementById('cafe-category-box').classList.add('hidden');
 
             if (editId) {
                 const target = userCustomPlaces.find(p => p.id === editId);
                 if (target) {
-                    document.getElementById('modal-title').innerHTML = '<i class="ph-fill ph-pencil-simple text-royal text-xl"></i> แก้ไขสถานที่';
+                    document.getElementById('modal-title').innerHTML = '<i class="ph-fill ph-pencil-simple text-royal text-xl"></i> แก้ไขบันทึกสถานที่';
                     document.getElementById('input-name').value = target.name || '';
                     document.getElementById('input-kr').value = target.kr || '';
                     const zoneSelect = document.getElementById('input-zone');
@@ -1081,9 +1419,15 @@
                         document.getElementById('input-custom-zone').classList.remove('hidden');
                     }
                     document.getElementById('input-addr').value = target.addr || '';
+                    document.getElementById('chk-auto-checkin').checked = !!completedIds[`ev_${editId}`] || !!completedIds[`cf_${editId}`];
+                    document.getElementById('chk-add-cafe').checked = !!target.addCafe;
+                    if (target.addCafe) {
+                        toggleCafeCategoryField();
+                        document.getElementById('input-cafe-type').value = target.cafeType || 'คาเฟ่ / กาแฟ';
+                    }
                     document.getElementById('chk-add-daily').checked = !!target.addDaily;
+                    toggleDailyFields();
                     if (target.addDaily) {
-                        toggleDailyFields();
                         document.getElementById('input-day').value = target.day || '1';
                         document.getElementById('input-time').value = target.time || '';
                     }
@@ -1091,12 +1435,11 @@
                     document.getElementById('chk-add-gacha').checked = !!target.addGacha;
                 }
             } else {
-                document.getElementById('modal-title').innerHTML = '<i class="ph-fill ph-map-pin-plus text-royal text-xl"></i> เพิ่มสถานที่ใหม่ลงในทริป';
-                if (presetDay) {
-                    document.getElementById('chk-add-daily').checked = true;
-                    toggleDailyFields();
-                    document.getElementById('input-day').value = String(presetDay);
-                }
+                document.getElementById('modal-title').innerHTML = '<i class="ph-fill ph-map-pin-plus text-royal text-xl"></i> บันทึกจุดแวะ / สถานที่ใหม่';
+                document.getElementById('chk-auto-checkin').checked = true;
+                document.getElementById('chk-add-daily').checked = true;
+                toggleDailyFields();
+                document.getElementById('input-day').value = String(presetDay || currentDay || 1);
             }
 
             modal.classList.remove('hidden');
@@ -1117,6 +1460,16 @@
                 customInput.focus();
             } else {
                 customInput.classList.add('hidden');
+            }
+        }
+
+        function toggleCafeCategoryField() {
+            const checked = document.getElementById('chk-add-cafe').checked;
+            const box = document.getElementById('cafe-category-box');
+            if (checked) {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
             }
         }
 
@@ -1141,22 +1494,34 @@
             const customZone = document.getElementById('input-custom-zone').value.trim();
             const zone = zoneSel === 'OTHER' ? (customZone || 'อื่นๆ') : zoneSel;
             const addr = document.getElementById('input-addr').value.trim();
+            const autoCheckin = document.getElementById('chk-auto-checkin').checked;
+            const addCafe = document.getElementById('chk-add-cafe').checked;
+            const cafeType = document.getElementById('input-cafe-type').value;
             const addDaily = document.getElementById('chk-add-daily').checked;
             const day = document.getElementById('input-day').value;
             const time = document.getElementById('input-time').value.trim();
             const addStamp = document.getElementById('chk-add-stamp').checked;
             const addGacha = document.getElementById('chk-add-gacha').checked;
 
+            let targetId = editId;
             if (editId) {
                 const idx = userCustomPlaces.findIndex(p => p.id === editId);
                 if (idx !== -1) {
-                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], name, kr, zone, addr, addDaily, day, time, addStamp, addGacha };
+                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], name, kr, zone, addr, addCafe, cafeType, addDaily, day, time, addStamp, addGacha };
                     lastAddedId = editId;
                 }
             } else {
-                const newId = 'custom_' + Date.now();
-                userCustomPlaces.unshift({ id: newId, name, kr, zone, addr, addDaily, day, time, addStamp, addGacha });
-                lastAddedId = newId;
+                targetId = 'custom_' + Date.now();
+                userCustomPlaces.unshift({ id: targetId, name, kr, zone, addr, addCafe, cafeType, addDaily, day, time, addStamp, addGacha });
+                lastAddedId = targetId;
+            }
+
+            if (autoCheckin) {
+                const stampTime = getCheckinTimestamp();
+                if (addDaily) completedIds[`ev_${targetId}`] = stampTime;
+                if (addCafe) completedIds[`cf_${targetId}`] = stampTime;
+                if (addStamp) completedIds[`st_${targetId}`] = stampTime;
+                if (addGacha) completedIds[`gc_${targetId}`] = stampTime;
             }
 
             if (addDaily) currentDay = Number(day);
@@ -1164,15 +1529,19 @@
             saveState();
             closeAddModal();
             refreshAllViews();
-            showToast(editId ? 'อัปเดตข้อมูลสถานที่เรียบร้อยแล้ว' : 'เพิ่มสถานที่ใหม่เรียบร้อยแล้ว!');
+            showToast(editId ? 'อัปเดตบันทึกสถานที่เรียบร้อยแล้ว' : 'บันทึกจุดแวะใหม่ลงในทริปเรียบร้อยแล้ว!');
         }
 
         function deleteCustomPlace(id) {
             userCustomPlaces = userCustomPlaces.filter(p => p.id !== id);
+            delete completedIds[`ev_${id}`];
+            delete completedIds[`cf_${id}`];
+            delete completedIds[`st_${id}`];
+            delete completedIds[`gc_${id}`];
             bumpMinorVersion();
             saveState();
             refreshAllViews();
-            showToast('ลบสถานที่ออกจากรายการแล้ว');
+            showToast('ลบบันทึกสถานที่ออกจากรายการแล้ว');
         }
 
         function openBackupModal() {
@@ -1188,8 +1557,10 @@
         function exportTripData() {
             const payload = JSON.stringify({
                 checked: completedIds,
+                checkinNotes: checkinNotes,
                 customPlaces: userCustomPlaces,
                 travelerData: travelerData,
+                ktxSchedule: ktxSchedule,
                 version: versionState
             });
             copyText(payload);
@@ -1204,8 +1575,10 @@
             try {
                 const parsed = JSON.parse(raw);
                 if (parsed.checked) completedIds = parsed.checked;
+                if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
                 if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
                 if (parsed.travelerData) travelerData = parsed.travelerData;
+                if (parsed.ktxSchedule) ktxSchedule = parsed.ktxSchedule;
                 if (parsed.version) versionState = parsed.version;
                 saveState();
                 refreshAllViews();
@@ -1228,8 +1601,10 @@
 
         function saveState() {
             localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
+            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
             localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
+            localStorage.setItem('ppr2026_ktx_schedule', JSON.stringify(ktxSchedule));
             localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
             renderVersionBadge();
             updateProgressUI();
@@ -1238,17 +1613,20 @@
         function toggleCheck(id) {
             if (completedIds[id]) {
                 delete completedIds[id];
+                showToast('ยกเลิกการเช็กอินจุดนี้แล้ว');
             } else {
-                completedIds[id] = true;
+                completedIds[id] = getCheckinTimestamp();
+                showToast('เช็กอินสำเร็จ! ประทับตรา VISITED แล้ว');
             }
             saveState();
         }
 
         function resetAllProgress() {
             completedIds = {};
+            checkinNotes = {};
             saveState();
             refreshAllViews();
-            showToast('รีเซ็ตการติ๊กเช็กลิสต์ทั้งหมดเรียบร้อยแล้ว');
+            showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
         }
 
         function copyText(text) {
@@ -1283,6 +1661,23 @@
 
         function getDailyPlanWithCustom() {
             const cloned = JSON.parse(JSON.stringify(baseDailyPlans));
+
+            // Inject saved KTX schedule into Day 3 Event 1
+            const day3 = cloned.find(d => d.day === 3);
+            if (day3) {
+                const ktxEv = day3.events.find(e => e.isKtxEvent);
+                if (ktxEv && (ktxSchedule.departTime || ktxSchedule.arriveTime)) {
+                    ktxEv.time = `${ktxSchedule.departTime || '?'} – ${ktxSchedule.arriveTime || '?'}`;
+                    ktxEv.transit = `KTX ${ktxSchedule.trainNo ? ktxSchedule.trainNo + ' ' : ''}(Busan → Seoul Station)`;
+                    const extraDetails = [
+                        ktxSchedule.trainNo ? `ขบวน: ${ktxSchedule.trainNo}` : '',
+                        ktxSchedule.seat ? `ที่นั่ง: ${ktxSchedule.seat}` : '',
+                        ktxSchedule.note ? `หมายเหตุ: ${ktxSchedule.note}` : ''
+                    ].filter(Boolean).join(' • ');
+                    ktxEv.desc = `รถไฟความเร็วสูง KTX ออกจากสถานี Busan เวลา ${ktxSchedule.departTime || '-'} น. ถึง Seoul Station เวลา ${ktxSchedule.arriveTime || '-'} น.${extraDetails ? ' (' + extraDetails + ')' : ''} จากนั้นต่อรถไฟใต้ดินสาย 5 ไปสถานี Gangdong`;
+                }
+            }
+
             userCustomPlaces.forEach(cp => {
                 if (cp.addDaily) {
                     const targetDay = cloned.find(d => d.day === Number(cp.day));
@@ -1291,16 +1686,33 @@
                             id: `ev_${cp.id}`,
                             customId: cp.id,
                             isCustom: true,
-                            time: cp.time || 'เวลาตามสะดวก',
+                            time: cp.time || 'แวะระหว่างวัน',
                             transit: cp.zone,
                             title: cp.name,
-                            desc: cp.addr || 'สถานที่ที่เพิ่มใหม่ลงในแพลน',
+                            desc: cp.addr || 'จุดแวะใหม่ที่บันทึกเพิ่มระหว่างเดินทาง',
                             places: [{ name: cp.name, kr: cp.kr }]
                         });
                     }
                 }
             });
             return cloned;
+        }
+
+        function getAllCafeFoodItems() {
+            const customCafes = userCustomPlaces
+                .filter(cp => cp.addCafe)
+                .map(cp => ({
+                    id: `cf_${cp.id}`,
+                    customId: cp.id,
+                    isCustom: true,
+                    zone: cp.zone,
+                    type: cp.cafeType || 'คาเฟ่ / กาแฟ',
+                    name: cp.name,
+                    kr: cp.kr,
+                    menu: cp.addr || 'ร้านที่บันทึกเพิ่มใหม่',
+                    note: cp.addDaily ? `บันทึกไว้ใน Day ${cp.day}` : 'เพิ่มใหม่'
+                }));
+            return [...customCafes, ...baseCafeFoodItems];
         }
 
         function getAllStamps() {
@@ -1343,21 +1755,26 @@
 
         function updateProgressUI() {
             const allEvents = getDailyPlanWithCustom().flatMap(d => d.events);
+            const allCafes = getAllCafeFoodItems();
             const allStamps = getAllStamps();
             const allGachas = [...getAllGacha(), ...baseFreebieItems];
 
-            const totalItems = allEvents.length + allStamps.length + allGachas.length;
+            const totalItems = allEvents.length + allCafes.length + allStamps.length + allGachas.length;
             const checkedEvents = allEvents.filter(e => completedIds[e.id]).length;
+            const checkedCafes = allCafes.filter(c => completedIds[c.id]).length;
             const checkedStamps = allStamps.filter(s => completedIds[s.id]).length;
             const checkedGachas = allGachas.filter(g => completedIds[g.id]).length;
 
-            const totalChecked = checkedEvents + checkedStamps + checkedGachas;
+            const totalChecked = checkedEvents + checkedCafes + checkedStamps + checkedGachas;
             const pct = totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
 
             const globalText = document.getElementById('global-progress-text');
             const globalBar = document.getElementById('global-progress-bar');
-            if (globalText) globalText.textContent = `${totalChecked}/${totalItems} (${pct}%)`;
+            if (globalText) globalText.textContent = `${totalChecked}/${totalItems} จุด (${pct}%)`;
             if (globalBar) globalBar.style.width = `${pct}%`;
+
+            const cafeVisitedEl = document.getElementById('cafe-visited-count');
+            if (cafeVisitedEl) cafeVisitedEl.textContent = `เช็กอินแล้ว ${checkedCafes}/${allCafes.length} ร้าน`;
 
             const stampTotalEl = document.getElementById('stamp-total-label');
             const stampCountEl = document.getElementById('stamp-count');
@@ -1369,8 +1786,11 @@
             const gachaCountEl = document.getElementById('gacha-count');
             if (gachaCountEl) gachaCountEl.textContent = `${checkedGachas}/${allGachas.length}`;
 
+            const navCafeLabel = document.getElementById('nav-cafe-label');
+            if (navCafeLabel) navCafeLabel.textContent = `2. คาเฟ่ & ร้านอาหาร (${allCafes.length})`;
+
             const navLabel = document.getElementById('nav-map-label');
-            if (navLabel) navLabel.textContent = `5. พิกัด Naver Map (${getAllPlaces().length})`;
+            if (navLabel) navLabel.textContent = `6. พิกัดทั้งหมด (${getAllPlaces().length})`;
         }
 
         // ---------------------------------------------------------
@@ -1530,63 +1950,125 @@
         }
 
         // ---------------------------------------------------------
-        // RENDER FUNCTIONS FOR ALL TABS
+        // RENDER FUNCTIONS (MOBILE SCRAPBOOK & TRAVEL CARDS UI)
         // ---------------------------------------------------------
         function renderDaily() {
             const plans = getDailyPlanWithCustom();
             const pillsContainer = document.getElementById('day-pills');
             pillsContainer.innerHTML = plans.map(p => {
                 const active = p.day === currentDay;
-                return `<button onclick="currentDay=${p.day};renderDaily()" class="px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition flex flex-col items-start ${active ? 'bg-royal text-white shadow-sm font-bold' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 font-medium'}">
-                    <span>Day ${p.day}</span>
-                    <span class="text-[10px] ${active ? 'text-blue-100' : 'text-slate-400'}">${p.date}</span>
+                const visitedInDay = p.events.filter(e => completedIds[e.id]).length;
+                return `<button onclick="currentDay=${p.day};renderDaily()" class="px-4 py-2.5 rounded-2xl text-xs whitespace-nowrap transition flex flex-col items-start min-w-[82px] ${active ? 'bg-slate-900 text-white shadow-md font-bold' : 'bg-white text-slate-700 border border-slate-200/90 hover:bg-slate-50 font-medium'}">
+                    <div class="flex items-center justify-between w-full gap-1.5">
+                        <span>Day ${p.day}</span>
+                        ${visitedInDay > 0 ? `<span class="text-[10px] px-1.5 py-0.2 rounded-full ${active ? 'bg-emerald-400 text-slate-950 font-extrabold' : 'bg-emerald-100 text-emerald-700 font-bold'}">${visitedInDay}/${p.events.length}</span>` : ''}
+                    </div>
+                    <span class="text-[10px] mt-0.5 ${active ? 'text-slate-300' : 'text-slate-400'}">${p.date}</span>
                 </button>`;
             }).join('');
 
             const dayData = plans.find(p => p.day === currentDay) || plans[0];
+            const dayCheckedCount = dayData.events.filter(e => completedIds[e.id]).length;
+
             document.getElementById('day-header-card').innerHTML = `
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
                     <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${dayData.badgeColor}">${dayData.city}</span>
-                        <span class="text-xs text-slate-500 font-medium">${dayData.date} 2569</span>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${dayData.badgeColor}">${dayData.city}</span>
+                        <span class="text-xs text-slate-500 font-semibold">${dayData.date} 2569</span>
+                        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">เช็กอินแล้ว ${dayCheckedCount}/${dayData.events.length}</span>
                     </div>
-                    <button onclick="openAddModal(${dayData.day})" class="text-xs bg-blue-50 hover:bg-blue-100 text-royal font-semibold px-3 py-1 rounded-lg flex items-center gap-1 transition">
-                        <i class="ph-bold ph-plus"></i> เพิ่มกิจกรรมใน Day ${dayData.day}
+                    <button onclick="openAddModal(${dayData.day})" class="text-xs bg-royal hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                        <i class="ph-bold ph-plus"></i> บันทึกจุดแวะ / ร้านใหม่ใน Day ${dayData.day}
                     </button>
                 </div>
-                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">Day ${dayData.day}: ${dayData.title}</h2>
-                <div class="bg-amber-50 border border-amber-200/80 text-amber-800 text-xs px-3 py-2 rounded-xl">
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 mb-2 leading-snug">Day ${dayData.day}: ${dayData.title}</h2>
+                <div class="bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs px-3.5 py-2.5 rounded-2xl leading-relaxed">
                     ${dayData.highlightNote}
                 </div>
             `;
 
-            document.getElementById('day-timeline').innerHTML = dayData.events.map(ev => {
-                const isChecked = !!completedIds[ev.id];
+            document.getElementById('day-timeline').innerHTML = dayData.events.map((ev, idx) => {
+                const checkVal = completedIds[ev.id];
+                const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 const isNew = ev.customId && ev.customId === lastAddedId;
-                return `<div class="bg-white rounded-2xl p-4 border ${isChecked ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
-                    <div class="flex items-start gap-3">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${ev.id}');renderDaily()" class="mt-1 w-4 h-4 rounded accent-emerald-600 cursor-pointer shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1">
-                                <span class="text-xs font-bold text-royal bg-blue-50 px-2 py-0.5 rounded-md"><i class="ph-bold ph-clock"></i> ${ev.time}</span>
-                                <span class="text-[11px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md truncate max-w-full"><i class="ph-fill ph-train"></i> ${ev.transit}</span>
+                const hasKtxTime = ev.isKtxEvent && (ktxSchedule.departTime || ktxSchedule.arriveTime);
+                const userNote = checkinNotes[ev.id];
+
+                return `<div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-emerald-300/90 bg-gradient-to-br from-white to-emerald-50/30' : ev.isKtxEvent ? 'border-indigo-200' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
+                    <!-- Top Card Bar: Step/Time + Visited Stamp -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <span class="w-6 h-6 rounded-full ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'} text-[11px] font-bold inline-flex items-center justify-center shrink-0">${idx + 1}</span>
+                            <span class="text-xs font-bold ${ev.isKtxEvent && !hasKtxTime ? 'text-amber-700 bg-amber-100' : 'text-royal bg-blue-50'} px-2.5 py-1 rounded-xl"><i class="ph-bold ph-clock"></i> ${ev.time}</span>
+                            ${ev.isKtxEvent ? `
+                                <button onclick="openKtxModal()" class="text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded-xl flex items-center gap-1 shadow-xs transition cursor-pointer">
+                                    <i class="ph-bold ph-pencil-simple"></i> ${hasKtxTime ? 'แก้ไขเวลา KTX' : 'ลงตารางเวลา KTX'}
+                                </button>
+                            ` : ''}
+                        </div>
+                        ${isVisited ? `
+                            <span class="visited-stamp px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold tracking-wide uppercase flex items-center gap-1">
+                                <i class="ph-fill ph-seal-check text-sm"></i> VISITED • ${stampLabel}
+                            </span>
+                        ` : `
+                            <span class="text-[11px] text-slate-400 font-medium">${ev.isCustom ? '✨ บันทึกเพิ่มเติม' : 'จุดหมายตามแพลน'}</span>
+                        `}
+                    </div>
+
+                    <!-- Transit Pill -->
+                    <div class="text-[11px] text-slate-600 bg-slate-100/90 px-3 py-1.5 rounded-xl mb-2.5 inline-flex items-center gap-1.5 max-w-full">
+                        <i class="ph-fill ph-train text-slate-500 shrink-0"></i>
+                        <span class="truncate">${ev.transit}</span>
+                    </div>
+
+                    <!-- Title & Description -->
+                    <h4 class="font-bold text-sm sm:text-base text-slate-900 leading-snug">${ev.title}</h4>
+                    <p class="text-xs sm:text-[13px] text-slate-600 mt-1.5 leading-relaxed">${ev.desc}</p>
+
+                    <!-- User Memory Note Box (if exists) -->
+                    ${userNote ? `
+                        <div class="mt-2.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 flex items-start justify-between gap-2">
+                            <div class="flex items-start gap-2">
+                                <i class="ph-fill ph-chat-teardrop-text text-amber-600 text-base shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div class="text-[10px] font-bold text-amber-800 uppercase">บันทึกความทรงจำของเรา</div>
+                                    <p class="mt-0.5 leading-relaxed">${userNote}</p>
+                                </div>
                             </div>
-                            <h4 class="font-bold text-sm text-slate-900 ${isChecked ? 'line-through text-slate-400' : ''}">${ev.title}</h4>
-                            <p class="text-xs text-slate-600 mt-1 leading-relaxed">${ev.desc}</p>
-                            <div class="flex flex-wrap gap-1.5 mt-2.5">
-                                ${ev.places.map(pl => `
-                                    <div class="inline-flex items-center bg-slate-50 border border-slate-200 rounded-lg overflow-hidden text-xs">
-                                        <span class="px-2 py-1 font-medium text-slate-700">${pl.name}</span>
-                                        <button onclick="copyText('${pl.kr}')" class="px-1.5 py-1 hover:bg-slate-200 text-slate-500 border-l border-slate-200" title="คัดลอกชื่อเกาหลี (${pl.kr})"><i class="ph ph-copy"></i></button>
-                                        <a href="${nMap(pl.kr)}" target="_blank" class="px-2 py-1 bg-naver hover:bg-naverDark text-white font-semibold flex items-center gap-0.5"><i class="ph-bold ph-map-pin"></i> Map</a>
-                                    </div>
-                                `).join('')}
+                            <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="text-[11px] text-amber-700 hover:underline font-semibold shrink-0">แก้ไข</button>
+                        </div>
+                    ` : ''}
+
+                    <!-- Place Action Boxes (Mobile-friendly tap targets) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                        ${ev.places.map(pl => `
+                            <div class="flex items-center justify-between bg-slate-50 border border-slate-200/90 rounded-2xl p-2 pl-3 gap-2">
+                                <span class="text-xs font-semibold text-slate-800 truncate">${pl.name}</span>
+                                <div class="flex items-center gap-1 shrink-0">
+                                    <button onclick="copyText('${pl.kr}')" class="p-2 bg-white hover:bg-slate-200 text-slate-600 border border-slate-200 rounded-xl transition" title="คัดลอกชื่อเกาหลี (${pl.kr})"><i class="ph ph-copy text-sm"></i></button>
+                                    <a href="${nMap(pl.kr)}" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs transition"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                </div>
                             </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Bottom Scrapbook Check-in & Note Action Bar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mt-3.5 pt-3 border-t border-slate-100">
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="toggleCheck('${ev.id}');renderDaily()" class="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-900 hover:bg-slate-800 text-white'}">
+                                <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'} text-base"></i>
+                                <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
+                            </button>
+                            <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
+                                <i class="ph-bold ph-note-pencil"></i>
+                                <span>${userNote ? 'แก้ไขโน้ต' : 'จดบันทึก'}</span>
+                            </button>
                         </div>
                         ${ev.isCustom ? `
-                            <div class="flex items-center gap-1 shrink-0">
-                                <button onclick="openAddModal(null, '${ev.customId}')" class="p-1.5 text-slate-400 hover:text-royal rounded-lg hover:bg-slate-100" title="แก้ไข"><i class="ph-bold ph-pencil-simple"></i></button>
-                                <button onclick="deleteCustomPlace('${ev.customId}')" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-slate-100" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                            <div class="flex items-center gap-1">
+                                <button onclick="openAddModal(null, '${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-royal rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไข</button>
+                                <button onclick="deleteCustomPlace('${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-rose-500 rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
                             </div>
                         ` : ''}
                     </div>
@@ -1594,30 +2076,191 @@
             }).join('');
         }
 
+        function setCafeType(type) {
+            currentCafeType = type;
+            document.querySelectorAll('.ctype-btn').forEach(btn => {
+                if (btn.dataset.ctype === type) {
+                    btn.className = 'ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-900 text-white font-semibold transition';
+                } else {
+                    btn.className = 'ctype-btn px-3 py-2 rounded-xl text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium transition';
+                }
+            });
+            renderCafeTab();
+        }
+
+        function renderCafeTab() {
+            const allItems = getAllCafeFoodItems();
+            const search = (document.getElementById('cafe-search')?.value || '').toLowerCase().trim();
+
+            const uniqueZones = ['ALL', ...new Set(allItems.map(i => i.zone))];
+            const zonePillsEl = document.getElementById('cafe-zone-pills');
+            if (zonePillsEl) {
+                zonePillsEl.innerHTML = uniqueZones.map(z => {
+                    const active = currentCafeZone === z;
+                    return `<button onclick="currentCafeZone='${z}';renderCafeTab()" class="px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition ${active ? 'bg-amber-500 text-white font-bold shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium'}">
+                        ${z === 'ALL' ? 'ทุกย่าน (' + allItems.length + ')' : z}
+                    </button>`;
+                }).join('');
+            }
+
+            const filtered = allItems.filter(item => {
+                if (currentCafeZone !== 'ALL' && item.zone !== currentCafeZone) return false;
+                if (currentCafeType !== 'ALL' && item.type !== currentCafeType) return false;
+                if (search) {
+                    const hay = `${item.name} ${item.kr} ${item.zone} ${item.type} ${item.menu || ''} ${item.note || ''}`.toLowerCase();
+                    if (!hay.includes(search)) return false;
+                }
+                return true;
+            });
+
+            const countEl = document.getElementById('cafe-result-count');
+            if (countEl) countEl.textContent = `แสดง ${filtered.length} ร้านจากทั้งหมด ${allItems.length} ร้าน`;
+
+            const container = document.getElementById('cafe-list-container');
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="bg-white rounded-3xl p-8 text-center border border-slate-200/80 text-xs text-slate-500">ไม่พบร้านที่ตรงกับเงื่อนไขการค้นหา</div>`;
+                return;
+            }
+
+            const groupedByZone = {};
+            filtered.forEach(item => {
+                if (!groupedByZone[item.zone]) groupedByZone[item.zone] = [];
+                groupedByZone[item.zone].push(item);
+            });
+
+            const typeBadgeStyle = (t) => {
+                if (t === 'คาเฟ่ / กาแฟ') return 'bg-amber-100 text-amber-800';
+                if (t === 'ร้านขนม / เบเกอรี') return 'bg-pink-100 text-pink-700';
+                return 'bg-orange-100 text-orange-800';
+            };
+
+            const typeEmoji = (t) => {
+                if (t === 'คาเฟ่ / กาแฟ') return '☕';
+                if (t === 'ร้านขนม / เบเกอรี') return '🥐';
+                return '🍲';
+            };
+
+            container.innerHTML = Object.entries(groupedByZone).map(([zoneName, list]) => `
+                <div class="space-y-2.5">
+                    <div class="flex items-center justify-between px-1">
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">
+                            <i class="ph-fill ph-map-pin text-amber-500"></i> ${zoneName}
+                        </h3>
+                        <span class="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-0.5 rounded-full">${list.length} ร้าน</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${list.map(item => {
+                            const checkVal = completedIds[item.id];
+                            const isVisited = !!checkVal;
+                            const userNote = checkinNotes[item.id];
+                            return `
+                            <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/20' : item.isCustom ? 'border-amber-300 bg-amber-50/15' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
+                                <div>
+                                    <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+                                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${typeBadgeStyle(item.type)}">${typeEmoji(item.type)} ${item.type}</span>
+                                        ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>` : item.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">บันทึกใหม่</span>' : ''}
+                                    </div>
+                                    <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
+                                    <p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>
+                                    ${item.menu ? `<p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><span class="font-bold text-slate-900">เมนูแนะนำ:</span> ${item.menu}</p>` : ''}
+                                    ${item.note ? `<p class="text-[11px] text-slate-500 mt-1"><i class="ph-fill ph-info text-slate-400"></i> ${item.note}</p>` : ''}
+                                    ${userNote ? `
+                                        <div class="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-xs text-slate-800">
+                                            <span class="font-bold text-amber-800">โน้ตของเรา:</span> ${userNote}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                                    <div class="flex items-center gap-1">
+                                        <button onclick="toggleCheck('${item.id}');renderCafeTab()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'ไปลองแล้ว' : 'เช็กอิน'}
+                                        </button>
+                                        <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
+                                            <i class="ph-bold ph-note-pencil"></i> โน้ต
+                                        </button>
+                                        ${item.isCustom ? `
+                                            <button onclick="deleteCustomPlace('${item.customId}')" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                                        ` : ''}
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <button onclick="copyText('${item.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
+                                        <a href="${nMap(item.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `}).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function filterGroup(type = 'all') {
             document.querySelectorAll('.gfilter-btn').forEach(btn => {
                 if (btn.dataset.gfilter === type) {
-                    btn.className = 'gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition';
+                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition';
                 } else {
-                    btn.className = 'gfilter-btn px-3 py-1.5 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition';
+                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition';
                 }
             });
 
             const container = document.getElementById('group-content');
             let html = '';
 
+            if (type === 'all' || type === 'haebangchon') {
+                html += `<div class="bg-gradient-to-br from-amber-50 via-orange-50/70 to-rose-50/50 border border-amber-200/90 rounded-3xl p-4 sm:p-5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950">แนะนำช่วงบ่าย Day 6 (ศ. 11 ธ.ค.)</span>
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-950 mt-1 flex items-center gap-1.5">📸 Route เดินลงเนิน แฮบังชน – ฮูอัมดง (Haebangchon Walking Route)</h3>
+                        </div>
+                        <a href="${nMap('스윗보틀')}" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs"><i class="ph-bold ph-map-pin"></i> จุด Sweet Bottle</a>
+                    </div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        <strong>ทิศทางการเดิน:</strong> นั่งรถไฟสาย 4 ลงสถานี <strong>Sookmyung Women's Univ. (숙대입구역)</strong> ทางออก 2 เดินขึ้นไปนั่ง <strong>ลิฟต์เอียงฟรีที่บันได 108 ขั้น</strong> ขึ้นสู่ยอดเนินแฮบังชน จากนั้นเดินลงเนินเรื่อยๆ ตามจุดด้านล่างนี้ (ไม่ต้องเดินขึ้นเขาให้เหนื่อย):
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
+                            <div class="font-bold text-amber-900">1. ลิฟต์เอียงบันได 108 ขั้น</div>
+                            <p class="text-slate-600 mt-0.5">ขึ้นลิฟต์เอียงชมวิวหลังคาบ้านย่านแฮบังชนและหอคอย N Seoul Tower ด้านหลัง</p>
+                        </div>
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
+                            <div class="font-bold text-amber-900">2. HBC Restaurant & ตลาดชินฮึง</div>
+                            <p class="text-slate-600 mt-0.5">แวะทาน Gamtae Salmon Roll หรือเดินเล่นตรอกตลาดเก่า Sinheung Market (1953)</p>
+                        </div>
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
+                            <div class="font-bold text-amber-900">3. A Glass Of (어글라스오브)</div>
+                            <p class="text-slate-600 mt-0.5">บาร์ไวน์และเจลาโต้ แนะนำเจลาโต้มัทฉะเกลือ Maldon และบาแก็ตจิ้ม Kaymak</p>
+                        </div>
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-200 ring-1 ring-amber-300/60">
+                            <div class="font-bold text-rose-700">4. ตรอกบันได Sweet Bottle (ไฮไลต์)</div>
+                            <p class="text-slate-600 mt-0.5">มุมถ่ายรูปช่องตึกเห็นวิวเมืองโซลสุดสายตา (28-15 Dutteopbawi-ro 40-gil) แสงสวยสุดช่วง 15:00–16:30 น.</p>
+                        </div>
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
+                            <div class="font-bold text-amber-900">5. Laundry Project (ฮูอัมดง)</div>
+                            <p class="text-slate-600 mt-0.5">เดินลงเนินต่อ 15 นาที แวะคาเฟ่เครื่องซักผ้านั่งพักริมระเบียงชิลๆ</p>
+                        </div>
+                        <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
+                            <div class="font-bold text-amber-900">6. Gubok Mandu (구복만두)</div>
+                            <p class="text-slate-600 mt-0.5">ร้านเกี๊ยวมิชลิน บิบ กูร์มองด์ 10 ปีซ้อน ใกล้สถานี Sookmyung Women's Univ. ก่อนเดินทางต่อ</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
             if (type === 'all' || type === 'aquarium') {
-                html += `<div class="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200/80 rounded-2xl p-4 sm:p-5 space-y-2.5">
+                html += `<div class="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200/80 rounded-3xl p-4 sm:p-5 space-y-2.5">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h3 class="font-bold text-sm sm:text-base text-cyan-950 flex items-center gap-1.5">🐋 คู่มือเที่ยว Lotte World Aquarium (จัมซิล)</h3>
                         <a href="${nMap('롯데월드 아쿠아리움')}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Naver Map</a>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
-                        <div class="bg-white/80 rounded-xl p-3 border border-cyan-100">
+                        <div class="bg-white/85 rounded-2xl p-3.5 border border-cyan-100">
                             <div class="font-bold text-cyan-900 mb-1">📍 พิกัด & เวลาเปิด-ปิด</div>
                             <p>ชั้น B1 ห้าง Lotte World Mall (เปิดทุกวัน 10:00–22:00 น.) แนะนำไป <strong>วันพฤหัสบดีที่ 10 ธ.ค.</strong> คนจะน้อยกว่าเสาร์-อาทิตย์</p>
                         </div>
-                        <div class="bg-white/80 rounded-xl p-3 border border-cyan-100">
+                        <div class="bg-white/85 rounded-2xl p-3.5 border border-cyan-100">
                             <div class="font-bold text-cyan-900 mb-1">🚇 การเดินทางจากที่พัก (STAYMIN Gangdong)</div>
                             <p>นั่งสาย 5 ลงสถานี Cheonho → เปลี่ยนเป็น <strong>สาย 8 (สีชมพู)</strong> ลงสถานี Jamsil ทางออก 10 หรือ 11 ใช้เวลาไม่ถึง 20 นาที</p>
                         </div>
@@ -1628,19 +2271,19 @@
             if (type === 'all' || type === 'christmas') {
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🎄 จุดเช็กอิน Christmas Spots (6–12 ธ.ค. 2569)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                        ${christmasSpots.map(c => `<div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${christmasSpots.map(c => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
                             <div>
                                 <div class="flex items-center justify-between gap-2 mb-1">
-                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${c.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'}">${c.city}</span>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${c.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'}">${c.city}</span>
                                     <span class="text-[11px] text-slate-400">${c.transit}</span>
                                 </div>
                                 <h4 class="font-bold text-xs sm:text-sm text-slate-900">${c.name}</h4>
                                 <p class="text-xs text-slate-600 mt-1">${c.info}</p>
                             </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-1 border-t border-slate-100">
-                                <button onclick="copyText('${c.kr}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(c.kr)}" target="_blank" class="px-2.5 py-1 bg-naver hover:bg-naverDark text-white rounded-lg text-[11px] font-semibold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Naver Map</a>
+                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
+                                <button onclick="copyText('${c.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
+                                <a href="${nMap(c.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
                             </div>
                         </div>`).join('')}
                     </div>
@@ -1650,17 +2293,17 @@
             if (type === 'all' || type === 'gallery') {
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🖼️ Free Art Galleries ในโซล (เปิด อังคาร–เสาร์)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                        ${freeGalleries.map(g => `<div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${freeGalleries.map(g => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
                             <div>
-                                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-purple-700">${g.zone}</span>
-                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1">${g.name}</h4>
+                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-700">${g.zone}</span>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${g.name}</h4>
                                 <p class="text-xs text-slate-600 mt-0.5">${g.info}</p>
                                 <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-train"></i> ${g.transit}</p>
                             </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-1 border-t border-slate-100">
-                                <button onclick="copyText('${g.kr}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(g.kr)}" target="_blank" class="px-2.5 py-1 bg-naver hover:bg-naverDark text-white rounded-lg text-[11px] font-semibold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Naver Map</a>
+                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
+                                <button onclick="copyText('${g.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
+                                <a href="${nMap(g.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
                             </div>
                         </div>`).join('')}
                     </div>
@@ -1671,13 +2314,13 @@
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🗺️ การจัดกลุ่มสถานที่ท่องเที่ยวตามโซน (10 โซน)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${zoneGroups.map(z => `<div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs">
+                        ${zoneGroups.map(z => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs">
                             <div class="flex items-center justify-between gap-2 mb-1.5">
-                                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${z.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-indigo-100 text-indigo-700'}">${z.city}</span>
+                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${z.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-indigo-100 text-indigo-700'}">${z.city}</span>
                                 <span class="text-[11px] font-medium text-slate-500">${z.line}</span>
                             </div>
                             <h4 class="font-bold text-xs sm:text-sm text-slate-900 mb-2">${z.title}</h4>
-                            <ul class="list-disc list-inside space-y-1 text-xs text-slate-600">
+                            <ul class="list-disc list-inside space-y-1 text-xs text-slate-600 leading-relaxed">
                                 ${z.items.map(it => `<li>${it}</li>`).join('')}
                             </ul>
                         </div>`).join('')}
@@ -1691,19 +2334,25 @@
         function renderStamps() {
             const items = getAllStamps();
             document.getElementById('stamp-list').innerHTML = items.map(s => {
-                const isChecked = !!completedIds[s.id];
-                return `<div class="bg-white rounded-2xl p-3.5 border ${isChecked ? 'border-amber-300 bg-amber-50/30' : 'border-slate-200/80'} shadow-xs flex items-start justify-between gap-3">
-                    <div class="flex items-start gap-3 min-w-0">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${s.id}');renderStamps()" class="mt-1 w-4 h-4 rounded accent-amber-500 cursor-pointer shrink-0">
-                        <div class="min-w-0">
-                            <span class="inline-block text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 mb-1">${s.day}</span>
-                            <h4 class="font-bold text-xs sm:text-sm text-slate-900 ${isChecked ? 'line-through text-slate-400' : ''}">${s.name}</h4>
-                            <p class="text-xs text-slate-600 mt-0.5">${s.loc}</p>
+                const checkVal = completedIds[s.id];
+                const isVisited = !!checkVal;
+                return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <span class="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800">${s.day}</span>
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">STAMPED ✓</span>` : ''}
                         </div>
+                        <h4 class="font-bold text-sm text-slate-900">${s.name}</h4>
+                        <p class="text-xs text-slate-600 mt-1">${s.loc}</p>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="copyText('${s.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
-                        <a href="${nMap(s.kr)}" target="_blank" class="px-2.5 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                    <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
+                        <button onclick="toggleCheck('${s.id}');renderStamps()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-amber-500 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                            <i class="${isVisited ? 'ph-fill ph-stamp' : 'ph-bold ph-stamp'}"></i> ${isVisited ? 'เก็บ Stamp แล้ว' : 'ปั๊ม Stamp'}
+                        </button>
+                        <div class="flex items-center gap-1">
+                            <button onclick="copyText('${s.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
+                            <a href="${nMap(s.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
@@ -1712,32 +2361,42 @@
         function renderGachaAndFreebies() {
             const gachas = getAllGacha();
             document.getElementById('gacha-spots-list').innerHTML = gachas.map(g => {
-                const isChecked = !!completedIds[g.id];
-                return `<div class="bg-white rounded-2xl p-3.5 border ${isChecked ? 'border-pink-300 bg-pink-50/30' : 'border-slate-200/80'} shadow-xs flex items-start justify-between gap-2.5">
-                    <div class="flex items-start gap-2.5 min-w-0">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${g.id}');renderGachaAndFreebies()" class="mt-1 w-4 h-4 rounded accent-pink-500 cursor-pointer shrink-0">
-                        <div class="min-w-0">
-                            <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-pink-100 text-pink-700">${g.tag}</span>
-                            <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1 ${isChecked ? 'line-through text-slate-400' : ''}">${g.name}</h4>
-                            <p class="text-xs text-slate-600 mt-0.5">${g.desc}</p>
+                const isVisited = !!completedIds[g.id];
+                return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-pink-300 bg-pink-50/25' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-2.5">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-pink-100 text-pink-700">${g.tag}</span>
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>` : ''}
                         </div>
+                        <h4 class="font-bold text-sm text-slate-900 mt-1">${g.name}</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">${g.desc}</p>
                     </div>
-                    <a href="${nMap(g.kr)}" target="_blank" class="px-2.5 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold shrink-0 flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                        <button onclick="toggleCheck('${g.id}');renderGachaAndFreebies()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-pink-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'หมุนแล้ว' : 'เช็กอินจุดนี้'}
+                        </button>
+                        <a href="${nMap(g.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                    </div>
                 </div>`;
             }).join('');
 
             document.getElementById('freebies-list').innerHTML = baseFreebieItems.map(f => {
-                const isChecked = !!completedIds[f.id];
-                return `<div class="bg-white rounded-2xl p-3.5 border ${isChecked ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-200/80'} shadow-xs flex items-start justify-between gap-2.5">
-                    <div class="flex items-start gap-2.5 min-w-0">
-                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${f.id}');renderGachaAndFreebies()" class="mt-1 w-4 h-4 rounded accent-emerald-600 cursor-pointer shrink-0">
-                        <div class="min-w-0">
-                            <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700">${f.tag}</span>
-                            <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1 ${isChecked ? 'line-through text-slate-400' : ''}">${f.name}</h4>
-                            <p class="text-xs text-slate-600 mt-0.5">${f.desc}</p>
+                const isVisited = !!completedIds[f.id];
+                return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/25' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-2.5">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-700">${f.tag}</span>
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">COLLECTED ✓</span>` : ''}
                         </div>
+                        <h4 class="font-bold text-sm text-slate-900 mt-1">${f.name}</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">${f.desc}</p>
                     </div>
-                    <a href="${nMap(f.kr)}" target="_blank" class="px-2.5 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold shrink-0 flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                    <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                        <button onclick="toggleCheck('${f.id}');renderGachaAndFreebies()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-gift'}"></i> ${isVisited ? 'รับของฟรีแล้ว' : 'บันทึกว่ารับแล้ว'}
+                        </button>
+                        <a href="${nMap(f.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                    </div>
                 </div>`;
             }).join('');
         }
@@ -1750,7 +2409,7 @@
             const uniqueZones = ['ALL', ...new Set(allPlaces.map(p => p.zone))];
             document.getElementById('map-zone-pills').innerHTML = uniqueZones.map(z => {
                 const active = currentMapZone === z;
-                return `<button onclick="currentMapZone='${z}';renderNaverDirectory()" class="px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition ${active ? 'bg-slate-900 text-white font-semibold' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium'}">
+                return `<button onclick="currentMapZone='${z}';renderNaverDirectory()" class="px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition ${active ? 'bg-slate-900 text-white font-semibold' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium'}">
                     ${z === 'ALL' ? 'ทั้งหมด' : z}
                 </button>`;
             }).join('');
@@ -1770,20 +2429,20 @@
 
             document.getElementById('naver-directory-list').innerHTML = filtered.map(p => {
                 const isNew = p.id && p.id === lastAddedId;
-                return `<div class="bg-white rounded-2xl p-3.5 border ${p.isCustom ? 'border-blue-200 bg-blue-50/15' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs flex items-start justify-between gap-3">
+                return `<div class="bg-white rounded-3xl p-4 border ${p.isCustom ? 'border-blue-200 bg-blue-50/15' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs flex items-start justify-between gap-3">
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-1.5 mb-1">
-                            <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">${p.zone}</span>
-                            ${p.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">เพิ่มใหม่</span>' : ''}
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-slate-100 text-slate-700">${p.zone}</span>
+                            ${p.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">บันทึกใหม่</span>' : ''}
                         </div>
-                        <h4 class="font-bold text-xs sm:text-sm text-slate-900">${p.name}</h4>
+                        <h4 class="font-bold text-sm text-slate-900">${p.name}</h4>
                         <p class="text-[11px] font-mono text-slate-500 mt-0.5">${p.kr}</p>
                         ${p.addr ? `<p class="text-xs text-slate-600 mt-1">${p.addr}</p>` : ''}
                     </div>
                     <div class="flex flex-col items-end gap-1.5 shrink-0">
                         <div class="flex items-center gap-1">
                             <button onclick="copyText('${p.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
-                            <a href="${nMap(p.kr)}" target="_blank" class="px-2.5 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-semibold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                            <a href="${nMap(p.kr)}" target="_blank" class="px-3 py-2 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
                         </div>
                         ${p.isCustom ? `
                             <div class="flex items-center gap-1">
@@ -1818,7 +2477,7 @@
             document.getElementById('travelers-container').innerHTML = travelerData.travelers.map((t, idx) => {
                 const fl = t.flights || { outNo: '', outPnr: '', outTime: '', outSeat: '', inNo: '', inPnr: '', inTime: '', inSeat: '' };
                 return `
-                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-3.5 text-xs">
+                <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3.5 text-xs">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                         <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
                             <i class="ph-fill ph-user-circle text-amber-500 text-lg"></i> ${t.label} ${t.nickname ? `<span class="text-xs font-medium text-slate-500">(${t.nickname})</span>` : ''}
@@ -1854,7 +2513,7 @@
                             <i class="ph-fill ph-airplane-tilt text-royal text-base"></i> ข้อมูลเที่ยวบิน ไป – กลับ (${t.label})
                         </div>
                         <!-- Outbound -->
-                        <div class="bg-sky-50/70 border border-sky-100 rounded-xl p-3 space-y-2">
+                        <div class="bg-sky-50/70 border border-sky-100 rounded-2xl p-3 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-bold text-sky-800 flex items-center gap-1"><i class="ph-fill ph-airplane-takeoff"></i> เที่ยวบินขาไป (${idx === 0 ? '30 พ.ย. 2569' : '6 ธ.ค. 2569'})</span>
                                 ${fl.outPnr ? `<button type="button" onclick="copyText('${fl.outPnr}')" class="px-2 py-0.5 bg-white hover:bg-sky-100 text-sky-700 border border-sky-200 rounded text-[10px] font-semibold"><i class="ph ph-copy"></i> PNR</button>` : ''}
@@ -1879,7 +2538,7 @@
                             </div>
                         </div>
                         <!-- Inbound -->
-                        <div class="bg-rose-50/70 border border-rose-100 rounded-xl p-3 space-y-2">
+                        <div class="bg-rose-50/70 border border-rose-100 rounded-2xl p-3 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="font-bold text-rose-800 flex items-center gap-1"><i class="ph-fill ph-airplane-landing"></i> เที่ยวบินขากลับ (12 ธ.ค. 2569)</span>
                                 ${fl.inPnr ? `<button type="button" onclick="copyText('${fl.inPnr}')" class="px-2 py-0.5 bg-white hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-[10px] font-semibold"><i class="ph ph-copy"></i> PNR</button>` : ''}
@@ -1908,7 +2567,7 @@
                     <div class="pt-1">
                         <label class="block text-[11px] font-semibold text-slate-600 mb-1.5">รูปหน้าพาสปอร์ต (.jpg / .png)</label>
                         ${t.passportImg ? `
-                            <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-900 group">
+                            <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 group">
                                 <img src="${t.passportImg}" onclick="openImageViewer('${t.passportImg}')" alt="Passport ${idx + 1}" class="w-full h-40 object-cover cursor-zoom-in opacity-95 group-hover:opacity-100 transition">
                                 <div class="absolute bottom-2 right-2 flex gap-1.5">
                                     <button type="button" onclick="openImageViewer('${t.passportImg}')" class="px-2.5 py-1 bg-slate-900/80 text-white rounded-lg text-[11px] font-semibold backdrop-blur-xs"><i class="ph-bold ph-magnifying-glass-plus"></i> ขยายดู</button>
@@ -1916,7 +2575,7 @@
                                 </div>
                             </div>
                         ` : `
-                            <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl p-4 cursor-pointer bg-slate-50/70 transition">
+                            <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-2xl p-4 cursor-pointer bg-slate-50/70 transition">
                                 <i class="ph-fill ph-image text-2xl text-slate-400 mb-1"></i>
                                 <span class="text-xs font-semibold text-slate-600">คลิกเพื่ออัปโหลดรูปหน้าพาสปอร์ต</span>
                                 <span class="text-[10px] text-slate-400">รองรับไฟล์ .jpg และ .png</span>
@@ -1938,6 +2597,7 @@
         function refreshAllViews() {
             renderVersionBadge();
             renderDaily();
+            renderCafeTab();
             filterGroup('all');
             renderStamps();
             renderGachaAndFreebies();
