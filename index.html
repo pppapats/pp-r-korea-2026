@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Firebase Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -62,6 +65,13 @@
         .newly-added {
             animation: highlightPulse 2s ease-out;
         }
+        @keyframes syncPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
+        }
+        .sync-dot-live {
+            animation: syncPulse 2s infinite;
+        }
     </style>
 </head>
 <body class="pb-28 sm:pb-14">
@@ -81,7 +91,7 @@
     <!-- Header -->
     <header class="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white pt-5 pb-6 px-4 sm:px-6 shadow-lg">
         <div class="max-w-5xl mx-auto">
-            <!-- Top Row: Date Badge + Version Badge + Action Buttons -->
+            <!-- Top Row: Date Badge + Version Badge + Sync Status + Action Buttons -->
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div class="flex flex-wrap items-center gap-1.5">
                     <span class="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 px-3 py-1 rounded-full text-xs font-medium text-sky-200">
@@ -89,7 +99,11 @@
                     </span>
                     <button onclick="openVersionModal()" id="version-badge" class="inline-flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-200 transition cursor-pointer" title="คลิกเพื่อดูรายละเอียดเวอร์ชันและการอัปเดต">
                         <i class="ph-bold ph-git-commit text-emerald-300"></i>
-                        <span id="version-text">v5.0 • อัปเดต: 22 พ.ย. 2569</span>
+                        <span id="version-text">v5.1 • อัปเดต: 22 พ.ย. 2569</span>
+                    </button>
+                    <button onclick="forceFirebaseSync()" id="cloud-sync-badge" class="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/30 px-2.5 py-1 rounded-full text-[11px] font-semibold text-amber-200 transition cursor-pointer" title="คลิกเพื่อซิงก์ข้อมูล 2 เครื่องทันที">
+                        <span id="cloud-sync-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                        <span id="cloud-sync-text">Connecting Cloud...</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
@@ -113,7 +127,7 @@
                         PP_R in KOREA <span class="text-sky-400">2026</span>
                     </h1>
                     <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
-                        Travel Log &amp; Check-in Scrapbook &bull; คู่มือเที่ยว &amp; บันทึกการเดินทาง
+                        Travel Log &amp; Check-in Scrapbook &bull; คู่มือเที่ยว &amp; บันทึกการเดินทาง (Realtime Sync 2 เครื่อง)
                     </p>
                 </div>
                 <div class="bg-white/10 border border-white/15 rounded-2xl px-3.5 py-2.5 sm:min-w-[235px]">
@@ -132,23 +146,29 @@
     <!-- Sticky Main Navigation Tabs -->
     <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-xs">
         <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold">
-                1. สมุดเดินทาง 7 วัน
+            <button onclick="switchTab('daily')" data-tab="daily" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold">
+                <i class="ph-fill ph-calendar-heart text-sky-400 text-base"></i>
+                <span>1. สมุดเดินทาง 7 วัน</span>
             </button>
-            <button onclick="switchTab('cafe')" data-tab="cafe" id="nav-cafe-label" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
-                2. คาเฟ่ &amp; ร้านอาหาร
+            <button onclick="switchTab('cafe')" data-tab="cafe" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-coffee text-amber-500 text-base"></i>
+                <span id="nav-cafe-label">2. คาเฟ่ &amp; ร้านอาหาร</span>
             </button>
-            <button onclick="switchTab('group')" data-tab="group" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
-                3. โซน &amp; ไฮไลต์
+            <button onclick="switchTab('group')" data-tab="group" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-sparkle text-purple-500 text-base"></i>
+                <span>3. โซน &amp; ไฮไลต์</span>
             </button>
-            <button onclick="switchTab('stamp')" data-tab="stamp" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
-                4. เก็บ Stamp
+            <button onclick="switchTab('stamp')" data-tab="stamp" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-stamp text-orange-500 text-base"></i>
+                <span>4. เก็บ Stamp</span>
             </button>
-            <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
-                5. กาชาปอง &amp; ของฟรี
+            <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-gift text-pink-500 text-base"></i>
+                <span>5. กาชาปอง &amp; ของฟรี</span>
             </button>
-            <button onclick="switchTab('navermap')" data-tab="navermap" id="nav-map-label" class="tab-btn px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
-                6. พิกัดทั้งหมด
+            <button onclick="switchTab('navermap')" data-tab="navermap" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-map-pin-area text-naver text-base"></i>
+                <span id="nav-map-label">6. พิกัดทั้งหมด</span>
             </button>
         </div>
     </nav>
@@ -214,10 +234,10 @@
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-2.5">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">📮 จุดเก็บ Stamp ที่ระลึก (<span id="stamp-total-label">14</span> จุด)</h2>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">📮 จุดเก็บ Stamp ที่ระลึก (<span id="stamp-total-label">15</span> จุด)</h2>
                         <p class="text-xs text-slate-500">พกสมุดโน้ตเล็กๆ ไปปั๊มตราประทับตามศูนย์ข้อมูลท่องเที่ยวและแลนด์มาร์ก</p>
                     </div>
-                    <span id="stamp-count" class="text-xs font-extrabold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">0/14</span>
+                    <span id="stamp-count" class="text-xs font-extrabold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">0/15</span>
                 </div>
                 <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
                     <div id="stamp-progress-bar" class="h-full bg-amber-400 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -352,7 +372,7 @@
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-clock-clockwise text-royal text-xl"></i> แก้ไขตารางเวลา & รายละเอียดกิจกรรม
+                    <i class="ph-fill ph-clock-clockwise text-royal text-xl"></i> แก้ไขตารางเวลา &amp; รายละเอียดกิจกรรม
                 </h3>
                 <button onclick="closeScheduleModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
@@ -362,7 +382,7 @@
                 <input type="hidden" id="sched-event-id">
                 <input type="hidden" id="sched-is-custom">
                 <div class="bg-blue-50/80 border border-blue-100 rounded-xl p-2.5 text-[11px] text-blue-900">
-                    <i class="ph-fill ph-info"></i> ปรับเปลี่ยนช่วงเวลา ขบวนรถไฟ KTX หรือรายละเอียดได้ตามต้องการ เมื่อบันทึกแล้วตารางจะอัปเดตทันทีครับ
+                    <i class="ph-fill ph-info"></i> ปรับเปลี่ยนช่วงเวลา ขบวนรถไฟ KTX หรือรายละเอียดได้ตามต้องการ เมื่อบันทึกแล้วตารางจะอัปเดตและซิงก์ทั้ง 2 เครื่องทันทีครับ
                 </div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">ช่วงเวลา (Time) *</label>
@@ -416,12 +436,12 @@
                     <label class="block font-semibold text-slate-700 mb-1">เลือกโซน / ย่าน *</label>
                     <select id="input-zone" onchange="toggleCustomZoneInput()" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                         <option value="ปูซาน (Busan)">ปูซาน (Busan)</option>
-                        <option value="โซล: Anguk & Bukchon">โซล: Anguk & Bukchon</option>
-                        <option value="โซล: Jongno & Myeongdong">โซล: Jongno & Myeongdong</option>
-                        <option value="โซล: Yongsan, Hannam & Haebangchon">โซล: Yongsan, Hannam & Haebangchon (แฮบังชน)</option>
-                        <option value="โซล: Seongsu & Ttukseom">โซล: Seongsu & Ttukseom</option>
-                        <option value="โซล: Hongdae & Yeonnam">โซล: Hongdae & Yeonnam</option>
-                        <option value="โซล: Gangnam & Jamsil">โซล: Gangnam & Jamsil</option>
+                        <option value="โซล: Anguk & Bukchon">โซล: Anguk &amp; Bukchon</option>
+                        <option value="โซล: Jongno & Myeongdong">โซล: Jongno &amp; Myeongdong</option>
+                        <option value="โซล: Yongsan, Hannam & Haebangchon">โซล: Yongsan, Hannam &amp; Haebangchon (แฮบังชน)</option>
+                        <option value="โซล: Seongsu & Ttukseom">โซล: Seongsu &amp; Ttukseom</option>
+                        <option value="โซล: Hongdae & Yeonnam">โซล: Hongdae &amp; Yeonnam</option>
+                        <option value="โซล: Gangnam & Jamsil">โซล: Gangnam &amp; Jamsil</option>
                         <option value="โซล: Yeouido">โซล: Yeouido</option>
                         <option value="OTHER">อื่นๆ (พิมพ์ระบุโซนเอง)</option>
                     </select>
@@ -438,7 +458,7 @@
                     </label>
                     <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
                         <input type="checkbox" id="chk-add-cafe" onchange="toggleCafeCategoryField()" class="rounded accent-amber-500">
-                        <span>เก็บเข้าหมวด <strong>คาเฟ่ & ร้านอาหาร</strong> ด้วย</span>
+                        <span>เก็บเข้าหมวด <strong>คาเฟ่ &amp; ร้านอาหาร</strong> ด้วย</span>
                     </label>
                     <div id="cafe-category-box" class="hidden pl-5 pt-0.5">
                         <label class="block text-[11px] text-slate-500 mb-0.5">ประเภทร้าน</label>
@@ -510,8 +530,12 @@
                 </div>
                 <div class="space-y-2">
                     <div class="border-l-2 border-emerald-500 pl-3">
-                        <div class="font-bold text-slate-900">v5.0 • 22 พ.ย. 2569</div>
-                        <p>นำเข้าข้อมูลทั้งหมดจากโน้ต PP_R KOREA 2026.txt ครบทุกหมวด: เพิ่มร้านกาแฟ/ขนม/อาหารรวมกว่า 55 ร้านแยกตามย่าน, เพิ่มจุดเช็กอิน K-Heritage Passport ที่อินชอน T1, เทศกาลไฟ Deep Dive Haeundae, จุดชมวิว Seongsu Skywalk / Ttukseom Sunset, พิกัดตู้ Photobooth & ร้าน NYUNYU / Daiso 12 ชั้น</p>
+                        <div class="font-bold text-slate-900">v5.1 • 22 พ.ย. 2569</div>
+                        <p>กู้คืนข้อมูลทั้งหมดจาก v5.0 (ข้อมูลผู้เดินทาง PIN 070910, แท็บทั้ง 6 หมวด, คลังพิกัด Naver Map, จุดเก็บ Stamp, กาชาปอง และ Route แฮบังชน) พร้อมเชื่อมต่อระบบซิงก์เรียลไทม์ 2 เครื่องผ่าน Firebase Realtime Database</p>
+                    </div>
+                    <div class="border-l-2 border-slate-300 pl-3">
+                        <div class="font-bold text-slate-700">v5.0 • 22 พ.ย. 2569</div>
+                        <p>นำเข้าข้อมูลทั้งหมดจากโน้ต PP_R KOREA 2026.txt ครบทุกหมวด: เพิ่มร้านกาแฟ/ขนม/อาหารรวมกว่า 55 ร้านแยกตามย่าน, เพิ่มจุดเช็กอิน K-Heritage Passport ที่อินชอน T1, เทศกาลไฟ Deep Dive Haeundae, จุดชมวิว Seongsu Skywalk / Ttukseom Sunset, พิกัดตู้ Photobooth &amp; ร้าน NYUNYU / Daiso 12 ชั้น</p>
                     </div>
                     <div class="border-l-2 border-slate-300 pl-3">
                         <div class="font-bold text-slate-700">v4.1 • 22 พ.ย. 2569</div>
@@ -519,15 +543,7 @@
                     </div>
                     <div class="border-l-2 border-slate-300 pl-3">
                         <div class="font-bold text-slate-700">v4.0 • 22 พ.ย. 2569</div>
-                        <p>ปรับโฉม UI เป็น Mobile Travel Cards & Check-in Scrapbook กดเช็กอินพร้อมประทับตรา VISITED และจดโน้ตความทรงจำได้ทุกจุด, เพิ่มเส้นทางเดินแฮบังชน–ฮูอัมดงแบบละเอียดใน Day 6 และเพิ่มรายการคาเฟ่/ร้านขนม/ร้านอาหารครบ 34+ ร้านแยกตามย่าน</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v3.0 • 22 พ.ย. 2569</div>
-                        <p>เพิ่มแถบใหม่ "คาเฟ่ & ร้านอาหาร" แยกตามย่านและประเภทร้าน พร้อมปุ่มแก้ไขและบันทึกตารางเวลา KTX (ปูซาน → โซล) ใน Day 3</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v2.4 • 22 พ.ย. 2569</div>
-                        <p>เพิ่มย่านแฮบังชน (Haebangchon / Sweet Bottle) ลงในแพลน Day 6 และปรับรายละเอียด Day 2 โซน Blueline Park เป็นเดินชมวิวเลียบทะเล</p>
+                        <p>ปรับโฉม UI เป็น Mobile Travel Cards &amp; Check-in Scrapbook กดเช็กอินพร้อมประทับตรา VISITED และจดโน้ตความทรงจำได้ทุกจุด, เพิ่มเส้นทางเดินแฮบังชน–ฮูอัมดงแบบละเอียดใน Day 6</p>
                     </div>
                 </div>
             </div>
@@ -570,8 +586,11 @@
                 </button>
             </div>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-                ข้อมูลบันทึกการเดินทาง จุดเช็กอินทั้งหมด โน้ตความทรงจำ ข้อมูลผู้เดินทาง และตารางเวลา KTX จะบันทึกอยู่ในเบราว์เซอร์ของเครื่องนี้ หากต้องการย้ายไปเปิดในมือถืออีกเครื่อง ให้กดคัดลอกโค้ดด้านล่างไปวางครับ
+                ระบบซิงก์เรียลไทม์ 2 เครื่องทำงานอัตโนมัติผ่าน Cloud Database อยู่แล้ว แต่คุณสามารถคัดลอกโค้ดด้านล่างเก็บสำรองไว้หรือย้ายข้อมูลแบบ Manual ได้เช่นกันครับ
             </p>
+            <button onclick="forceFirebaseSync()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 mb-2 transition">
+                <i class="ph-bold ph-cloud-arrow-up"></i> ซิงก์ข้อมูลกับ Cloud Database เดี๋ยวนี้
+            </button>
             <button onclick="exportTripData()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 mb-4 transition">
                 <i class="ph-bold ph-copy"></i> 1. คัดลอกโค้ดข้อมูลทริปทั้งหมด (Export)
             </button>
@@ -597,9 +616,23 @@
         </div>
     </div>
 
+    <!-- CUSTOM CONFIRM MODAL (NO BROWSER ALERTS) -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 shadow-2xl border border-slate-200 text-center space-y-3">
+            <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                <i class="ph-fill ph-warning-circle text-2xl"></i>
+            </div>
+            <p id="confirm-modal-text" class="text-xs font-bold text-slate-800 leading-relaxed"></p>
+            <div class="flex gap-2 pt-1">
+                <button type="button" onclick="closeConfirmModal()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold">ยกเลิก</button>
+                <button type="button" id="confirm-modal-yes" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Reset Progress Button -->
     <footer class="max-w-5xl mx-auto px-4 sm:px-6 mt-10 mb-6 text-center">
-        <button onclick="resetAllProgress()" class="text-xs text-slate-400 hover:text-rose-500 underline transition">
+        <button onclick="openConfirmModal('ต้องการรีเซ็ตบันทึกการเช็กอินและโน้ตความทรงจำทั้งหมดใช่ไหมครับ?', resetAllProgress)" class="text-xs text-slate-400 hover:text-rose-500 underline transition">
             รีเซ็ตบันทึกการเช็กอินทั้งหมด
         </button>
     </footer>
@@ -611,10 +644,49 @@
         const nMap = (kr) => `https://map.naver.com/p/search/${encodeURIComponent(kr)}`;
 
         // ---------------------------------------------------------
+        // FIREBASE REALTIME DATABASE INIT (SYNC v5 STATE ACROSS DEVICES)
+        // ---------------------------------------------------------
+        const firebaseConfig = {
+            databaseURL: "https://ppr-korea-2026-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+        let dbRef = null;
+        let isApplyingRemote = false;
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            dbRef = firebase.database().ref("ppr2026_v5_shared_state");
+        } catch (e) {
+            console.error("Firebase init error:", e);
+        }
+
+        function updateCloudSyncBadge(status, label) {
+            const btn = document.getElementById('cloud-sync-badge');
+            const dot = document.getElementById('cloud-sync-dot');
+            const text = document.getElementById('cloud-sync-text');
+            if (!btn || !dot || !text) return;
+
+            text.textContent = label;
+            btn.className = "inline-flex items-center gap-1.5 border px-2.5 py-1 rounded-full text-[11px] font-semibold transition cursor-pointer ";
+            dot.className = "w-2 h-2 rounded-full ";
+
+            if (status === 'live') {
+                btn.className += "bg-sky-500/20 border-sky-400/30 text-sky-200 hover:bg-sky-500/30";
+                dot.className += "bg-emerald-400 sync-dot-live";
+            } else if (status === 'syncing') {
+                btn.className += "bg-blue-500/25 border-blue-400/40 text-blue-200";
+                dot.className += "bg-blue-400 animate-ping";
+            } else {
+                btn.className += "bg-amber-500/20 border-amber-400/30 text-amber-200";
+                dot.className += "bg-amber-400";
+            }
+        }
+
+        // ---------------------------------------------------------
         // DYNAMIC STATE (Travel Scrapbook, Check-ins, Notes, KTX, Versioning)
         // ---------------------------------------------------------
         const TRAVELER_PIN = '070910';
         let isTravelerUnlocked = false;
+        let lastSyncTimestamp = Number(localStorage.getItem('ppr2026_last_sync_ts') || 0);
 
         // Stores custom schedule edits for ANY event in Day 1 - Day 7 (keyed by event id)
         let eventOverrides = (() => {
@@ -704,7 +776,7 @@
         let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
         let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
             major: 5,
-            minor: 0,
+            minor: 1,
             updatedAt: '22 พ.ย. 2569'
         }));
 
@@ -715,7 +787,7 @@
         let lastAddedId = null;
 
         // ---------------------------------------------------------
-        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (55+ SPOTS FROM USER LIST)
+        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (44+ SPOTS)
         // ---------------------------------------------------------
         const baseCafeFoodItems = [
             // ปูซาน (Busan)
@@ -1050,7 +1122,7 @@
                         time: '13:00 – 15:45',
                         transit: 'สาย 6 สถานี Noksapyeong ทางออก 2 (ต่อบัส Yongsan 02) หรือแท็กซี่จากฮันนัมดง',
                         title: 'Route เดินเที่ยวย่านแฮบังชน – ฮูอัมดง (Haebangchon Walking Route)',
-                        desc: 'เส้นทางเดินเที่ยวแฮบังชน (เริ่มจาก Noksapyeong ทางออก 2 ต่อบัส Yongsan 02 หรือขึ้นลิฟต์เอียง 108 ขั้น):<br><strong>① ตลาดชินฮึง (Sinheung Market) & HBC Restaurant</strong> เดินเล่นตรอกตลาดเก่าและคาเฟ่ในซอย Sinheung-ro<br><strong>② Tortoise (토터스) & Haus Bakery Service</strong> แวะทานซูเฟล่แพนเค้กหรือเบเกอรีอบสดในแฮบังชน<br><strong>③ ถ่ายรูปตู้สติกเกอร์ Stiikers (스티커즈 해방촌점)</strong> & เดินชมวิวเส้น <strong>Sowol-ro / Namsan Sky Forest Trail / Noeul Observatory</strong><br><strong>④ มุมถ่ายรูปตรอกบันได Sweet Bottle (스윗보틀)</strong> ถ่ายรูปช่องตึกเห็นวิวเมืองโซลช่วงแสงบ่าย 15:00 น.<br><strong>⑤ เดินลงเนินสู่ฮูอัมดง (Huam-dong)</strong> แวะคาเฟ่ <strong>Laundry Project</strong> หรือเกี๊ยวมิชลิน <strong>Gubok Mandu</strong>',
+                        desc: 'เส้นทางเดินเที่ยวแฮบังชน (เริ่มจาก Noksapyeong ทางออก 2 ต่อบัส Yongsan 02 หรือขึ้นลิฟต์เอียง 108 ขั้น):<br><strong>① ตลาดชินฮึง (Sinheung Market) &amp; HBC Restaurant</strong> เดินเล่นตรอกตลาดเก่าและคาเฟ่ในซอย Sinheung-ro<br><strong>② Tortoise (토터스) &amp; Haus Bakery Service</strong> แวะทานซูเฟล่แพนเค้กหรือเบเกอรีอบสดในแฮบังชน<br><strong>③ ถ่ายรูปตู้สติกเกอร์ Stiikers (스티커즈 해방촌점)</strong> &amp; เดินชมวิวเส้น <strong>Sowol-ro / Namsan Sky Forest Trail / Noeul Observatory</strong><br><strong>④ มุมถ่ายรูปตรอกบันได Sweet Bottle (스윗보틀)</strong> ถ่ายรูปช่องตึกเห็นวิวเมืองโซลช่วงแสงบ่าย 15:00 น.<br><strong>⑤ เดินลงเนินสู่ฮูอัมดง (Huam-dong)</strong> แวะคาเฟ่ <strong>Laundry Project</strong> หรือเกี๊ยวมิชลิน <strong>Gubok Mandu</strong>',
                         places: [
                             { name: '① ตลาดชินฮึง แฮบังชน (Sinheung Market)', kr: '해방촌 신흥시장' },
                             { name: '② Tortoise (토터스 ซูเฟล่แพนเค้ก)', kr: '토터스 해방촌' },
@@ -1252,6 +1324,118 @@
         ];
 
         // ---------------------------------------------------------
+        // FIREBASE REALTIME LISTENER & SYNC HELPERS
+        // ---------------------------------------------------------
+        function buildSyncPayload() {
+            return {
+                updatedAtTs: lastSyncTimestamp,
+                checked: completedIds,
+                checkinNotes: checkinNotes,
+                customPlaces: userCustomPlaces,
+                travelerData: travelerData,
+                eventOverrides: eventOverrides,
+                version: versionState
+            };
+        }
+
+        function applyRemotePayload(parsed) {
+            if (!parsed || typeof parsed !== 'object') return;
+            isApplyingRemote = true;
+            if (parsed.checked) completedIds = parsed.checked;
+            if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
+            if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
+            if (parsed.travelerData) {
+                travelerData = {
+                    ...defaultTravelerData,
+                    ...parsed.travelerData,
+                    travelers: defaultTravelerData.travelers.map((defT, i) => ({
+                        ...defT,
+                        ...((parsed.travelerData.travelers && parsed.travelerData.travelers[i]) || {}),
+                        flights: {
+                            ...defT.flights,
+                            ...((parsed.travelerData.travelers && parsed.travelerData.travelers[i] && parsed.travelerData.travelers[i].flights) || {})
+                        }
+                    })),
+                    notes: { ...defaultTravelerData.notes, ...(parsed.travelerData.notes || {}) }
+                };
+            }
+            if (parsed.eventOverrides) eventOverrides = parsed.eventOverrides;
+            if (parsed.version) versionState = parsed.version;
+            if (parsed.updatedAtTs) {
+                lastSyncTimestamp = parsed.updatedAtTs;
+                localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
+            }
+
+            localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
+            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
+            localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
+            localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
+            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
+            localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
+
+            refreshAllViews();
+            isApplyingRemote = false;
+        }
+
+        if (dbRef) {
+            dbRef.on('value', (snap) => {
+                const remote = snap.val();
+                updateCloudSyncBadge('live', 'Cloud Synced');
+                if (!remote) {
+                    lastSyncTimestamp = Date.now();
+                    localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
+                    dbRef.set(buildSyncPayload());
+                    return;
+                }
+                if (!lastSyncTimestamp || (remote.updatedAtTs && remote.updatedAtTs > lastSyncTimestamp)) {
+                    applyRemotePayload(remote);
+                }
+            }, () => {
+                updateCloudSyncBadge('offline', 'Offline Mode');
+            });
+        }
+
+        function forceFirebaseSync() {
+            if (!dbRef) return;
+            updateCloudSyncBadge('syncing', 'Syncing...');
+            dbRef.once('value').then((snap) => {
+                const remote = snap.val();
+                if (remote && remote.updatedAtTs && remote.updatedAtTs > lastSyncTimestamp) {
+                    applyRemotePayload(remote);
+                } else {
+                    lastSyncTimestamp = Date.now();
+                    localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
+                    dbRef.set(buildSyncPayload());
+                }
+                updateCloudSyncBadge('live', 'Cloud Synced');
+                showToast('ซิงก์ข้อมูลกับ Cloud Database เรียบร้อยแล้ว!');
+            }).catch(() => {
+                updateCloudSyncBadge('offline', 'Offline Mode');
+                showToast('ไม่สามารถเชื่อมต่อ Cloud ได้ในขณะนี้');
+            });
+        }
+
+        // ---------------------------------------------------------
+        // CUSTOM CONFIRM MODAL (NO BROWSER ALERTS)
+        // ---------------------------------------------------------
+        function openConfirmModal(msg, onConfirm) {
+            document.getElementById('confirm-modal-text').textContent = msg;
+            document.getElementById('confirm-modal-yes').onclick = () => {
+                closeConfirmModal();
+                onConfirm();
+            };
+            const m = document.getElementById('confirm-modal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const m = document.getElementById('confirm-modal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        // ---------------------------------------------------------
         // CHECK-IN & MEMORY NOTE HANDLERS
         // ---------------------------------------------------------
         function openNoteModal(itemId, title) {
@@ -1313,7 +1497,6 @@
             document.getElementById('sched-time').value = targetEv.time || '';
             document.getElementById('sched-transit').value = targetEv.transit || '';
             document.getElementById('sched-title').value = targetEv.title || '';
-            // Strip HTML tags if editing rich text
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = targetEv.desc || '';
             document.getElementById('sched-desc').value = tempDiv.textContent || tempDiv.innerText || '';
@@ -1547,14 +1730,7 @@
         }
 
         function exportTripData() {
-            const payload = JSON.stringify({
-                checked: completedIds,
-                checkinNotes: checkinNotes,
-                customPlaces: userCustomPlaces,
-                travelerData: travelerData,
-                eventOverrides: eventOverrides,
-                version: versionState
-            });
+            const payload = JSON.stringify(buildSyncPayload());
             copyText(payload);
         }
 
@@ -1619,6 +1795,8 @@
         }
 
         function saveState() {
+            lastSyncTimestamp = Date.now();
+            localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
             localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
             localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
@@ -1627,6 +1805,13 @@
             localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
             renderVersionBadge();
             updateProgressUI();
+
+            if (dbRef && !isApplyingRemote) {
+                updateCloudSyncBadge('syncing', 'Syncing...');
+                dbRef.set(buildSyncPayload())
+                    .then(() => updateCloudSyncBadge('live', 'Cloud Synced'))
+                    .catch(() => updateCloudSyncBadge('offline', 'Offline (Saved Local)'));
+            }
         }
 
         function toggleCheck(id) {
@@ -1681,7 +1866,6 @@
         function getDailyPlanWithCustom() {
             const cloned = JSON.parse(JSON.stringify(baseDailyPlans));
 
-            // Apply custom schedule/time/KTX overrides across ALL days (Day 1 - Day 7)
             cloned.forEach(dayObj => {
                 dayObj.events.forEach(ev => {
                     if (eventOverrides[ev.id]) {
@@ -2088,7 +2272,7 @@
                         ${ev.isCustom ? `
                             <div class="flex items-center gap-1">
                                 <button onclick="openAddModal(null, '${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-royal rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไขสถานที่</button>
-                                <button onclick="deleteCustomPlace('${ev.customId}')" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-rose-500 rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
+                                <button onclick="openConfirmModal('ต้องการลบจุดแวะนี้ออกจากรายการใช่ไหมครับ?', () => deleteCustomPlace('${ev.customId}'))" class="px-2.5 py-1.5 text-xs text-slate-500 hover:text-rose-500 rounded-xl bg-slate-50 border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
                             </div>
                         ` : ''}
                     </div>
@@ -2201,7 +2385,7 @@
                                             <i class="ph-bold ph-note-pencil"></i> โน้ต
                                         </button>
                                         ${item.isCustom ? `
-                                            <button onclick="deleteCustomPlace('${item.customId}')" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                                            <button onclick="openConfirmModal('ต้องการลบร้านนี้ออกจากรายการใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
                                         ` : ''}
                                     </div>
                                     <div class="flex items-center gap-1">
@@ -2219,9 +2403,9 @@
         function filterGroup(type = 'all') {
             document.querySelectorAll('.gfilter-btn').forEach(btn => {
                 if (btn.dataset.gfilter === type) {
-                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition';
+                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition whitespace-nowrap';
                 } else {
-                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition';
+                    btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-white text-slate-600 border border-slate-200 font-medium transition whitespace-nowrap';
                 }
             });
 
@@ -2246,7 +2430,7 @@
                             <p class="text-slate-600 mt-0.5">ขึ้นลิฟต์เอียงชมวิวหลังคาบ้านย่านแฮบังชนและหอคอย N Seoul Tower ด้านหลัง</p>
                         </div>
                         <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
-                            <div class="font-bold text-amber-900">2. HBC Restaurant & ตลาดชินฮึง</div>
+                            <div class="font-bold text-amber-900">2. HBC Restaurant &amp; ตลาดชินฮึง</div>
                             <p class="text-slate-600 mt-0.5">แวะทาน Gamtae Salmon Roll หรือเดินเล่นตรอกตลาดเก่า Sinheung Market (1953)</p>
                         </div>
                         <div class="bg-white/90 rounded-2xl p-3 border border-amber-100">
@@ -2317,7 +2501,7 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
                         <div class="bg-white/85 rounded-2xl p-3.5 border border-cyan-100">
-                            <div class="font-bold text-cyan-900 mb-1">📍 พิกัด & เวลาเปิด-ปิด</div>
+                            <div class="font-bold text-cyan-900 mb-1">📍 พิกัด &amp; เวลาเปิด-ปิด</div>
                             <p>ชั้น B1 ห้าง Lotte World Mall (เปิดทุกวัน 10:00–22:00 น.) แนะนำไป <strong>วันพฤหัสบดีที่ 10 ธ.ค.</strong> คนจะน้อยกว่าเสาร์-อาทิตย์</p>
                         </div>
                         <div class="bg-white/85 rounded-2xl p-3.5 border border-cyan-100">
@@ -2507,7 +2691,7 @@
                         ${p.isCustom ? `
                             <div class="flex items-center gap-1">
                                 <button onclick="openAddModal(null, '${p.id}')" class="px-2 py-1 text-[11px] text-slate-500 hover:text-royal bg-slate-50 rounded-lg border border-slate-200"><i class="ph-bold ph-pencil-simple"></i> แก้ไข</button>
-                                <button onclick="deleteCustomPlace('${p.id}')" class="px-2 py-1 text-[11px] text-slate-500 hover:text-rose-500 bg-slate-50 rounded-lg border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
+                                <button onclick="openConfirmModal('ต้องการลบสถานที่นี้ออกจากรายการใช่ไหมครับ?', () => deleteCustomPlace('${p.id}'))" class="px-2 py-1 text-[11px] text-slate-500 hover:text-rose-500 bg-slate-50 rounded-lg border border-slate-200"><i class="ph-bold ph-trash"></i> ลบ</button>
                             </div>
                         ` : ''}
                     </div>
