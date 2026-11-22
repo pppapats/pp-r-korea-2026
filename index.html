@@ -389,23 +389,27 @@
     </main>
 
     <!-- ========================================================= -->
-    <!-- MODAL: CHECK-IN MEMORY NOTE & PHOTOS (UP TO 3 PHOTOS)     -->
+    <!-- MODAL: FREESTYLE BUBBLE POST THREAD & PHOTOS              -->
     <!-- ========================================================= -->
     <div id="note-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
                 <h3 class="font-bold text-base text-slate-900 flex items-center gap-2">
-                    <i class="ph-fill ph-note-pencil text-amber-500 text-xl"></i> บันทึกความทรงจำ &amp; รูปภาพ
+                    <i class="ph-fill ph-chats-circle text-amber-500 text-xl"></i> บันทึกมุมมอง &amp; รูปภาพ (Bubble Thread)
                 </h3>
                 <button onclick="closeNoteModal()" class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
             <p id="note-modal-place-title" class="text-xs font-bold text-slate-700 bg-slate-50 px-3 py-2 rounded-xl mb-3"></p>
-            <form onsubmit="saveCheckinNote(event)" class="space-y-3 text-xs">
+
+            <!-- Existing Bubble Thread Preview inside Modal -->
+            <div id="note-modal-thread-list" class="space-y-2 mb-3 max-h-48 overflow-y-auto pr-0.5"></div>
+
+            <form onsubmit="saveCheckinNote(event)" class="space-y-3 text-xs border-t border-slate-100 pt-3">
                 <input type="hidden" id="note-modal-item-id">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1.5">ผู้บันทึก (Author Tag)</label>
+                    <label class="block font-semibold text-slate-700 mb-1.5">โพสต์ในมุมมองของ (Author Tag)</label>
                     <div class="grid grid-cols-3 gap-2">
                         <label class="cursor-pointer">
                             <input type="radio" name="note-author" value="PPWR" class="peer hidden">
@@ -428,13 +432,13 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">เขียนความประทับใจ เมนูที่สั่ง หรือเรื่องราวระหว่างวัน</label>
-                    <textarea id="note-modal-text" rows="3" placeholder="เช่น อากาศหนาวกำลังดี กาแฟอร่อยมาก ถ่ายรูปมุมนี้แสงสวยสุดๆ..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+                    <label class="block font-semibold text-slate-700 mb-1">เพิ่มโพสต์ความประทับใจ / รีวิวในมุมมองของคุณ</label>
+                    <textarea id="note-modal-text" rows="2" placeholder="พิมพ์ข้อความโพสต์ของตัวเองได้อิสระ ไม่ทับกับโพสต์ก่อนหน้า..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                 </div>
-                <!-- Upload up to 3 photos -->
+                <!-- Upload up to 3 photos for this bubble -->
                 <div>
                     <div class="flex items-center justify-between mb-1.5">
-                        <label class="font-semibold text-slate-700">แนบรูปภาพความทรงจำ (สูงสุด 3 รูป)</label>
+                        <label class="font-semibold text-slate-700">แนบรูปภาพในโพสต์นี้ (สูงสุด 3 รูป)</label>
                         <span id="note-photo-count" class="text-[11px] font-bold text-slate-400">0/3 รูป</span>
                     </div>
                     <div id="note-photo-grid" class="grid grid-cols-3 gap-2"></div>
@@ -444,9 +448,11 @@
                     <input type="checkbox" id="note-modal-mark-visited" checked class="rounded accent-emerald-600">
                     <span>ประทับตรา "เช็กอินแล้ว (VISITED)" ให้จุดนี้ด้วย</span>
                 </label>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeNoteModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ยกเลิก</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-md">บันทึกความทรงจำ</button>
+                <div class="pt-1 flex gap-2">
+                    <button type="button" onclick="closeNoteModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">ปิด</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold shadow-md flex items-center justify-center gap-1">
+                        <i class="ph-bold ph-paper-plane-right"></i> โพสต์บันทึก
+                    </button>
                 </div>
             </form>
         </div>
@@ -916,16 +922,18 @@
 
         // completedIds stores either true (legacy) or string timestamp e.g. "6 ธ.ค. 14:20"
         let completedIds = JSON.parse(localStorage.getItem('ppr2026_checked') || '{}');
-        // checkinNotes stores user memory notes keyed by item id
+        // checkinNotes stores user memory notes keyed by item id (legacy fallback)
         let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
-        // placePhotos stores array of compressed base64 images (max 3) keyed by item id
+        // placePhotos stores array of compressed base64 images keyed by item id (legacy fallback)
         let placePhotos = JSON.parse(localStorage.getItem('ppr2026_place_photos') || '{}');
         // noteAuthors stores 'PPWR' | 'PPSR' | 'BOTH' keyed by item id
         let noteAuthors = JSON.parse(localStorage.getItem('ppr2026_note_authors') || '{}');
+        // placeThreads stores array of freestyle bubble posts: [{ id, author, text, photos, timestamp }]
+        let placeThreads = JSON.parse(localStorage.getItem('ppr2026_place_threads') || '{}');
         let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
         let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
             major: 6,
-            minor: 0,
+            minor: 1,
             updatedAt: '22 พ.ย. 2569'
         }));
 
@@ -1000,6 +1008,7 @@
             localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
             localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
             localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
+            localStorage.setItem('ppr2026_place_threads', JSON.stringify(placeThreads));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
             localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
             localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
@@ -1322,9 +1331,58 @@
             checkinNotes = {};
             placePhotos = {};
             noteAuthors = {};
+            placeThreads = {};
             saveState();
             refreshAllViews();
             showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
+        }
+
+        function getThreadsForItem(itemId) {
+            if (Array.isArray(placeThreads[itemId]) && placeThreads[itemId].length > 0) {
+                return placeThreads[itemId];
+            }
+            const legacyNote = checkinNotes[itemId];
+            const legacyPhotos = Array.isArray(placePhotos[itemId]) ? placePhotos[itemId] : [];
+            if (legacyNote || legacyPhotos.length > 0) {
+                return [{
+                    id: 'legacy_' + itemId,
+                    author: noteAuthors[itemId] || 'BOTH',
+                    text: legacyNote || '',
+                    photos: legacyPhotos,
+                    timestamp: typeof completedIds[itemId] === 'string' ? completedIds[itemId] : ''
+                }];
+            }
+            return [];
+        }
+
+        function renderBubbleThreadHtml(itemId, placeTitle = '') {
+            const posts = getThreadsForItem(itemId);
+            if (!posts.length) return '';
+            const safeTitle = (placeTitle || '').replace(/'/g, "\\'");
+
+            return `<div class="mt-2.5 space-y-2">
+                ${posts.map(post => {
+                    const isPpwr = post.author === 'PPWR';
+                    const isPpsr = post.author === 'PPSR';
+                    const boxStyle = isPpwr
+                        ? 'bg-purple-50/85 border-purple-200/90 text-purple-950'
+                        : isPpsr
+                        ? 'bg-sky-50/85 border-sky-200/90 text-sky-950'
+                        : 'bg-amber-50/80 border-amber-200/80 text-slate-800';
+
+                    return `<div class="rounded-2xl border ${boxStyle} px-3.5 py-2.5 text-xs">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <div class="flex items-center gap-1.5">
+                                ${renderAuthorBadge(post.author)}
+                                ${post.timestamp ? `<span class="text-[10px] text-slate-400 font-medium">${post.timestamp}</span>` : ''}
+                            </div>
+                            <button onclick="openNoteModal('${itemId}', '${safeTitle}')" class="text-[10px] text-slate-500 hover:text-slate-900 font-semibold">+ โพสต์ต่อ</button>
+                        </div>
+                        ${post.text ? `<p class="leading-relaxed whitespace-pre-line">${post.text}</p>` : ''}
+                        ${renderPhotoGalleryHtml(post.photos)}
+                    </div>`;
+                }).join('')}
+            </div>`;
         }
 
         function exportScrapbookHTML() {
@@ -1342,9 +1400,25 @@
 
             const renderPhotosPrint = (photos) => {
                 if (!Array.isArray(photos) || !photos.length) return '';
-                return `<div style="display:grid;grid-template-columns:repeat(${Math.min(photos.length, 3)},1fr);gap:8px;margin-top:10px;">
-                    ${photos.map(src => `<img src="${src}" style="width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid #e2e8f0;">`).join('')}
+                return `<div style="display:grid;grid-template-columns:repeat(${Math.min(photos.length, 3)},1fr);gap:8px;margin-top:8px;">
+                    ${photos.map(src => `<img src="${src}" style="width:100%;height:165px;object-fit:cover;border-radius:12px;border:1px solid #e2e8f0;">`).join('')}
                 </div>`;
+            };
+
+            const renderThreadsPrint = (itemId) => {
+                const posts = getThreadsForItem(itemId);
+                if (!posts.length) return '';
+                return posts.map(post => {
+                    const bg = post.author === 'PPWR' ? '#faf5ff;border-color:#e9d5ff;' : post.author === 'PPSR' ? '#f0f9ff;border-color:#bae6fd;' : '#fffbeb;border-color:#fde68a;';
+                    return `<div style="background:${bg}border-width:1px;border-style:solid;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:12px;">
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                            ${authorPill(post.author)}
+                            ${post.timestamp ? `<span style="color:#94a3b8;font-size:10px;">${post.timestamp}</span>` : ''}
+                        </div>
+                        ${post.text ? `<div style="line-height:1.5;color:#1e293b;">${post.text}</div>` : ''}
+                        ${renderPhotosPrint(post.photos)}
+                    </div>`;
+                }).join('');
             };
 
             let soloHtml = '';
@@ -1354,8 +1428,6 @@
                         const key = `solo_${cp.id}`;
                         const meta = soloDaysMeta.find(m => m.dateKey === cp.soloDate);
                         const visited = completedIds[key];
-                        const note = checkinNotes[key];
-                        const photos = placePhotos[key] || [];
                         const author = noteAuthors[key] || cp.author || 'PPWR';
                         return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
                             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
@@ -1364,8 +1436,7 @@
                             </div>
                             <div style="font-size:15px;font-weight:700;">${cp.name}</div>
                             ${cp.addr ? `<p style="font-size:13px;color:#475569;margin:4px 0;">${cp.addr}</p>` : ''}
-                            ${note ? `<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;font-size:12px;margin-top:6px;"><strong>บันทึก:</strong> ${note}</div>` : ''}
-                            ${renderPhotosPrint(photos)}
+                            ${renderThreadsPrint(key)}
                         </div>`;
                     }).join('');
             }
@@ -1373,8 +1444,6 @@
             const dailyHtml = dailyPlans.map(d => {
                 const evHtml = d.events.map(ev => {
                     const visited = completedIds[ev.id];
-                    const note = checkinNotes[ev.id];
-                    const photos = placePhotos[ev.id] || [];
                     const author = noteAuthors[ev.id] || ev.author || '';
                     return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
                         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
@@ -1383,8 +1452,7 @@
                         </div>
                         <div style="font-size:15px;font-weight:700;">${ev.title}</div>
                         <p style="font-size:13px;color:#475569;margin:4px 0;">${ev.desc}</p>
-                        ${note ? `<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;font-size:12px;margin-top:6px;"><strong>บันทึกความทรงจำ:</strong> ${note}</div>` : ''}
-                        ${renderPhotosPrint(photos)}
+                        ${renderThreadsPrint(ev.id)}
                     </div>`;
                 }).join('');
                 return `<h2 style="margin-top:28px;color:#0f172a;border-bottom:2px solid #cbd5e1;padding-bottom:6px;">Day ${d.day} (${d.date} 2569) • ${d.city} — ${d.title}</h2>${evHtml}`;
@@ -2024,6 +2092,7 @@
                 checkinNotes: checkinNotes,
                 placePhotos: placePhotos,
                 noteAuthors: noteAuthors,
+                placeThreads: placeThreads,
                 customPlaces: userCustomPlaces,
                 travelerData: travelerData,
                 eventOverrides: eventOverrides,
@@ -2038,6 +2107,7 @@
             if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
             if (parsed.placePhotos) placePhotos = parsed.placePhotos;
             if (parsed.noteAuthors) noteAuthors = parsed.noteAuthors;
+            if (parsed.placeThreads) placeThreads = parsed.placeThreads;
             if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
             if (parsed.travelerData) {
                 travelerData = {
@@ -2065,6 +2135,7 @@
             localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
             localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
             localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
+            localStorage.setItem('ppr2026_place_threads', JSON.stringify(placeThreads));
             localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
             localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
             localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
@@ -2077,13 +2148,14 @@
         if (dbRef) {
             dbRef.on('value', (snap) => {
                 const remote = snap.val();
-                updateCloudSyncBadge('live', 'Cloud Synced');
                 if (!remote) {
                     lastSyncTimestamp = Date.now();
                     localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
                     dbRef.set(buildSyncPayload());
+                    updateCloudSyncBadge('live', 'Cloud Synced');
                     return;
                 }
+                updateCloudSyncBadge('live', 'Cloud Synced');
                 if (!lastSyncTimestamp || (remote.updatedAtTs && remote.updatedAtTs > lastSyncTimestamp)) {
                     applyRemotePayload(remote);
                 }
@@ -2113,7 +2185,7 @@
         }
 
         // ---------------------------------------------------------
-        // CHECK-IN & MEMORY NOTE HANDLERS (WITH PHOTOS & AUTHOR TAG)
+        // CHECK-IN & BUBBLE POST THREAD HANDLERS
         // ---------------------------------------------------------
         function renderNotePhotoGrid() {
             const grid = document.getElementById('note-photo-grid');
@@ -2160,18 +2232,61 @@
             renderNotePhotoGrid();
         }
 
+        function renderNoteModalThreadList(itemId) {
+            const listEl = document.getElementById('note-modal-thread-list');
+            if (!listEl) return;
+            const posts = getThreadsForItem(itemId);
+            if (!posts.length) {
+                listEl.innerHTML = `<div class="text-[11px] text-slate-400 text-center py-2 bg-slate-50 rounded-xl border border-dashed border-slate-200">ยังไม่มีโพสต์ในสถานที่นี้ — พิมพ์มุมมองแรกด้านล่างได้เลย!</div>`;
+                return;
+            }
+            listEl.innerHTML = posts.map((post, idx) => {
+                const isPpwr = post.author === 'PPWR';
+                const isPpsr = post.author === 'PPSR';
+                const boxStyle = isPpwr ? 'bg-purple-50 border-purple-200' : isPpsr ? 'bg-sky-50 border-sky-200' : 'bg-amber-50/70 border-amber-200';
+                return `<div class="p-2.5 rounded-2xl border ${boxStyle} text-xs space-y-1">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5">
+                            ${renderAuthorBadge(post.author)}
+                            ${post.timestamp ? `<span class="text-[10px] text-slate-400">${post.timestamp}</span>` : ''}
+                        </div>
+                        <button type="button" onclick="deleteBubblePost('${itemId}', ${idx})" class="text-[10px] text-rose-500 hover:underline font-semibold">ลบโพสต์</button>
+                    </div>
+                    ${post.text ? `<p class="text-slate-700 leading-relaxed whitespace-pre-line">${post.text}</p>` : ''}
+                    ${Array.isArray(post.photos) && post.photos.length ? `<div class="text-[10px] text-slate-500 font-medium">📷 แนบรูปภาพ ${post.photos.length} รูป</div>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        function deleteBubblePost(itemId, idx) {
+            const current = getThreadsForItem(itemId);
+            current.splice(idx, 1);
+            if (current.length > 0) {
+                placeThreads[itemId] = current;
+            } else {
+                delete placeThreads[itemId];
+                delete checkinNotes[itemId];
+                delete placePhotos[itemId];
+            }
+            saveState();
+            renderNoteModalThreadList(itemId);
+            refreshAllViews();
+            showToast('ลบโพสต์ออกจากสถานที่นี้แล้ว');
+        }
+
         function openNoteModal(itemId, title) {
             document.getElementById('note-modal-item-id').value = itemId;
             document.getElementById('note-modal-place-title').textContent = title;
-            document.getElementById('note-modal-text').value = checkinNotes[itemId] || '';
+            document.getElementById('note-modal-text').value = '';
             document.getElementById('note-modal-mark-visited').checked = true;
 
-            const savedAuthor = noteAuthors[itemId] || 'BOTH';
+            const savedAuthor = noteAuthors[itemId] || 'PPWR';
             const radio = document.querySelector(`input[name="note-author"][value="${savedAuthor}"]`);
             if (radio) radio.checked = true;
 
-            tempNotePhotos = Array.isArray(placePhotos[itemId]) ? [...placePhotos[itemId]] : [];
+            tempNotePhotos = [];
             renderNotePhotoGrid();
+            renderNoteModalThreadList(itemId);
 
             const modal = document.getElementById('note-modal');
             modal.classList.remove('hidden');
@@ -2192,18 +2307,20 @@
             const markVisited = document.getElementById('note-modal-mark-visited').checked;
             const authorVal = document.querySelector('input[name="note-author"]:checked')?.value || 'BOTH';
 
-            if (text) {
-                checkinNotes[itemId] = text;
-            } else {
-                delete checkinNotes[itemId];
+            if (!text && tempNotePhotos.length === 0) {
+                showToast('กรุณาพิมพ์ข้อความหรือเพิ่มรูปภาพก่อนโพสต์ครับ');
+                return;
             }
 
-            if (tempNotePhotos.length > 0) {
-                placePhotos[itemId] = [...tempNotePhotos];
-            } else {
-                delete placePhotos[itemId];
-            }
-
+            const existingThreads = getThreadsForItem(itemId);
+            existingThreads.push({
+                id: 'post_' + Date.now(),
+                author: authorVal,
+                text: text,
+                photos: [...tempNotePhotos],
+                timestamp: getCheckinTimestamp()
+            });
+            placeThreads[itemId] = existingThreads;
             noteAuthors[itemId] = authorVal;
 
             if (markVisited && !completedIds[itemId]) {
@@ -2213,7 +2330,7 @@
             saveState();
             closeNoteModal();
             refreshAllViews();
-            showToast('บันทึกความทรงจำและรูปภาพเรียบร้อยแล้ว!');
+            showToast('เพิ่ม Bubble โพสต์ความทรงจำเรียบร้อยแล้ว!');
         }
 
         // ---------------------------------------------------------
@@ -2534,10 +2651,14 @@
             const linkedKeys = [`ev_${targetId}`, `solo_${targetId}`, `cf_${targetId}`, `st_${targetId}`, `gc_${targetId}`];
             linkedKeys.forEach(k => {
                 noteAuthors[k] = author;
-                if (tempAddPhotos.length > 0) {
-                    placePhotos[k] = [...tempAddPhotos];
-                } else {
-                    delete placePhotos[k];
+                if (tempAddPhotos.length > 0 && !editId) {
+                    placeThreads[k] = [{
+                        id: 'post_' + Date.now(),
+                        author: author,
+                        text: addr || '',
+                        photos: [...tempAddPhotos],
+                        timestamp: getCheckinTimestamp()
+                    }];
                 }
             });
 
@@ -2566,6 +2687,7 @@
                 delete placePhotos[`${prefix}${id}`];
                 delete noteAuthors[`${prefix}${id}`];
                 delete checkinNotes[`${prefix}${id}`];
+                delete placeThreads[`${prefix}${id}`];
             });
             bumpMinorVersion();
             saveState();
@@ -2600,6 +2722,7 @@
                 if (parsed.checkinNotes) checkinNotes = parsed.checkinNotes;
                 if (parsed.placePhotos) placePhotos = parsed.placePhotos;
                 if (parsed.noteAuthors) noteAuthors = parsed.noteAuthors;
+                if (parsed.placeThreads) placeThreads = parsed.placeThreads;
                 if (Array.isArray(parsed.customPlaces)) userCustomPlaces = parsed.customPlaces;
                 if (parsed.travelerData) travelerData = parsed.travelerData;
                 if (parsed.eventOverrides) eventOverrides = parsed.eventOverrides;
@@ -2692,8 +2815,7 @@
                 const isVisited = !!checkVal;
                 const stampLabel = typeof checkVal === 'string' ? checkVal : 'บันทึกแล้ว';
                 const author = noteAuthors[key] || cp.author || 'PPWR';
-                const userNote = checkinNotes[key];
-                const photos = placePhotos[key] || [];
+                const threads = getThreadsForItem(key);
                 const dateObj = soloDaysMeta.find(m => m.dateKey === cp.soloDate);
                 const dateBadge = dateObj ? dateObj.shortDate : '';
 
@@ -2721,20 +2843,7 @@
                         <h4 class="font-bold text-sm sm:text-base text-slate-900">${cp.name}</h4>
                         ${cp.addr ? `<p class="text-xs sm:text-[13px] text-slate-600 mt-1 leading-relaxed">${cp.addr}</p>` : ''}
 
-                        ${userNote ? `
-                            <div class="mt-2.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 flex items-start justify-between gap-2">
-                                <div class="flex items-start gap-2">
-                                    <i class="ph-fill ph-chat-teardrop-text text-amber-600 text-base shrink-0 mt-0.5"></i>
-                                    <div>
-                                        <div class="text-[10px] font-bold text-amber-800 uppercase">บันทึกเพิ่มเติม</div>
-                                        <p class="mt-0.5 leading-relaxed">${userNote}</p>
-                                    </div>
-                                </div>
-                                <button onclick="openNoteModal('${key}', '${cp.name.replace(/'/g, "\\'")}')" class="text-[11px] text-amber-700 hover:underline font-semibold shrink-0">แก้ไข</button>
-                            </div>
-                        ` : ''}
-
-                        ${renderPhotoGalleryHtml(photos)}
+                        ${renderBubbleThreadHtml(key, cp.name)}
 
                         ${cp.kr ? `
                             <div class="flex items-center justify-between bg-slate-50 border border-slate-200/90 rounded-2xl p-2 pl-3 gap-2 mt-3">
@@ -2753,8 +2862,8 @@
                                     <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
                                 </button>
                                 <button onclick="openNoteModal('${key}', '${cp.name.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
-                                    <i class="ph-bold ph-camera-plus"></i>
-                                    <span>${photos.length > 0 || userNote ? 'โน้ต/รูป (' + photos.length + '/3)' : 'จดโน้ต & เพิ่มรูป'}</span>
+                                    <i class="ph-bold ph-chats-circle"></i>
+                                    <span>${threads.length > 0 ? '+ โพสต์มุมมอง (' + threads.length + ')' : '+ โพสต์โน้ต & รูป'}</span>
                                 </button>
                             </div>
                             <div class="flex items-center gap-1">
@@ -2810,8 +2919,7 @@
                 const isVisited = !!checkVal;
                 const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 const isNew = ev.customId && ev.customId === lastAddedId;
-                const userNote = checkinNotes[ev.id];
-                const photos = placePhotos[ev.id] || [];
+                const threads = getThreadsForItem(ev.id);
                 const author = noteAuthors[ev.id] || ev.author || '';
 
                 return `<div class="bg-white rounded-3xl p-4 sm:p-5 border-2 ${isVisited ? 'border-emerald-300/90 bg-gradient-to-br from-white to-emerald-50/30' : ev.isEdited ? 'border-indigo-200' : 'border-slate-200/80'} ${isNew ? 'newly-added' : ''} shadow-xs transition">
@@ -2846,22 +2954,8 @@
                     <h4 class="font-bold text-sm sm:text-base text-slate-900 leading-snug">${ev.title}</h4>
                     <p class="text-xs sm:text-[13px] text-slate-600 mt-1.5 leading-relaxed">${ev.desc}</p>
 
-                    <!-- User Memory Note Box (if exists) -->
-                    ${userNote ? `
-                        <div class="mt-2.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 text-xs text-slate-800 flex items-start justify-between gap-2">
-                            <div class="flex items-start gap-2">
-                                <i class="ph-fill ph-chat-teardrop-text text-amber-600 text-base shrink-0 mt-0.5"></i>
-                                <div>
-                                    <div class="text-[10px] font-bold text-amber-800 uppercase">บันทึกความทรงจำของเรา</div>
-                                    <p class="mt-0.5 leading-relaxed">${userNote}</p>
-                                </div>
-                            </div>
-                            <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="text-[11px] text-amber-700 hover:underline font-semibold shrink-0">แก้ไข</button>
-                        </div>
-                    ` : ''}
-
-                    <!-- Attached Photos (Up to 3) -->
-                    ${renderPhotoGalleryHtml(photos)}
+                    <!-- Freestyle Bubble Post Thread -->
+                    ${renderBubbleThreadHtml(ev.id, ev.title)}
 
                     <!-- Place Action Boxes (Mobile-friendly tap targets) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
@@ -2884,8 +2978,8 @@
                                 <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
                             </button>
                             <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
-                                <i class="ph-bold ph-camera-plus"></i>
-                                <span>${photos.length > 0 || userNote ? 'โน้ต/รูป (' + photos.length + '/3)' : 'จดโน้ต & รูป'}</span>
+                                <i class="ph-bold ph-chats-circle"></i>
+                                <span>${threads.length > 0 ? '+ โพสต์มุมมอง (' + threads.length + ')' : '+ โพสต์โน้ต & รูป'}</span>
                             </button>
                             <button onclick="openScheduleModal('${ev.id}')" class="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
                                 <i class="ph-bold ph-clock-clockwise"></i>
@@ -2981,8 +3075,7 @@
                         ${list.map(item => {
                             const checkVal = completedIds[item.id];
                             const isVisited = !!checkVal;
-                            const userNote = checkinNotes[item.id];
-                            const photos = placePhotos[item.id] || [];
+                            const threads = getThreadsForItem(item.id);
                             const author = noteAuthors[item.id] || '';
                             return `
                             <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/20' : item.isCustom ? 'border-amber-300 bg-amber-50/15' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
@@ -2998,12 +3091,7 @@
                                     <p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>
                                     ${item.menu ? `<p class="text-xs text-slate-700 mt-1.5 leading-relaxed"><span class="font-bold text-slate-900">เมนูแนะนำ:</span> ${item.menu}</p>` : ''}
                                     ${item.note ? `<p class="text-[11px] text-slate-500 mt-1"><i class="ph-fill ph-info text-slate-400"></i> ${item.note}</p>` : ''}
-                                    ${userNote ? `
-                                        <div class="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-xs text-slate-800">
-                                            <span class="font-bold text-amber-800">โน้ตของเรา:</span> ${userNote}
-                                        </div>
-                                    ` : ''}
-                                    ${renderPhotoGalleryHtml(photos)}
+                                    ${renderBubbleThreadHtml(item.id, item.name)}
                                 </div>
                                 <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
                                     <div class="flex items-center gap-1">
@@ -3011,7 +3099,7 @@
                                             <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'ไปลองแล้ว' : 'เช็กอิน'}
                                         </button>
                                         <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
-                                            <i class="ph-bold ph-camera-plus"></i> โน้ต/รูป ${photos.length ? '(' + photos.length + ')' : ''}
+                                            <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
                                         </button>
                                         ${item.isCustom ? `
                                             <button onclick="openConfirmModal('ต้องการลบร้านนี้ออกจากรายการใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
