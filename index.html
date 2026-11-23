@@ -10,18 +10,251 @@
     <meta name="apple-mobile-web-app-title" content="PP_R KOREA">
     <meta name="application-name" content="PP_R KOREA">
     <meta name="theme-color" content="#0B1120">
-    <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180">
+    <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link id="favicon-icon" rel="icon" type="image/png" sizes="192x192">
     <link id="pwa-manifest" rel="manifest">
     <script>
-        (function setupHomeScreenIcons() {
-            function drawAppIcon(size) {
-                const canvas = document.createElement('canvas');
-                canvas.width = size;
-                canvas.height = size;
-                const ctx = canvas.getContext('2d');
+        window.renderAppIconDataUrl = function(size, styleId = 'midnight') {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
 
-                // Deep Navy to Royal Blue Gradient Background
+            if (styleId === 'sunset') {
+                // Style 2: Seoul Sunset Pastel (Pink -> Purple -> Indigo)
+                const grad = ctx.createLinearGradient(0, 0, size, size);
+                grad.addColorStop(0, '#F43F5E');
+                grad.addColorStop(0.5, '#9333EA');
+                grad.addColorStop(1, '#312E81');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Soft Sun Disc
+                ctx.fillStyle = 'rgba(253, 224, 71, 0.28)';
+                ctx.beginPath();
+                ctx.arc(size * 0.5, size * 0.36, size * 0.24, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Namsan Tower Silhouette Minimal
+                ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+                ctx.lineWidth = Math.max(2, size * 0.018);
+                ctx.beginPath();
+                ctx.moveTo(size * 0.5, size * 0.14);
+                ctx.lineTo(size * 0.5, size * 0.34);
+                ctx.stroke();
+
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.beginPath();
+                ctx.roundRect(size * 0.42, size * 0.24, size * 0.16, size * 0.055, 8);
+                ctx.fill();
+
+                // Text
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `800 ${Math.round(size * 0.23)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('PP_R', size * 0.5, size * 0.56);
+
+                ctx.fillStyle = '#FDE047';
+                ctx.font = `800 ${Math.round(size * 0.105)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('SEOUL • BUSAN', size * 0.5, size * 0.76);
+            } else if (styleId === 'ticket') {
+                // Style 3: Minimal Boarding Pass Ticket (Cream / Navy / Royal)
+                ctx.fillStyle = '#F8FAFC';
+                ctx.fillRect(0, 0, size, size);
+
+                // Top Header Strip
+                ctx.fillStyle = '#0F172A';
+                ctx.fillRect(0, 0, size, size * 0.28);
+
+                ctx.fillStyle = '#38BDF8';
+                ctx.font = `800 ${Math.round(size * 0.095)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('✈ BOARDING PASS • 2026', size * 0.5, size * 0.145);
+
+                // Main Route Code
+                ctx.fillStyle = '#0F172A';
+                ctx.font = `800 ${Math.round(size * 0.24)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('PP_R', size * 0.5, size * 0.48);
+
+                // Perforated Ticket Line
+                ctx.strokeStyle = '#CBD5E1';
+                ctx.lineWidth = Math.max(2, size * 0.012);
+                ctx.setLineDash([size * 0.03, size * 0.025]);
+                ctx.beginPath();
+                ctx.moveTo(size * 0.12, size * 0.65);
+                ctx.lineTo(size * 0.88, size * 0.65);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Bottom Destination Pill
+                ctx.fillStyle = '#2563EB';
+                ctx.beginPath();
+                ctx.roundRect(size * 0.16, size * 0.73, size * 0.68, size * 0.15, 99);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `800 ${Math.round(size * 0.095)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('ICN • PUS • SEL', size * 0.5, size * 0.805);
+            } else if (styleId === 'retro_cam') {
+                // Style 4: Retro Polaroid Camera (Classic Instagram Mood)
+                // Bottom cream leather body
+                ctx.fillStyle = '#F5EFE6';
+                ctx.fillRect(0, 0, size, size);
+
+                // Top warm espresso brown leather cap
+                ctx.fillStyle = '#4A3222';
+                ctx.fillRect(0, 0, size, size * 0.34);
+
+                // Subtle seam line
+                ctx.fillStyle = '#2C1A10';
+                ctx.fillRect(0, size * 0.335, size, Math.max(2, size * 0.015));
+
+                // Classic 4-color retro rainbow stripe on left
+                const stripeX = size * 0.14;
+                const stripeW = size * 0.026;
+                const stripes = ['#E11D48', '#F59E0B', '#10B981', '#2563EB'];
+                stripes.forEach((col, i) => {
+                    ctx.fillStyle = col;
+                    ctx.fillRect(stripeX + i * stripeW, 0, stripeW, size * 0.34);
+                });
+
+                // Top-right viewfinder glass
+                ctx.fillStyle = '#1E293B';
+                ctx.beginPath();
+                ctx.roundRect(size * 0.72, size * 0.09, size * 0.15, size * 0.15, size * 0.035);
+                ctx.fill();
+                ctx.strokeStyle = '#94A3B8';
+                ctx.lineWidth = Math.max(2, size * 0.012);
+                ctx.stroke();
+
+                // Center Camera Lens Ring
+                const cx = size * 0.5;
+                const cy = size * 0.53;
+                const outerR = size * 0.255;
+
+                // Outer silver bezel
+                ctx.fillStyle = '#CBD5E1';
+                ctx.beginPath();
+                ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Dark metallic barrel
+                ctx.fillStyle = '#1E293B';
+                ctx.beginPath();
+                ctx.arc(cx, cy, outerR * 0.84, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Deep glass lens gradient
+                const lensGrad = ctx.createRadialGradient(cx - outerR * 0.2, cy - outerR * 0.2, outerR * 0.05, cx, cy, outerR * 0.68);
+                lensGrad.addColorStop(0, '#38BDF8');
+                lensGrad.addColorStop(0.45, '#1E3A8A');
+                lensGrad.addColorStop(1, '#090D16');
+                ctx.fillStyle = lensGrad;
+                ctx.beginPath();
+                ctx.arc(cx, cy, outerR * 0.68, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Lens specular highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+                ctx.beginPath();
+                ctx.arc(cx - outerR * 0.24, cy - outerR * 0.24, outerR * 0.13, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Bottom classic label
+                ctx.fillStyle = '#4A3222';
+                ctx.font = `800 ${Math.round(size * 0.088)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('PP_R • KOREA ’26', size * 0.5, size * 0.88);
+            } else if (styleId === 'vintage_stamp') {
+                // Style 5: Vintage Sepia Postage & Film Frame
+                const grad = ctx.createLinearGradient(0, 0, size, size);
+                grad.addColorStop(0, '#3B2314');
+                grad.addColorStop(1, '#1C110A');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Warm gold double border frame
+                const pad = Math.round(size * 0.09);
+                ctx.strokeStyle = '#D97706';
+                ctx.lineWidth = Math.max(2, size * 0.016);
+                ctx.beginPath();
+                ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, size * 0.14);
+                ctx.stroke();
+
+                const innerPad = Math.round(size * 0.135);
+                ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
+                ctx.lineWidth = Math.max(1.5, size * 0.008);
+                ctx.setLineDash([size * 0.025, size * 0.02]);
+                ctx.beginPath();
+                ctx.roundRect(innerPad, innerPad, size - innerPad * 2, size - innerPad * 2, size * 0.1);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Top vintage year badge
+                ctx.fillStyle = '#FBBF24';
+                ctx.font = `700 ${Math.round(size * 0.085)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('✦ EST. 2026 ✦', size * 0.5, size * 0.27);
+
+                // Main Classic Serif-like Title
+                ctx.fillStyle = '#FEF3C7';
+                ctx.font = `800 ${Math.round(size * 0.24)}px Georgia, serif`;
+                ctx.fillText('PP_R', size * 0.5, size * 0.50);
+
+                // Subtitle
+                ctx.fillStyle = '#F59E0B';
+                ctx.font = `800 ${Math.round(size * 0.10)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('SEOUL • BUSAN', size * 0.5, size * 0.72);
+            } else if (styleId === 'kodak_sunset') {
+                // Style 6: Warm Kodak Sunset Camera Outline (Modern Vintage IG Mood)
+                const grad = ctx.createLinearGradient(0, size, size, 0);
+                grad.addColorStop(0, '#F59E0B');
+                grad.addColorStop(0.45, '#E11D48');
+                grad.addColorStop(1, '#7E22CE');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Soft warm vignette
+                const radGrad = ctx.createRadialGradient(size * 0.25, size * 0.85, size * 0.05, size * 0.5, size * 0.5, size * 0.8);
+                radGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
+                radGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = radGrad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Rounded camera outline frame (IG classic silhouette)
+                const boxPad = size * 0.17;
+                const boxSize = size - boxPad * 2;
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = Math.max(3, size * 0.042);
+                ctx.beginPath();
+                ctx.roundRect(boxPad, boxPad, boxSize, boxSize, size * 0.19);
+                ctx.stroke();
+
+                // Top-right flash dot
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(size * 0.71, size * 0.29, size * 0.032, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Center lens ring
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = Math.max(3, size * 0.038);
+                ctx.beginPath();
+                ctx.arc(size * 0.5, size * 0.5, size * 0.165, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // PP_R monogram inside lens
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `800 ${Math.round(size * 0.105)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('PP_R', size * 0.5, size * 0.505);
+            } else {
+                // Style 1: Midnight Winter (Default)
                 const grad = ctx.createLinearGradient(0, 0, size, size);
                 grad.addColorStop(0, '#0B1120');
                 grad.addColorStop(0.55, '#131C33');
@@ -29,14 +262,12 @@
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, size, size);
 
-                // Subtle Glow Accent Circle
                 const glow = ctx.createRadialGradient(size * 0.78, size * 0.22, size * 0.02, size * 0.78, size * 0.22, size * 0.45);
                 glow.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
                 glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, size, size);
 
-                // Decorative Border Frame
                 const pad = Math.round(size * 0.07);
                 const rad = Math.round(size * 0.18);
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
@@ -45,36 +276,36 @@
                 ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, rad);
                 ctx.stroke();
 
-                // Top Snowflake / Travel Badge
                 ctx.fillStyle = '#38BDF8';
                 ctx.font = `700 ${Math.round(size * 0.12)}px sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('❄', size * 0.5, size * 0.24);
 
-                // Main Brand Text: PP_R
                 ctx.fillStyle = '#FFFFFF';
                 ctx.font = `800 ${Math.round(size * 0.24)}px "Plus Jakarta Sans", sans-serif`;
                 ctx.fillText('PP_R', size * 0.5, size * 0.48);
 
-                // Subtitle: KOREA 2026
                 ctx.fillStyle = '#7DD3FC';
                 ctx.font = `800 ${Math.round(size * 0.115)}px "Plus Jakarta Sans", sans-serif`;
                 ctx.fillText('KOREA 2026', size * 0.5, size * 0.71);
 
-                // Bottom Accent Pill Line
                 ctx.fillStyle = '#FBBF24';
                 ctx.beginPath();
                 ctx.roundRect(size * 0.34, size * 0.81, size * 0.32, Math.max(3, size * 0.022), 99);
                 ctx.fill();
-
-                return canvas.toDataURL('image/png');
             }
 
+            return canvas.toDataURL('image/png');
+        };
+
+        window.applyHomeScreenIconStyle = function(styleId) {
             try {
-                const icon180 = drawAppIcon(180);
-                const icon192 = drawAppIcon(192);
-                const icon512 = drawAppIcon(512);
+                const chosen = styleId || localStorage.getItem('ppr_icon_style') || 'midnight';
+                localStorage.setItem('ppr_icon_style', chosen);
+                const icon180 = window.renderAppIconDataUrl(180, chosen);
+                const icon192 = window.renderAppIconDataUrl(192, chosen);
+                const icon512 = window.renderAppIconDataUrl(512, chosen);
 
                 const appleLink = document.getElementById('apple-touch-icon');
                 if (appleLink) appleLink.href = icon180;
@@ -98,7 +329,8 @@
                 const manifestLink = document.getElementById('pwa-manifest');
                 if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
             } catch (e) {}
-        })();
+        };
+        window.applyHomeScreenIconStyle();
     </script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -168,7 +400,7 @@
                     <span class="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] sm:text-xs font-medium text-sky-200 flex items-center gap-1.5">
                         <i class="ph-fill ph-snowflake text-sky-400"></i> 6–12 ธ.ค. 2569 • ปูซาน 2 คืน • โซล 4 คืน
                     </span>
-                    <button type="button" onclick="forceManualSync()" title="แตะเพื่อซิงก์ข้อมูลล่าสุดทันที" id="sync-status-pill" class="px-3 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-[11px] sm:text-xs font-semibold text-emerald-300 flex items-center gap-1.5 transition cursor-pointer">
+                    <button type="button" onclick="openCloudSetupModal()" title="แตะเพื่อตั้งค่า Cloud Sync หรือเปลี่ยนไอคอน" id="sync-status-pill" class="px-3 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-[11px] sm:text-xs font-semibold text-emerald-300 flex items-center gap-1.5 transition cursor-pointer">
                         <span id="sync-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span id="sync-status-text">กำลังเชื่อมต่อ...</span>
                     </button>
@@ -350,9 +582,10 @@
 
         <!-- Footer & Reset Checked Action -->
         <footer class="mt-10 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 no-print">
-            <div class="flex items-center gap-1.5 font-medium">
+            <div class="flex items-center gap-2 font-medium">
                 <i class="ph-fill ph-sparkle text-sky-400"></i>
-                <span>PP_R in KOREA 2026 • Travel Log & Check-in Scrapbook</span>
+                <span>PP_R in KOREA 2026</span>
+                <button onclick="openCloudSetupModal()" class="text-royal hover:underline font-semibold cursor-pointer">• ตั้งค่า Sync & ไอคอน</button>
             </div>
             <button onclick="openResetConfirmModal()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                 <i class="ph-bold ph-arrow-counter-clockwise"></i>
@@ -860,12 +1093,69 @@
         </div>
     </div>
 
+    <!-- Cloud Sync Setup & App Icon Picker Modal (z-[80]) -->
+    <div id="cloud-setup-modal" class="fixed inset-0 z-[80] bg-slate-950/70 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeCloudSetupModal()">
+        <div class="bg-white w-full max-w-xl rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-200 max-h-[92vh] overflow-y-auto space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <i class="ph-fill ph-cloud-arrow-up text-royal text-xl"></i> ตั้งค่า Cloud Sync & เลือกไอคอนหน้าจอโฮม
+                    </h3>
+                    <p class="text-[11px] text-slate-500">สำหรับซิงก์ข้อมูล 2 เครื่องบน GitHub Pages (`pppapats.github.io`)</p>
+                </div>
+                <button onclick="closeCloudSetupModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 cursor-pointer"><i class="ph-bold ph-x"></i></button>
+            </div>
+
+            <!-- Section 1: Cloud Sync Setup -->
+            <div class="space-y-3 text-xs">
+                <div class="p-3.5 rounded-2xl bg-sky-50 border border-sky-200 space-y-2">
+                    <div class="font-extrabold text-sky-950 flex items-center justify-between">
+                        <span>🔗 ฐานข้อมูล Realtime Sync (2 เครื่อง)</span>
+                        <span id="modal-sync-badge" class="px-2 py-0.5 rounded-full bg-white border border-sky-200 text-[10px] font-bold text-slate-700">Cloud Synced</span>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed">
+                        เชื่อมต่อกับฐานข้อมูล <b>Firebase Realtime Database</b> ของโปรเจกต์ <code>ppr-korea-2026</code> เรียบร้อยแล้ว ข้อมูลการเช็กอิน บันทึก และรูปภาพจะซิงก์ระหว่าง 2 เครื่องอัตโนมัติทันที:
+                    </p>
+                    <input type="url" id="rtdb-url-input" value="https://ppr-korea-2026-default-rtdb.asia-southeast1.firebasedatabase.app" class="w-full px-3 py-2 rounded-xl border border-sky-200 bg-white font-mono text-[11px] focus:outline-none focus:border-royal">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" onclick="saveCustomRtdbUrl()" class="px-4 py-2 rounded-xl bg-royal hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+                            <i class="ph-bold ph-plugs-connected"></i> บันทึก & ซิงก์ทันที
+                        </button>
+                        <button type="button" onclick="forceManualSync()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+                            <i class="ph-bold ph-arrows-clockwise"></i> รีเฟรชซิงก์ตอนนี้
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: 6 Home Screen App Icon Designs -->
+            <div class="space-y-3 text-xs border-t border-slate-200 pt-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-extrabold text-slate-900 text-sm">🎨 เลือกแบบไอคอน Home Screen (6 ดีไซน์)</h4>
+                    <span class="text-[11px] text-slate-400">แตะเพื่อเลือกดีไซน์ที่ชอบ</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="icon-style-grid">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-2">
+                    <div class="font-bold flex items-center gap-1.5">
+                        <i class="ph-fill ph-info text-amber-600"></i> เคล็ดลับสำหรับ iPhone / iPad บน GitHub Pages:
+                    </div>
+                    <p class="text-[11px] leading-relaxed">
+                        iOS Safari จะอ่านไฟล์ไอคอนชื่อ <b>apple-touch-icon.png</b> จากโฟลเดอร์หลักของ GitHub ของคุณโดยตรง แนะนำให้กดปุ่มด้านล่างเพื่อโหลดรูปไอคอนแบบที่คุณเลือก แล้วอัปโหลดไฟล์ <b>apple-touch-icon.png</b> ขึ้นไปวางคู่กับ <code>index.html</code> ใน Repo <b>pppapats.github.io</b> ครับ
+                    </p>
+                    <button type="button" onclick="downloadSelectedAppIcon()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer">
+                        <i class="ph-bold ph-download-simple text-amber-300"></i> ดาวน์โหลดไฟล์ apple-touch-icon.png
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase & Application Logic -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
         // =========================================================
         // 1. MASTER TRIP DATASET (PP_R in KOREA 2026 - VERIFIED)
         // =========================================================
@@ -1174,11 +1464,11 @@
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'ppr-korea-2026';
         const LOCAL_BACKUP_KEY = `ppr_korea_backup_${appId}`;
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let firestoreUnsubscribe = null;
-        let isCloudReady = false;
+        const DEFAULT_RTDB_URL = 'https://ppr-korea-2026-default-rtdb.asia-southeast1.firebasedatabase.app';
+        const CUSTOM_RTDB_KEY = 'ppr_korea_custom_rtdb_url';
+        let rtdbBaseUrl = DEFAULT_RTDB_URL;
+        let syncPollTimer = null;
+        let lastKnownUpdatedAt = 0;
         let isSavingCloud = false;
         let pendingCloudSave = false;
 
@@ -1186,6 +1476,8 @@
             const pill = document.getElementById('sync-status-pill');
             const dot = document.getElementById('sync-status-dot');
             const label = document.getElementById('sync-status-text');
+            const modalBadge = document.getElementById('modal-sync-badge');
+            if (modalBadge) modalBadge.textContent = text;
             if (!pill || !dot || !label) return;
             label.textContent = text;
 
@@ -1211,7 +1503,7 @@
                     itemOverrides,
                     customPlaces,
                     travelerVault,
-                    updatedAt: Date.now()
+                    updatedAt: lastKnownUpdatedAt || Date.now()
                 }));
             } catch (e) {}
         }
@@ -1227,6 +1519,7 @@
                 scheduleOverrides = data.scheduleOverrides || {};
                 itemOverrides = data.itemOverrides || {};
                 customPlaces = data.customPlaces || [];
+                lastKnownUpdatedAt = data.updatedAt || 0;
                 if (data.travelerVault) {
                     travelerVault = { ...travelerVault, ...data.travelerVault };
                 }
@@ -1246,114 +1539,159 @@
             return `${day} ${month}, ${hh}:${mm}`;
         }
 
-        function attachFirestoreListener() {
-            if (!db || !currentUser) return;
-            if (firestoreUnsubscribe) {
-                firestoreUnsubscribe();
-                firestoreUnsubscribe = null;
-            }
+        function getRtdbEndpoint() {
+            const cleanBase = (rtdbBaseUrl || DEFAULT_RTDB_URL).replace(/\/+$/, '');
+            return `${cleanBase}/ppr_korea_2026/main_state.json`;
+        }
 
-            const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
-            firestoreUnsubscribe = onSnapshot(tripDocRef, (snap) => {
-                isCloudReady = true;
-                if (snap.exists()) {
-                    const data = snap.data();
-                    completedIds = data.completedIds || {};
-                    completedDays = data.completedDays || {};
-                    userNotes = data.userNotes || {};
-                    scheduleOverrides = data.scheduleOverrides || {};
-                    itemOverrides = data.itemOverrides || {};
-                    customPlaces = data.customPlaces || [];
-                    if (data.travelerVault) {
-                        travelerVault = { ...travelerVault, ...data.travelerVault };
-                    }
-                    saveLocalBackup();
-                } else {
-                    // If cloud document doesn't exist yet and we have local data, push it to cloud
+        function applyCloudSnapshot(data) {
+            if (!data || typeof data !== 'object') return;
+            completedIds = data.completedIds || {};
+            completedDays = data.completedDays || {};
+            userNotes = data.userNotes || {};
+            scheduleOverrides = data.scheduleOverrides || {};
+            itemOverrides = data.itemOverrides || {};
+            customPlaces = Array.isArray(data.customPlaces) ? data.customPlaces : (data.customPlaces ? Object.values(data.customPlaces) : []);
+            if (data.travelerVault) {
+                travelerVault = { ...travelerVault, ...data.travelerVault };
+            }
+            if (data.updatedAt) {
+                lastKnownUpdatedAt = data.updatedAt;
+            }
+            saveLocalBackup();
+            renderAll();
+            if (isVaultUnlocked) populateTravelerVaultFields();
+            if (activeDetailItem) {
+                const refreshed = findItemById(activeDetailItem.id);
+                if (refreshed) openDetailModal(refreshed.id);
+            }
+        }
+
+        async function pullFromCloud(silent = true) {
+            if (isSavingCloud) return;
+            try {
+                const res = await fetch(getRtdbEndpoint(), { cache: 'no-store' });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                setSyncBadge('synced', 'Cloud Synced');
+                if (data && data.updatedAt && data.updatedAt > lastKnownUpdatedAt) {
+                    applyCloudSnapshot(data);
+                    if (!silent) showToast('อัปเดตข้อมูลล่าสุดจากอีกเครื่องแล้ว');
+                } else if (!data) {
+                    // First time database is empty: push local state up if any exists
                     const hasLocal = Object.keys(completedIds).length || Object.keys(completedDays).length ||
                         Object.keys(userNotes).length || customPlaces.length;
                     if (hasLocal) {
-                        saveState();
+                        await saveState();
                     }
+                } else if (!silent) {
+                    showToast('ข้อมูลตรงกันล่าสุดแล้ว (Cloud Synced)');
                 }
-                setSyncBadge('synced', 'Cloud Synced');
-                renderAll();
-                if (isVaultUnlocked) populateTravelerVaultFields();
-                if (activeDetailItem) {
-                    const refreshed = findItemById(activeDetailItem.id);
-                    if (refreshed) openDetailModal(refreshed.id);
-                }
-            }, (err) => {
-                setSyncBadge('warn', 'Local Backup');
-            });
+            } catch (e) {
+                setSyncBadge('warn', 'Local Mode');
+                if (!silent) showToast('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาตรวจสอบอินเทอร์เน็ตหรือ Rules');
+            }
         }
 
         async function initCloudSync() {
+            try {
+                const savedUrl = localStorage.getItem(CUSTOM_RTDB_KEY);
+                if (savedUrl) rtdbBaseUrl = savedUrl;
+            } catch (e) {}
+
             loadLocalBackup();
             renderAll();
+            setSyncBadge('syncing', 'กำลังเชื่อมต่อ...');
+            await pullFromCloud(true);
 
-            try {
-                if (typeof __firebase_config === 'undefined') {
-                    setSyncBadge('warn', 'Local Mode');
-                    return;
-                }
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        currentUser = user;
-                        attachFirestoreListener();
-                    }
-                });
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (e) {
-                setSyncBadge('warn', 'Local Backup');
-            }
+            // Auto-sync every 5 seconds for near-realtime 2-device collaboration
+            if (syncPollTimer) clearInterval(syncPollTimer);
+            syncPollTimer = setInterval(() => {
+                if (!document.hidden) pullFromCloud(true);
+            }, 5000);
         }
 
         async function forceManualSync() {
-            if (!db || !currentUser) {
-                showToast('กำลังใช้งานโหมดสำรองข้อมูลในเครื่อง (Local Backup)');
+            setSyncBadge('syncing', 'กำลังซิงก์...');
+            await pullFromCloud(false);
+        }
+
+        // Cloud Setup & Icon Selector Modal Logic
+        function openCloudSetupModal() {
+            const urlInput = document.getElementById('rtdb-url-input');
+            if (urlInput) urlInput.value = rtdbBaseUrl || DEFAULT_RTDB_URL;
+            renderIconStyleChoices();
+            const modal = document.getElementById('cloud-setup-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCloudSetupModal() {
+            const modal = document.getElementById('cloud-setup-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function saveCustomRtdbUrl() {
+            const input = document.getElementById('rtdb-url-input').value.trim();
+            if (!input || !input.startsWith('http')) {
+                showToast('กรุณาระบุ URL ของ Firebase Realtime Database ให้ถูกต้อง');
                 return;
             }
-            setSyncBadge('syncing', 'กำลังซิงก์...');
+            rtdbBaseUrl = input.replace(/\/+$/, '');
             try {
-                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
-                const snap = await getDoc(tripDocRef);
-                if (snap.exists()) {
-                    const data = snap.data();
-                    completedIds = data.completedIds || {};
-                    completedDays = data.completedDays || {};
-                    userNotes = data.userNotes || {};
-                    scheduleOverrides = data.scheduleOverrides || {};
-                    itemOverrides = data.itemOverrides || {};
-                    customPlaces = data.customPlaces || [];
-                    if (data.travelerVault) {
-                        travelerVault = { ...travelerVault, ...data.travelerVault };
-                    }
-                    saveLocalBackup();
-                    renderAll();
-                }
-                setSyncBadge('synced', 'Cloud Synced');
-                showToast('ซิงก์ข้อมูลล่าสุดกับ Cloud เรียบร้อยแล้ว');
-            } catch (e) {
-                setSyncBadge('warn', 'Sync Warning');
-                showToast('ไม่สามารถเชื่อมต่อ Cloud ชั่วคราว (ข้อมูลถูกเก็บในเครื่องแล้ว)');
-            }
+                localStorage.setItem(CUSTOM_RTDB_KEY, rtdbBaseUrl);
+            } catch (e) {}
+            await forceManualSync();
+        }
+
+        function renderIconStyleChoices() {
+            const currentStyle = localStorage.getItem('ppr_icon_style') || 'midnight';
+            const designs = [
+                { id: 'midnight', name: '1. Midnight Winter', desc: 'น้ำเงินเข้ม • ฟ้าคริสตัล' },
+                { id: 'sunset', name: '2. Seoul Sunset', desc: 'ชมพู-ม่วง • หอคอยนัมซาน' },
+                { id: 'ticket', name: '3. Boarding Pass', desc: 'สไตล์ตั๋วเครื่องบินมินิมอล' },
+                { id: 'retro_cam', name: '4. Retro Polaroid', desc: 'กล้องโพลารอยด์ • แถบสีเรโทร' },
+                { id: 'vintage_stamp', name: '5. Vintage Sepia', desc: 'น้ำตาลเอสเพรสโซ่ • กรอบทอง' },
+                { id: 'kodak_sunset', name: '6. Sunset Film IG', desc: 'ไล่เฉดฟิล์ม • กรอบกล้องคลาสสิก' }
+            ];
+            const grid = document.getElementById('icon-style-grid');
+            grid.innerHTML = designs.map(d => {
+                const previewUrl = window.renderAppIconDataUrl(180, d.id);
+                const isSelected = currentStyle === d.id;
+                return `
+                    <button type="button" onclick="selectAppIconDesign('${d.id}')" class="p-2.5 rounded-2xl border-2 text-center transition cursor-pointer flex flex-col items-center ${isSelected ? 'border-royal bg-sky-50/70 shadow-sm' : 'border-slate-200 bg-white hover:border-slate-300'}">
+                        <img src="${previewUrl}" alt="${d.name}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-md mb-2">
+                        <div class="font-extrabold text-[11px] text-slate-900 leading-tight">${d.name}</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">${d.desc}</div>
+                        ${isSelected ? '<span class="mt-1.5 px-2 py-0.5 rounded-full bg-royal text-white text-[9px] font-bold">กำลังใช้งาน</span>' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectAppIconDesign(styleId) {
+            window.applyHomeScreenIconStyle(styleId);
+            renderIconStyleChoices();
+            showToast('เปลี่ยนดีไซน์ไอคอนเรียบร้อยแล้ว');
+        }
+
+        function downloadSelectedAppIcon() {
+            const currentStyle = localStorage.getItem('ppr_icon_style') || 'midnight';
+            const dataUrl = window.renderAppIconDataUrl(512, currentStyle);
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = 'apple-touch-icon.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('ดาวน์โหลดไฟล์ apple-touch-icon.png เรียบร้อยแล้ว');
         }
 
         async function saveState() {
+            lastKnownUpdatedAt = Date.now();
             saveLocalBackup();
             renderAll();
-            if (!db || !currentUser) return;
 
             if (isSavingCloud) {
                 pendingCloudSave = true;
@@ -1371,19 +1709,18 @@
                     itemOverrides,
                     customPlaces,
                     travelerVault,
-                    updatedAt: Date.now()
+                    updatedAt: lastKnownUpdatedAt
                 };
-                const approxBytes = new Blob([JSON.stringify(payload)]).size;
-                if (approxBytes > 950000) {
-                    setSyncBadge('warn', 'รูปภาพใกล้เต็มโควตา');
-                    showToast('คำเตือน: ขนาดรูปภาพรวมใกล้เต็ม 1MB ของ Cloud กรุณาลบรูปเก่าบางส่วนหากบันทึกไม่เข้า');
-                }
-                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
-                await setDoc(tripDocRef, payload);
+                const res = await fetch(getRtdbEndpoint(), {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 setSyncBadge('synced', 'Cloud Synced');
             } catch (e) {
-                setSyncBadge('warn', 'บันทึกเฉพาะในเครื่อง');
-                showToast('บันทึกข้อมูลลง Cloud ไม่สำเร็จ (อาจเกิดจากขนาดรูปภาพรวมเกิน 1MB)');
+                setSyncBadge('warn', 'Local Mode');
+                showToast('บันทึกขึ้น Cloud ไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
             } finally {
                 isSavingCloud = false;
                 if (pendingCloudSave) {
@@ -2671,6 +3008,8 @@ ${content}
         Object.assign(window, {
             switchTab, selectDay, toggleCheck, toggleCompleteWholeDay, copyKoreanName,
             toggleActiveAuthor, openDetailModal, closeDetailModal, forceManualSync,
+            openCloudSetupModal, closeCloudSetupModal, saveCustomRtdbUrl,
+            selectAppIconDesign, downloadSelectedAppIcon,
             openNoteModal, closeNoteModal, setNoteAuthor, handleNotePhotoSelect, clearNotePhoto, submitNotePost, deleteNote,
             openScheduleModal, closeScheduleModal, saveScheduleOverride,
             setPlaceAuthor, updateAddModalSubfields, handlePlacePhotoSelect, clearPlacePhoto,
