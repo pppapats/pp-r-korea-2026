@@ -172,7 +172,7 @@
                     </span>
                     <button onclick="openVersionModal()" id="version-badge" class="inline-flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 px-2.5 py-1 rounded-full text-[11px] font-medium text-emerald-200 transition cursor-pointer" title="คลิกเพื่อดูรายละเอียดเวอร์ชันและการอัปเดต">
                         <i class="ph-bold ph-git-commit text-emerald-300"></i>
-                        <span id="version-text">v6.0 • อัปเดต: 22 พ.ย. 2569</span>
+                        <span id="version-text">v6.3 • อัปเดต: 23 พ.ย. 2569</span>
                     </button>
                     <button onclick="forceFirebaseSync()" id="cloud-sync-badge" class="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/30 px-2.5 py-1 rounded-full text-[11px] font-semibold text-amber-200 transition cursor-pointer" title="คลิกเพื่อซิงก์ข้อมูล 2 เครื่องทันที">
                         <span id="cloud-sync-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
@@ -236,21 +236,29 @@
                 <i class="ph-fill ph-coffee text-amber-500 text-base"></i>
                 <span id="nav-cafe-label">2. คาเฟ่ &amp; ร้านอาหาร</span>
             </button>
+            <button onclick="switchTab('library')" data-tab="library" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-books text-teal-600 text-base"></i>
+                <span id="nav-library-label">3. Library Sightseeing</span>
+            </button>
+            <button onclick="switchTab('series')" data-tab="series" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
+                <i class="ph-fill ph-film-slate text-rose-500 text-base"></i>
+                <span id="nav-series-label">4. Series Snap</span>
+            </button>
             <button onclick="switchTab('group')" data-tab="group" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
                 <i class="ph-fill ph-sparkle text-purple-500 text-base"></i>
-                <span>3. โซน &amp; ไฮไลต์</span>
+                <span>5. โซน &amp; ไฮไลต์</span>
             </button>
             <button onclick="switchTab('stamp')" data-tab="stamp" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
                 <i class="ph-fill ph-stamp text-orange-500 text-base"></i>
-                <span>4. เก็บ Stamp</span>
+                <span>6. เก็บ Stamp</span>
             </button>
             <button onclick="switchTab('gacha')" data-tab="gacha" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
                 <i class="ph-fill ph-gift text-pink-500 text-base"></i>
-                <span>5. กาชาปอง &amp; ของฟรี</span>
+                <span>7. กาชาปอง &amp; ของฟรี</span>
             </button>
             <button onclick="switchTab('navermap')" data-tab="navermap" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
                 <i class="ph-fill ph-map-pin-area text-naver text-base"></i>
-                <span id="nav-map-label">6. พิกัดทั้งหมด</span>
+                <span id="nav-map-label">8. พิกัดทั้งหมด</span>
             </button>
         </div>
     </nav>
@@ -303,7 +311,55 @@
             <div id="cafe-list-container" class="space-y-5"></div>
         </section>
 
-        <!-- TAB 3: ZONES, ROUTES & HIGHLIGHTS -->
+        <!-- TAB: LIBRARY SIGHTSEEING (LIBRARIES & BOOK CAFES) -->
+        <section id="tab-library" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-teal-200/80 shadow-xs space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">📚 Library Sightseeing (ห้องสมุด &amp; คาเฟ่ห้องสมุด)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">รวบรวมพิกัดห้องสมุดสถาปัตยกรรมสวยๆ และ Book Cafe สำหรับแวะพักผ่อนและถ่ายรูป</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="library-visited-count" class="text-xs font-bold text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">เช็กอินแล้ว 0/0 แห่ง</span>
+                        <button onclick="openAddLibraryModal()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition cursor-pointer">
+                            <i class="ph-bold ph-plus"></i> เพิ่มห้องสมุด / Book Cafe
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="library-search" oninput="renderLibraryTab()" placeholder="ค้นหาชื่อห้องสมุด คาเฟ่หนังสือ หรือย่าน..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div id="library-result-count" class="text-[11px] text-slate-400 font-medium"></div>
+            </div>
+            <div id="library-list-container" class="space-y-4"></div>
+        </section>
+
+        <!-- TAB: SERIES SNAP (K-DRAMA & MOVIE LOCATIONS) -->
+        <section id="tab-series" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-rose-200/80 shadow-xs space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">🎬 Series Snap (ตามรอยโลเคชั่นซีรีส์ &amp; หนัง)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">เก็บพิกัดฉากประทับใจในซีรีส์เกาหลี พร้อมแนบรูปถ่ายเทียบมุมซีนโปรด</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="series-visited-count" class="text-xs font-bold text-rose-800 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">ตามรอยแล้ว 0/0 จุด</span>
+                        <button onclick="openAddSeriesModal()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-xs transition cursor-pointer">
+                            <i class="ph-bold ph-plus"></i> เพิ่มโลเคชั่นซีรีส์
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="series-search" oninput="renderSeriesTab()" placeholder="ค้นหาชื่อเรื่องซีรีส์ ชื่อสถานที่ หรือย่าน..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-rose-500">
+                </div>
+                <div id="series-result-count" class="text-[11px] text-slate-400 font-medium"></div>
+            </div>
+            <div id="series-list-container" class="space-y-4"></div>
+        </section>
+
+        <!-- TAB: ZONES, ROUTES & HIGHLIGHTS -->
         <section id="tab-group" class="tab-content hidden space-y-4">
             <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
                 <button onclick="filterGroup('all')" data-gfilter="all" class="gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition whitespace-nowrap">ทั้งหมด</button>
@@ -318,7 +374,7 @@
             <div id="group-content" class="space-y-4"></div>
         </section>
 
-        <!-- TAB 4: STAMP COLLECTION -->
+        <!-- TAB: STAMP COLLECTION -->
         <section id="tab-stamp" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-2.5">
                 <div class="flex items-center justify-between">
@@ -335,7 +391,7 @@
             <div id="stamp-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- TAB 5: GACHA & FREEBIES -->
+        <!-- TAB: GACHA & FREEBIES -->
         <section id="tab-gacha" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
                 <div>
@@ -350,7 +406,7 @@
             <div id="freebies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- TAB 6: ALL NAVER MAP DIRECTORY -->
+        <!-- TAB: ALL NAVER MAP DIRECTORY -->
         <section id="tab-navermap" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-2">
@@ -373,7 +429,7 @@
             <div id="naver-directory-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </section>
 
-        <!-- TAB 7: TRAVELER INFO & PASSPORTS (PIN PROTECTED) -->
+        <!-- TAB: TRAVELER INFO & PASSPORTS (PIN PROTECTED) -->
         <section id="tab-traveler" class="tab-content hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-2">
                 <div>
@@ -599,8 +655,8 @@
                     <input type="text" id="input-custom-zone" placeholder="พิมพ์ชื่อโซน / ย่านเพิ่มเติม เช่น โซล: Suwon / Incheon" class="hidden mt-2 w-full px-3 py-2 bg-blue-50/40 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">บันทึกความทรงจำ / เมนูที่สั่ง / หมายเหตุ</label>
-                    <input type="text" id="input-addr" placeholder="เช่น อเมริกาโน่ดีมาก บรรยากาศเงียบสงบ ใกล้สถานี..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
+                    <label class="block font-semibold text-slate-700 mb-1">บันทึกความทรงจำ / เมนูที่สั่ง / ชื่อซีรีส์ / หมายเหตุ</label>
+                    <input type="text" id="input-addr" placeholder="เช่น อเมริกาโน่ดีมาก บรรยากาศเงียบสงบ / ฉากซีรีส์เรื่อง..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-royal">
                 </div>
                 <!-- Upload up to 3 photos for new place -->
                 <div>
@@ -671,6 +727,18 @@
                             <option value="ร้านอาหาร">🍲 ร้านอาหาร</option>
                         </select>
                     </div>
+                    <label class="flex items-center gap-2 font-semibold text-teal-800 bg-teal-50/70 px-3 py-2 rounded-xl border border-teal-200 cursor-pointer">
+                        <input type="checkbox" id="chk-add-library" class="rounded accent-teal-600">
+                        <span>เพิ่มลงในแท็บ <strong>Library Sightseeing</strong> (ห้องสมุด &amp; Book Cafe)</span>
+                    </label>
+                    <label class="flex items-center gap-2 font-semibold text-rose-800 bg-rose-50/70 px-3 py-2 rounded-xl border border-rose-200 cursor-pointer">
+                        <input type="checkbox" id="chk-add-series" onchange="toggleSeriesField()" class="rounded accent-rose-600">
+                        <span>เพิ่มลงในแท็บ <strong>Series Snap</strong> (ตามรอยโลเคชั่นซีรีส์)</span>
+                    </label>
+                    <div id="series-extra-box" class="hidden pl-5 pt-1">
+                        <label class="block text-[11px] text-slate-500 mb-0.5">ชื่อซีรีส์ / ฉากที่ตามรอย</label>
+                        <input type="text" id="input-series-title" placeholder="เช่น Lovely Runner / Goblin / Queen of Tears" class="w-full px-2.5 py-1.5 bg-rose-50/50 border border-rose-200 rounded-lg">
+                    </div>
                     <label class="flex items-center gap-2 font-medium text-slate-700 cursor-pointer">
                         <input type="checkbox" id="chk-add-stamp" class="rounded accent-amber-500">
                         <span>เพิ่มเป็นจุดเก็บ Stamp</span>
@@ -710,25 +778,29 @@
                     </ul>
                 </div>
                 <div class="space-y-2">
+                    <div class="border-l-2 border-royal pl-3">
+                        <div class="font-bold text-slate-900">v6.5 • 23 พ.ย. 2569</div>
+                        <p>เพิ่มพิกัดตามรอยซีรีส์ <strong>Hotel Del Luna</strong> (Hotel Seine Cafe อิกซอนดง, Changhwadang, Seoul Book Bogo จัมซิล, Seosulla-gil) และเพิ่มภาพประกอบซีนตัวอย่าง (Scene Visual Cards) ให้ครบทุกโลเคชั่นในแท็บ <strong>Series Snap</strong></p>
+                    </div>
+                    <div class="border-l-2 border-royal pl-3">
+                        <div class="font-bold text-slate-900">v6.4 • 23 พ.ย. 2569</div>
+                        <p>อัปเดตพิกัดตามรอยซีรีส์ <strong>Twenty-Five Twenty-One (2521)</strong> ในกรุงโซล 5 จุดเดินทางง่ายด้วยรถไฟใต้ดิน (Donuimun Museum Village, Seochon Village, Euljiro 3-ga, Ttukseom Hangang Tunnel และ Sinchon) ลงในแท็บ Series Snap</p>
+                    </div>
+                    <div class="border-l-2 border-royal pl-3">
+                        <div class="font-bold text-slate-900">v6.3 • 23 พ.ย. 2569</div>
+                        <p>อัปเดตเวลาเดินทาง Day 1 (10:30–12:00 ถึง ICN T1 / 12:00–14:30 Lunch) และข้อมูลตั๋วรถไฟ <strong>KTX 047</strong> ทั้งขาไป (14:58–17:47 Car 13 Seat 8A-8B) และขากลับ (13:17–16:34 Car 1 Seat 9A-9B), เพิ่มลิสต์ <strong>Library Sightseeing 11 แห่ง</strong>, เพิ่ม <strong>Kodak Corner Shop Stamp Tour 6 สาขา</strong> และเพิ่มโลเคชั่นซีรีส์ <strong>Reply 1988, 2521, Lovely Runner, Goblin, Our Beloved Summer</strong> ใน Series Snap</p>
+                    </div>
+                    <div class="border-l-2 border-teal-500 pl-3">
+                        <div class="font-bold text-slate-900">v6.2 • 23 พ.ย. 2569</div>
+                        <p>เพิ่มแท็บใหม่ 2 หมวด: <strong>Library Sightseeing</strong> (ลิสต์ห้องสมุดและคาเฟ่ห้องสมุด) และ <strong>Series Snap</strong> (ตามรอยโลเคชั่นซีรีส์) พร้อมปุ่มเพิ่มสถานที่ เช็กอิน และ Bubble โพสต์โน้ต/รูปภาพแยกแต่ละหมวด</p>
+                    </div>
                     <div class="border-l-2 border-purple-500 pl-3">
-                        <div class="font-bold text-slate-900">v6.0 • 22 พ.ย. 2569</div>
-                        <p>เพิ่มแท็บพิเศษ <strong>Solo Log (30 พ.ย.–5 ธ.ค.)</strong> สำหรับบันทึกช่วงเดินทางล่วงหน้า, เพิ่มป้าย Tag ผู้บันทึก <strong>PPWR (สีม่วงพาสเทล)</strong> และ <strong>PPSR (สีน้ำเงินโอเชียนบลู)</strong>, รองรับการแนบรูปภาพสูงสุด 3 รูปต่อสถานที่พร้อมบีบอัดอัตโนมัติ และเพิ่มปุ่ม <strong>Export Scrapbook</strong> สำหรับเปิดพิมพ์/เซฟ PDF ฉบับสมบูรณ์</p>
+                        <div class="font-bold text-slate-900">v6.1 • 22 พ.ย. 2569</div>
+                        <p>เพิ่มแท็บพิเศษ <strong>Solo Log (30 พ.ย.–5 ธ.ค.)</strong> สำหรับบันทึกช่วงเดินทางล่วงหน้า, เพิ่มป้าย Tag ผู้บันทึก <strong>PPWR (สีม่วงพาสเทล)</strong> และ <strong>PPSR (สีน้ำเงินโอเชียนบลู)</strong>, ระบบโพสต์โน้ตแบบ Freestyle Bubble Thread พร้อมแนบรูปภาพสูงสุด 3 รูป และปุ่ม <strong>Export Scrapbook</strong></p>
                     </div>
                     <div class="border-l-2 border-emerald-500 pl-3">
                         <div class="font-bold text-slate-900">v5.1 • 22 พ.ย. 2569</div>
-                        <p>กู้คืนข้อมูลทั้งหมดจาก v5.0 (ข้อมูลผู้เดินทาง PIN 070910, แท็บทั้ง 6 หมวด, คลังพิกัด Naver Map, จุดเก็บ Stamp, กาชาปอง และ Route แฮบังชน) พร้อมเชื่อมต่อระบบซิงก์เรียลไทม์ 2 เครื่องผ่าน Firebase Realtime Database</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v5.0 • 22 พ.ย. 2569</div>
-                        <p>นำเข้าข้อมูลทั้งหมดจากโน้ต PP_R KOREA 2026.txt ครบทุกหมวด: เพิ่มร้านกาแฟ/ขนม/อาหารรวมกว่า 55 ร้านแยกตามย่าน, เพิ่มจุดเช็กอิน K-Heritage Passport ที่อินชอน T1, เทศกาลไฟ Deep Dive Haeundae, จุดชมวิว Seongsu Skywalk / Ttukseom Sunset, พิกัดตู้ Photobooth &amp; ร้าน NYUNYU / Daiso 12 ชั้น</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v4.1 • 22 พ.ย. 2569</div>
-                        <p>เพิ่มปุ่มแก้ไขและบันทึกตารางเวลาใหม่ได้ทุกรายการในทั้ง 7 วัน (Day 1 – Day 7) รวมถึงปรับแก้ตารางเวลาและขบวนรถไฟ KTX ทั้งขาไปปูซานและขากลับโซลได้โดยตรง</p>
-                    </div>
-                    <div class="border-l-2 border-slate-300 pl-3">
-                        <div class="font-bold text-slate-700">v4.0 • 22 พ.ย. 2569</div>
-                        <p>ปรับโฉม UI เป็น Mobile Travel Cards &amp; Check-in Scrapbook กดเช็กอินพร้อมประทับตรา VISITED และจดโน้ตความทรงจำได้ทุกจุด, เพิ่มเส้นทางเดินแฮบังชน–ฮูอัมดงแบบละเอียดใน Day 6</p>
+                        <p>เชื่อมต่อระบบซิงก์เรียลไทม์ 2 เครื่องผ่าน Firebase Realtime Database และระบบล็อก PIN 070910 สำหรับข้อมูลผู้เดินทาง</p>
                     </div>
                 </div>
             </div>
@@ -790,15 +862,33 @@
     </div>
 
     <!-- ========================================================= -->
-    <!-- MODAL: FULLSCREEN PASSPORT IMAGE VIEWER                   -->
+    <!-- MODAL: FULLSCREEN IMAGE VIEWER                            -->
     <!-- ========================================================= -->
     <div id="image-viewer-modal" onclick="closeImageViewer()" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/90 p-4 cursor-zoom-out">
         <div class="max-w-2xl w-full text-center space-y-3" onclick="event.stopPropagation()">
-            <img id="viewer-img" src="" alt="Passport Preview" class="max-h-[78vh] mx-auto rounded-2xl shadow-2xl border border-white/20 object-contain">
+            <img id="viewer-img" src="" alt="Preview" class="max-h-[78vh] mx-auto rounded-2xl shadow-2xl border border-white/20 object-contain">
             <button onclick="closeImageViewer()" class="px-5 py-2 bg-white/15 hover:bg-white/25 text-white rounded-full text-xs font-semibold">
                 ปิดหน้าต่างพรีวิว
             </button>
         </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- FULLSCREEN OVERLAY: EXPORT SCRAPBOOK READER (MOBILE FRIENDLY) -->
+    <!-- ========================================================= -->
+    <div id="scrapbook-overlay" class="fixed inset-0 z-50 hidden bg-slate-100 overflow-y-auto">
+        <div class="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-md text-white px-4 py-3 shadow-md flex items-center justify-between gap-2">
+            <button type="button" onclick="closeScrapbookOverlay()" class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
+                <i class="ph-bold ph-arrow-left text-base"></i>
+                <span>กลับหน้าหลัก</span>
+            </button>
+            <span class="text-xs font-bold text-sky-300 truncate">Travel Scrapbook 2026</span>
+            <button type="button" onclick="printScrapbookOverlay()" class="inline-flex items-center gap-1.5 bg-royal hover:bg-blue-500 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
+                <i class="ph-bold ph-printer text-base"></i>
+                <span>บันทึก PDF</span>
+            </button>
+        </div>
+        <div id="scrapbook-overlay-body" class="max-w-3xl mx-auto p-4 sm:p-6 pb-24"></div>
     </div>
 
     <!-- CUSTOM CONFIRM MODAL (NO BROWSER ALERTS) -->
@@ -829,828 +919,58 @@
         const nMap = (kr) => `https://map.naver.com/p/search/${encodeURIComponent(kr)}`;
 
         // ---------------------------------------------------------
-        // FIREBASE REALTIME DATABASE INIT (SYNC v5 STATE ACROSS DEVICES)
+        // BASE SERIES SNAP LOCATIONS (REPLY 1988, 2521, HOTEL DEL LUNA & MORE)
         // ---------------------------------------------------------
-        const firebaseConfig = {
-            databaseURL: "https://ppr-korea-2026-default-rtdb.asia-southeast1.firebasedatabase.app/"
-        };
-        let dbRef = null;
-        let isApplyingRemote = false;
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            dbRef = firebase.database().ref("ppr2026_v5_shared_state");
-        } catch (e) {
-            console.error("Firebase init error:", e);
-        }
-
-        function updateCloudSyncBadge(status, label) {
-            const btn = document.getElementById('cloud-sync-badge');
-            const dot = document.getElementById('cloud-sync-dot');
-            const text = document.getElementById('cloud-sync-text');
-            if (!btn || !dot || !text) return;
-
-            text.textContent = label;
-            btn.className = "inline-flex items-center gap-1.5 border px-2.5 py-1 rounded-full text-[11px] font-semibold transition cursor-pointer ";
-            dot.className = "w-2 h-2 rounded-full ";
-
-            if (status === 'live') {
-                btn.className += "bg-sky-500/20 border-sky-400/30 text-sky-200 hover:bg-sky-500/30";
-                dot.className += "bg-emerald-400 sync-dot-live";
-            } else if (status === 'syncing') {
-                btn.className += "bg-blue-500/25 border-blue-400/40 text-blue-200";
-                dot.className += "bg-blue-400 animate-ping";
-            } else {
-                btn.className += "bg-amber-500/20 border-amber-400/30 text-amber-200";
-                dot.className += "bg-amber-400";
-            }
-        }
-
-        // ---------------------------------------------------------
-        // DYNAMIC STATE (Travel Scrapbook, Check-ins, Notes, KTX, Versioning)
-        // ---------------------------------------------------------
-        const TRAVELER_PIN = '070910';
-        let isTravelerUnlocked = false;
-        let lastSyncTimestamp = Number(localStorage.getItem('ppr2026_last_sync_ts') || 0);
-
-        // Stores custom schedule edits for ANY event in Day 1 - Day 7 (keyed by event id)
-        let eventOverrides = (() => {
-            try {
-                const saved = JSON.parse(localStorage.getItem('ppr2026_event_overrides'));
-                if (saved && typeof saved === 'object') return saved;
-            } catch (e) {}
-            return {};
-        })();
-
-        // Migrate legacy KTX schedule into eventOverrides['d3_e1'] if present
-        (() => {
-            try {
-                const legacyKtx = JSON.parse(localStorage.getItem('ppr2026_ktx_schedule'));
-                if (legacyKtx && (legacyKtx.departTime || legacyKtx.arriveTime) && !eventOverrides['d3_e1']) {
-                    const extra = [
-                        legacyKtx.trainNo ? `ขบวน: ${legacyKtx.trainNo}` : '',
-                        legacyKtx.seat ? `ที่นั่ง: ${legacyKtx.seat}` : '',
-                        legacyKtx.note ? `หมายเหตุ: ${legacyKtx.note}` : ''
-                    ].filter(Boolean).join(' • ');
-                    eventOverrides['d3_e1'] = {
-                        time: `${legacyKtx.departTime || '?'} – ${legacyKtx.arriveTime || '?'}`,
-                        transit: `KTX ${legacyKtx.trainNo ? legacyKtx.trainNo + ' ' : ''}(Busan → Seoul Station)`,
-                        title: 'เช็กเอาต์ปูซาน & นั่ง KTX กลับเข้ากรุงโซล',
-                        desc: `รถไฟความเร็วสูง KTX ออกจากสถานี Busan เวลา ${legacyKtx.departTime || '-'} น. ถึง Seoul Station เวลา ${legacyKtx.arriveTime || '-'} น.${extra ? ' (' + extra + ')' : ''} จากนั้นต่อรถไฟใต้ดินสาย 5 ไปสถานี Gangdong`
-                    };
-                }
-            } catch (e) {}
-        })();
-
-        const defaultTravelerData = {
-            lastSaved: '',
-            travelers: [
-                {
-                    label: 'ผู้เดินทางคนที่ 1 (PPWR)',
-                    fullName: '',
-                    nickname: 'PPWR',
-                    passportNo: '',
-                    dob: '',
-                    expiryDate: '',
-                    passportImg: '',
-                    flights: { outNo: '', outPnr: '', outTime: 'เดินทาง 30 พ.ย. 2569', outSeat: '', inNo: 'TW101 (หรือรอบ 19:50/20:15)', inPnr: '', inTime: 'ออก ICN 19:50 / 20:15 น.', inSeat: 'Terminal 1' }
-                },
-                {
-                    label: 'ผู้เดินทางคนที่ 2 (PPSR)',
-                    fullName: '',
-                    nickname: 'PPSR',
-                    passportNo: '',
-                    dob: '',
-                    expiryDate: '',
-                    passportImg: '',
-                    flights: { outNo: 'TW102', outPnr: '', outTime: 'ถึง ICN 09:00 น. (6 ธ.ค.)', outSeat: 'Terminal 1', inNo: 'TW101 (หรือรอบ 19:50/20:15)', inPnr: '', inTime: 'ออก ICN 19:50 / 20:15 น.', inSeat: 'Terminal 1' }
-                }
-            ],
-            notes: {
-                busanHotel: 'Busan Yeongmu Parade Hotel Haeundae Beach (6–8 ธ.ค. 2569)',
-                seoulHotel: 'STAYMIN Gangdong Hosted by Mama Jin (8–12 ธ.ค. 2569)',
-                insurance: '',
-                esim: '',
-                general: 'K-Heritage Visitor Passport รับได้ที่ ICN T1 ชั้น B1 Transportation Center (แถว Burger King)'
-            }
-        };
-
-        let travelerData = (() => {
-            try {
-                const saved = JSON.parse(localStorage.getItem('ppr2026_traveler_data'));
-                if (saved && Array.isArray(saved.travelers)) {
-                    return {
-                        ...defaultTravelerData,
-                        ...saved,
-                        travelers: defaultTravelerData.travelers.map((defT, i) => ({
-                            ...defT,
-                            ...(saved.travelers[i] || {}),
-                            flights: { ...defT.flights, ...((saved.travelers[i] && saved.travelers[i].flights) || {}) }
-                        })),
-                        notes: { ...defaultTravelerData.notes, ...(saved.notes || {}) }
-                    };
-                }
-            } catch (e) {}
-            return JSON.parse(JSON.stringify(defaultTravelerData));
-        })();
-
-        // completedIds stores either true (legacy) or string timestamp e.g. "6 ธ.ค. 14:20"
-        let completedIds = JSON.parse(localStorage.getItem('ppr2026_checked') || '{}');
-        // checkinNotes stores user memory notes keyed by item id (legacy fallback)
-        let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
-        // placePhotos stores array of compressed base64 images keyed by item id (legacy fallback)
-        let placePhotos = JSON.parse(localStorage.getItem('ppr2026_place_photos') || '{}');
-        // noteAuthors stores 'PPWR' | 'PPSR' | 'BOTH' keyed by item id
-        let noteAuthors = JSON.parse(localStorage.getItem('ppr2026_note_authors') || '{}');
-        // placeThreads stores array of freestyle bubble posts: [{ id, author, text, photos, timestamp }]
-        let placeThreads = JSON.parse(localStorage.getItem('ppr2026_place_threads') || '{}');
-        let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
-        let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || JSON.stringify({
-            major: 6,
-            minor: 1,
-            updatedAt: '22 พ.ย. 2569'
-        }));
-
-        let currentDay = 1;
-        let currentSoloDate = 'ALL';
-        let currentMapZone = 'ALL';
-        let currentCafeZone = 'ALL';
-        let currentCafeType = 'ALL';
-        let lastAddedId = null;
-        let tempNotePhotos = [];
-        let tempAddPhotos = [];
-        let pendingConfirmCallback = null;
-
-        // ---------------------------------------------------------
-        // CORE STATE, HELPERS & EXPORT SCRAPBOOK FUNCTIONS
-        // ---------------------------------------------------------
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toast-msg');
-            if (!toast || !msgEl) return;
-            msgEl.textContent = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-            clearTimeout(window._toastTimer);
-            window._toastTimer = setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-            }, 2600);
-        }
-
-        function copyText(text) {
-            if (!text) return;
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                document.execCommand('copy');
-                showToast('คัดลอกเรียบร้อยแล้ว!');
-            } catch (e) {
-                showToast('ไม่สามารถคัดลอกได้');
-            }
-            document.body.removeChild(ta);
-        }
-
-        function getCheckinTimestamp() {
-            const now = new Date();
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const d = now.getDate();
-            const m = months[now.getMonth()];
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            return `${d} ${m} ${hh}:${mm}`;
-        }
-
-        function bumpMinorVersion() {
-            versionState.minor = (Number(versionState.minor) || 0) + 1;
-            const now = new Date();
-            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            versionState.updatedAt = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 543}`;
-        }
-
-        function renderVersionBadge() {
-            const el = document.getElementById('version-text');
-            if (el) {
-                el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
-            }
-        }
-
-        function saveState() {
-            localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
-            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
-            localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
-            localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
-            localStorage.setItem('ppr2026_place_threads', JSON.stringify(placeThreads));
-            localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
-            localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
-            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
-            localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
-
-            if (!isApplyingRemote) {
-                lastSyncTimestamp = Date.now();
-                localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
-                if (dbRef) {
-                    updateCloudSyncBadge('syncing', 'Syncing...');
-                    dbRef.set(buildSyncPayload())
-                        .then(() => updateCloudSyncBadge('live', 'Cloud Synced'))
-                        .catch(() => updateCloudSyncBadge('offline', 'Offline Mode'));
-                }
-            }
-        }
-
-        function toggleCheck(id) {
-            if (completedIds[id]) {
-                delete completedIds[id];
-                showToast('ยกเลิกการเช็กอินแล้ว');
-            } else {
-                completedIds[id] = getCheckinTimestamp();
-                showToast('ประทับตรา VISITED เรียบร้อยแล้ว!');
-            }
-            saveState();
-            updateProgressUI();
-        }
-
-        function getDailyPlanWithCustom() {
-            return baseDailyPlans.map(dayObj => {
-                const baseEvs = dayObj.events.map(ev => {
-                    const ov = eventOverrides[ev.id];
-                    if (!ov) return { ...ev };
-                    return {
-                        ...ev,
-                        time: ov.time || ev.time,
-                        transit: ov.transit || ev.transit,
-                        title: ov.title || ev.title,
-                        desc: ov.desc || ev.desc,
-                        isEdited: true
-                    };
-                });
-
-                const customEvs = userCustomPlaces
-                    .filter(cp => cp.addDaily && Number(cp.day) === dayObj.day)
-                    .map(cp => ({
-                        id: `ev_${cp.id}`,
-                        customId: cp.id,
-                        isCustom: true,
-                        author: cp.author || 'BOTH',
-                        time: cp.time || 'แวะเพิ่มเติม',
-                        transit: cp.zone || 'บันทึกจุดแวะใหม่',
-                        title: cp.name,
-                        desc: cp.addr || '',
-                        places: cp.kr ? [{ name: cp.name, kr: cp.kr }] : []
-                    }));
-
-                return { ...dayObj, events: [...baseEvs, ...customEvs] };
-            });
-        }
-
-        function getAllCafeFoodItems() {
-            const customCafes = userCustomPlaces
-                .filter(cp => cp.addCafe)
-                .map(cp => ({
-                    id: `cf_${cp.id}`,
-                    customId: cp.id,
-                    isCustom: true,
-                    zone: cp.zone || 'อื่นๆ',
-                    type: cp.cafeType || 'คาเฟ่ / กาแฟ',
-                    name: cp.name,
-                    kr: cp.kr || '',
-                    menu: cp.addr || '',
-                    note: ''
-                }));
-            return [...customCafes, ...baseCafeFoodItems];
-        }
-
-        function getAllStamps() {
-            const customStamps = userCustomPlaces
-                .filter(cp => cp.addStamp)
-                .map(cp => ({
-                    id: `st_${cp.id}`,
-                    day: cp.zone || 'บันทึกใหม่',
-                    name: cp.name,
-                    loc: cp.addr || cp.zone || '',
-                    kr: cp.kr || ''
-                }));
-            return [...baseStampItems, ...customStamps];
-        }
-
-        function getAllGacha() {
-            const customGacha = userCustomPlaces
-                .filter(cp => cp.addGacha)
-                .map(cp => ({
-                    id: `gc_${cp.id}`,
-                    tag: cp.zone || 'บันทึกใหม่',
-                    name: cp.name,
-                    desc: cp.addr || '',
-                    kr: cp.kr || ''
-                }));
-            return [...baseGachaItems, ...customGacha];
-        }
-
-        function getAllPlaces() {
-            const customAll = userCustomPlaces.map(cp => ({
-                id: cp.id,
-                isCustom: true,
-                name: cp.name,
-                kr: cp.kr || '',
-                zone: cp.zone || 'อื่นๆ',
-                addr: cp.addr || ''
-            }));
-            return [...customAll, ...baseNaverPlaces];
-        }
-
-        function updateProgressUI() {
-            const plans = getDailyPlanWithCustom();
-            const dailyEvents = plans.flatMap(d => d.events);
-            const soloEvents = userCustomPlaces.filter(cp => cp.addSolo);
-            const totalSpots = dailyEvents.length + soloEvents.length;
-            const visitedDaily = dailyEvents.filter(e => completedIds[e.id]).length;
-            const visitedSolo = soloEvents.filter(cp => completedIds[`solo_${cp.id}`]).length;
-            const visitedTotal = visitedDaily + visitedSolo;
-            const pct = totalSpots > 0 ? Math.round((visitedTotal / totalSpots) * 100) : 0;
-
-            const gpText = document.getElementById('global-progress-text');
-            const gpBar = document.getElementById('global-progress-bar');
-            if (gpText) gpText.textContent = `${visitedTotal}/${totalSpots} จุด (${pct}%)`;
-            if (gpBar) gpBar.style.width = `${pct}%`;
-
-            const soloLabel = document.getElementById('nav-solo-label');
-            if (soloLabel) soloLabel.textContent = `Solo Log (${soloEvents.length})`;
-
-            const cafes = getAllCafeFoodItems();
-            const visitedCafes = cafes.filter(c => completedIds[c.id]).length;
-            const cafeCountEl = document.getElementById('cafe-visited-count');
-            const navCafeEl = document.getElementById('nav-cafe-label');
-            if (cafeCountEl) cafeCountEl.textContent = `เช็กอินแล้ว ${visitedCafes}/${cafes.length} ร้าน`;
-            if (navCafeEl) navCafeEl.textContent = `2. คาเฟ่ & ร้านอาหาร (${cafes.length})`;
-
-            const stamps = getAllStamps();
-            const visitedStamps = stamps.filter(s => completedIds[s.id]).length;
-            const stTotalEl = document.getElementById('stamp-total-label');
-            const stCountEl = document.getElementById('stamp-count');
-            const stBarEl = document.getElementById('stamp-progress-bar');
-            if (stTotalEl) stTotalEl.textContent = stamps.length;
-            if (stCountEl) stCountEl.textContent = `${visitedStamps}/${stamps.length}`;
-            if (stBarEl) stBarEl.style.width = `${stamps.length ? Math.round((visitedStamps / stamps.length) * 100) : 0}%`;
-
-            const gachas = getAllGacha();
-            const allGachaFree = [...gachas, ...baseFreebieItems];
-            const visitedGacha = allGachaFree.filter(g => completedIds[g.id]).length;
-            const gcCountEl = document.getElementById('gacha-count');
-            if (gcCountEl) gcCountEl.textContent = `${visitedGacha}/${allGachaFree.length}`;
-
-            const navMapEl = document.getElementById('nav-map-label');
-            if (navMapEl) navMapEl.textContent = `6. พิกัดทั้งหมด (${getAllPlaces().length})`;
-        }
-
-        function switchTab(tabName) {
-            if (tabName === 'traveler' && !isTravelerUnlocked) {
-                openPinModal();
-                return;
-            }
-            document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
-            const target = document.getElementById(`tab-${tabName}`);
-            if (target) target.classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.dataset.tab === tabName) {
-                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold';
-                } else {
-                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium';
-                }
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function openPinModal() {
-            const input = document.getElementById('pin-input');
-            const err = document.getElementById('pin-error');
-            if (input) input.value = '';
-            if (err) err.classList.add('hidden');
-            const modal = document.getElementById('pin-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => input && input.focus(), 100);
-        }
-
-        function closePinModal() {
-            const modal = document.getElementById('pin-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function verifyTravelerPin(e) {
-            e.preventDefault();
-            const val = document.getElementById('pin-input').value.trim();
-            if (val === TRAVELER_PIN) {
-                isTravelerUnlocked = true;
-                closePinModal();
-                renderTravelerTab();
-                switchTab('traveler');
-                showToast('ปลดล็อกข้อมูลผู้เดินทางแล้ว');
-            } else {
-                document.getElementById('pin-error').classList.remove('hidden');
-            }
-        }
-
-        function lockTravelerTab() {
-            isTravelerUnlocked = false;
-            switchTab('daily');
-            showToast('ล็อกหน้าข้อมูลผู้เดินทางแล้ว');
-        }
-
-        function saveTravelerInfo() {
-            travelerData.travelers.forEach((t, idx) => {
-                t.fullName = document.getElementById(`t-fullname-${idx}`)?.value.trim() || '';
-                t.nickname = document.getElementById(`t-nickname-${idx}`)?.value.trim() || '';
-                t.passportNo = document.getElementById(`t-passport-${idx}`)?.value.trim() || '';
-                t.dob = document.getElementById(`t-dob-${idx}`)?.value.trim() || '';
-                t.expiryDate = document.getElementById(`t-expiry-${idx}`)?.value.trim() || '';
-                t.flights = {
-                    outNo: document.getElementById(`t-flight-out-no-${idx}`)?.value.trim() || '',
-                    outPnr: document.getElementById(`t-flight-out-pnr-${idx}`)?.value.trim() || '',
-                    outTime: document.getElementById(`t-flight-out-time-${idx}`)?.value.trim() || '',
-                    outSeat: document.getElementById(`t-flight-out-seat-${idx}`)?.value.trim() || '',
-                    inNo: document.getElementById(`t-flight-in-no-${idx}`)?.value.trim() || '',
-                    inPnr: document.getElementById(`t-flight-in-pnr-${idx}`)?.value.trim() || '',
-                    inTime: document.getElementById(`t-flight-in-time-${idx}`)?.value.trim() || '',
-                    inSeat: document.getElementById(`t-flight-in-seat-${idx}`)?.value.trim() || ''
-                };
-            });
-            travelerData.notes = {
-                busanHotel: document.getElementById('note-busan-hotel')?.value.trim() || '',
-                seoulHotel: document.getElementById('note-seoul-hotel')?.value.trim() || '',
-                insurance: document.getElementById('note-insurance')?.value.trim() || '',
-                esim: document.getElementById('note-esim')?.value.trim() || '',
-                general: document.getElementById('note-general')?.value.trim() || ''
-            };
-            travelerData.lastSaved = getCheckinTimestamp();
-            bumpMinorVersion();
-            saveState();
-            renderTravelerTab();
-            showToast('บันทึกข้อมูลผู้เดินทางเรียบร้อยแล้ว!');
-        }
-
-        async function handlePassportUpload(e, idx) {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-            showToast('กำลังอัปโหลดและย่อรูปพาสปอร์ต...');
-            const compressed = await compressImageFile(file, 900, 0.8);
-            if (compressed) {
-                travelerData.travelers[idx].passportImg = compressed;
-                saveState();
-                renderTravelerTab();
-                showToast('อัปโหลดรูปพาสปอร์ตเรียบร้อยแล้ว');
-            }
-        }
-
-        function removePassportImage(idx) {
-            travelerData.travelers[idx].passportImg = '';
-            saveState();
-            renderTravelerTab();
-            showToast('ลบรูปพาสปอร์ตแล้ว');
-        }
-
-        function openImageViewer(src) {
-            const img = document.getElementById('viewer-img');
-            const modal = document.getElementById('image-viewer-modal');
-            if (img && modal) {
-                img.src = src;
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        }
-
-        function closeImageViewer() {
-            const modal = document.getElementById('image-viewer-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
-
-        function openVersionModal() {
-            const modal = document.getElementById('version-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeVersionModal() {
-            const modal = document.getElementById('version-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function openConfirmModal(message, onConfirm) {
-            document.getElementById('confirm-modal-text').textContent = message;
-            pendingConfirmCallback = onConfirm;
-            const modal = document.getElementById('confirm-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.getElementById('confirm-modal-yes').onclick = () => {
-                closeConfirmModal();
-                if (typeof pendingConfirmCallback === 'function') pendingConfirmCallback();
-            };
-        }
-
-        function closeConfirmModal() {
-            const modal = document.getElementById('confirm-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function resetAllProgress() {
-            completedIds = {};
-            checkinNotes = {};
-            placePhotos = {};
-            noteAuthors = {};
-            placeThreads = {};
-            saveState();
-            refreshAllViews();
-            showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
-        }
-
-        function getThreadsForItem(itemId) {
-            if (Array.isArray(placeThreads[itemId]) && placeThreads[itemId].length > 0) {
-                return placeThreads[itemId];
-            }
-            const legacyNote = checkinNotes[itemId];
-            const legacyPhotos = Array.isArray(placePhotos[itemId]) ? placePhotos[itemId] : [];
-            if (legacyNote || legacyPhotos.length > 0) {
-                return [{
-                    id: 'legacy_' + itemId,
-                    author: noteAuthors[itemId] || 'BOTH',
-                    text: legacyNote || '',
-                    photos: legacyPhotos,
-                    timestamp: typeof completedIds[itemId] === 'string' ? completedIds[itemId] : ''
-                }];
-            }
-            return [];
-        }
-
-        function renderBubbleThreadHtml(itemId, placeTitle = '') {
-            const posts = getThreadsForItem(itemId);
-            if (!posts.length) return '';
-            const safeTitle = (placeTitle || '').replace(/'/g, "\\'");
-
-            return `<div class="mt-2.5 space-y-2">
-                ${posts.map(post => {
-                    const isPpwr = post.author === 'PPWR';
-                    const isPpsr = post.author === 'PPSR';
-                    const boxStyle = isPpwr
-                        ? 'bg-purple-50/85 border-purple-200/90 text-purple-950'
-                        : isPpsr
-                        ? 'bg-sky-50/85 border-sky-200/90 text-sky-950'
-                        : 'bg-amber-50/80 border-amber-200/80 text-slate-800';
-
-                    return `<div class="rounded-2xl border ${boxStyle} px-3.5 py-2.5 text-xs">
-                        <div class="flex items-center justify-between gap-2 mb-1">
-                            <div class="flex items-center gap-1.5">
-                                ${renderAuthorBadge(post.author)}
-                                ${post.timestamp ? `<span class="text-[10px] text-slate-400 font-medium">${post.timestamp}</span>` : ''}
-                            </div>
-                            <button onclick="openNoteModal('${itemId}', '${safeTitle}')" class="text-[10px] text-slate-500 hover:text-slate-900 font-semibold">+ โพสต์ต่อ</button>
-                        </div>
-                        ${post.text ? `<p class="leading-relaxed whitespace-pre-line">${post.text}</p>` : ''}
-                        ${renderPhotoGalleryHtml(post.photos)}
-                    </div>`;
-                }).join('')}
-            </div>`;
-        }
-
-        function exportScrapbookHTML() {
-            const soloItems = userCustomPlaces
-                .filter(cp => cp.addSolo)
-                .sort((a, b) => (a.soloDate || '').localeCompare(b.soloDate || ''));
-            const dailyPlans = getDailyPlanWithCustom();
-
-            const authorPill = (a) => {
-                if (a === 'PPWR') return '<span style="background:#f3e8ff;color:#6b21a8;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">💜 PPWR</span>';
-                if (a === 'PPSR') return '<span style="background:#e0f2fe;color:#075985;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">💙 PPSR</span>';
-                if (a === 'BOTH') return '<span style="background:#f1f5f9;color:#334155;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">👫 PPWR &amp; PPSR</span>';
-                return '';
-            };
-
-            const renderPhotosPrint = (photos) => {
-                if (!Array.isArray(photos) || !photos.length) return '';
-                return `<div style="display:grid;grid-template-columns:repeat(${Math.min(photos.length, 3)},1fr);gap:8px;margin-top:8px;">
-                    ${photos.map(src => `<img src="${src}" style="width:100%;height:165px;object-fit:cover;border-radius:12px;border:1px solid #e2e8f0;">`).join('')}
-                </div>`;
-            };
-
-            const renderThreadsPrint = (itemId) => {
-                const posts = getThreadsForItem(itemId);
-                if (!posts.length) return '';
-                return posts.map(post => {
-                    const bg = post.author === 'PPWR' ? '#faf5ff;border-color:#e9d5ff;' : post.author === 'PPSR' ? '#f0f9ff;border-color:#bae6fd;' : '#fffbeb;border-color:#fde68a;';
-                    return `<div style="background:${bg}border-width:1px;border-style:solid;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:12px;">
-                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-                            ${authorPill(post.author)}
-                            ${post.timestamp ? `<span style="color:#94a3b8;font-size:10px;">${post.timestamp}</span>` : ''}
-                        </div>
-                        ${post.text ? `<div style="line-height:1.5;color:#1e293b;">${post.text}</div>` : ''}
-                        ${renderPhotosPrint(post.photos)}
-                    </div>`;
-                }).join('');
-            };
-
-            let soloHtml = '';
-            if (soloItems.length > 0) {
-                soloHtml = `<h2 style="margin-top:28px;color:#6b21a8;border-bottom:2px solid #e9d5ff;padding-bottom:6px;">✨ ช่วงเดินทางล่วงหน้า: Solo Log (30 พ.ย. – 5 ธ.ค. 2569)</h2>` +
-                    soloItems.map(cp => {
-                        const key = `solo_${cp.id}`;
-                        const meta = soloDaysMeta.find(m => m.dateKey === cp.soloDate);
-                        const visited = completedIds[key];
-                        const author = noteAuthors[key] || cp.author || 'PPWR';
-                        return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
-                            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
-                                <div><strong>${meta ? meta.label : ''}</strong> ${cp.soloTime ? '• ' + cp.soloTime : ''} ${authorPill(author)}</div>
-                                ${visited ? `<span style="color:#059669;font-weight:800;font-size:11px;border:1.5px solid #059669;padding:2px 8px;border-radius:6px;">VISITED ✓</span>` : ''}
-                            </div>
-                            <div style="font-size:15px;font-weight:700;">${cp.name}</div>
-                            ${cp.addr ? `<p style="font-size:13px;color:#475569;margin:4px 0;">${cp.addr}</p>` : ''}
-                            ${renderThreadsPrint(key)}
-                        </div>`;
-                    }).join('');
-            }
-
-            const dailyHtml = dailyPlans.map(d => {
-                const evHtml = d.events.map(ev => {
-                    const visited = completedIds[ev.id];
-                    const author = noteAuthors[ev.id] || ev.author || '';
-                    return `<div style="border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
-                            <div style="font-size:12px;color:#2563eb;font-weight:700;">${ev.time} ${authorPill(author)}</div>
-                            ${visited ? `<span style="color:#059669;font-weight:800;font-size:11px;border:1.5px solid #059669;padding:2px 8px;border-radius:6px;">VISITED ✓ ${typeof visited === 'string' ? visited : ''}</span>` : ''}
-                        </div>
-                        <div style="font-size:15px;font-weight:700;">${ev.title}</div>
-                        <p style="font-size:13px;color:#475569;margin:4px 0;">${ev.desc}</p>
-                        ${renderThreadsPrint(ev.id)}
-                    </div>`;
-                }).join('');
-                return `<h2 style="margin-top:28px;color:#0f172a;border-bottom:2px solid #cbd5e1;padding-bottom:6px;">Day ${d.day} (${d.date} 2569) • ${d.city} — ${d.title}</h2>${evHtml}`;
-            }).join('');
-
-            const win = window.open('', '_blank');
-            if (!win) {
-                showToast('กรุณาอนุญาต Pop-up เพื่อเปิดหน้า Export Scrapbook');
-                return;
-            }
-            win.document.write(`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>PP_R in KOREA 2026 - Travel Scrapbook</title>
-                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700;800&display=swap" rel="stylesheet">
-                <style>body{font-family:'Noto Sans Thai',sans-serif;max-width:820px;margin:0 auto;padding:24px;background:#f8fafc;color:#0f172a;}@media print{.no-print{display:none;}body{background:#fff;padding:0;}}</style>
-                </head><body>
-                <div class="no-print" style="background:#0f172a;color:#fff;padding:14px 20px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                    <div><strong>📖 PP_R in KOREA 2026 Scrapbook</strong><div style="font-size:12px;color:#94a3b8;">กดปุ่มด้านขวาเพื่อพิมพ์หรือบันทึกเป็นไฟล์ PDF</div></div>
-                    <button onclick="window.print()" style="background:#38bdf8;color:#0f172a;border:none;padding:10px 18px;border-radius:12px;font-weight:800;cursor:pointer;">🖨️ พิมพ์ / Save PDF</button>
-                </div>
-                <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:24px;">
-                    <div style="font-size:34px;">🇰🇷📸</div>
-                    <h1 style="margin:6px 0;font-size:28px;">PP_R in KOREA 2026</h1>
-                    <p style="margin:0;color:#bae6fd;font-size:14px;">สมุดบันทึกการเดินทาง PPWR &amp; PPSR • 30 พ.ย. – 12 ธ.ค. 2569</p>
-                </div>
-                ${soloHtml}
-                ${dailyHtml}
-                </body></html>`);
-            win.document.close();
-        }
-
-        const soloDaysMeta = [
-            { dateKey: '2026-11-30', shortDate: '30 พ.ย.', label: 'จ. 30 พ.ย. 2569', subtitle: 'วันที่ 30 พ.ย. 2569' },
-            { dateKey: '2026-12-01', shortDate: '1 ธ.ค.', label: 'อ. 1 ธ.ค. 2569', subtitle: 'วันที่ 1 ธ.ค. 2569' },
-            { dateKey: '2026-12-02', shortDate: '2 ธ.ค.', label: 'พ. 2 ธ.ค. 2569', subtitle: 'วันที่ 2 ธ.ค. 2569' },
-            { dateKey: '2026-12-03', shortDate: '3 ธ.ค.', label: 'พฤ. 3 ธ.ค. 2569', subtitle: 'วันที่ 3 ธ.ค. 2569' },
-            { dateKey: '2026-12-04', shortDate: '4 ธ.ค.', label: 'ศ. 4 ธ.ค. 2569', subtitle: 'วันที่ 4 ธ.ค. 2569' },
-            { dateKey: '2026-12-05', shortDate: '5 ธ.ค.', label: 'ส. 5 ธ.ค. 2569', subtitle: 'วันที่ 5 ธ.ค. 2569' }
+        const baseSeriesItems = [
+            { id: 'ser_hdl_1', seriesTitle: 'Hotel Del Luna (호텔 델루나)', zone: 'โซล: Jongno & Ikseon', name: 'Hotel Seine Cafe (호텔세느장) — อาคารโรงแรมเรโทรสีชมพู', kr: '호텔세느장', sceneTag: 'Pink Vintage Hotel • 6F Rooftop', sceneTheme: 'from-rose-950 via-pink-900 to-amber-900', sceneIcon: '🏨🌙', sceneCaption: 'ตึกวินเทจสีชมพู 6 ชั้นย่านอิกซอนดง แรงบันดาลใจโรงแรมของจางมันวอล', desc: 'สาย 5 สถานี Jongno 3-ga ทางออก 4 เดิน 2 นาที (แวะคู่กับหมู่บ้านฮันอกอิกซอนดงใน Day 3 ได้ทันที)' },
+            { id: 'ser_hdl_2', seriesTitle: 'Hotel Del Luna (호텔 델루나)', zone: 'โซล: Jongno & Ikseon', name: 'ร้านเกี๊ยว Changhwadang (창화당 익선점) — ร้านโปรดจางมันวอล', kr: '창화당 익선점', sceneTag: 'Gourmet Scene • Pan-Fried Dumplings', sceneTheme: 'from-amber-950 via-orange-900 to-rose-950', sceneIcon: '🥟✨', sceneCaption: 'ซีนจางมันวอลแวะทานเกี๊ยวทอดกรอบขึ้นชื่อในย่านอิกซอนดง', desc: 'อยู่ติดกับ Hotel Seine Cafe ในซอยอิกซอนดง เดินถึงกันใน 1 นาที แนะนำเมนูเกี๊ยวรวมทอดกรอบ' },
+            { id: 'ser_hdl_3', seriesTitle: 'Hotel Del Luna (호텔 델루나)', zone: 'โซล: Gangnam & Jamsil', name: 'Seoul Book Bogo (서울책보고) — อุโมงค์หนังสือลึกลับ', kr: '서울책보고', sceneTag: 'Ep.2 Secret Library • Book Tunnel', sceneTheme: 'from-indigo-950 via-purple-900 to-slate-900', sceneIcon: '📚🔮', sceneCaption: 'อุโมงค์ชั้นหนังสือโค้งเรียงยาว ฉากห้องสมุดลึกลับของโรงแรม Del Luna', desc: 'สาย 2 สถานี Jamsillaru ทางออก 1 เดิน 3 นาที (ห่างจาก Lotte World Mall ใน Day 5 เพียง 1 สถานี)' },
+            { id: 'ser_hdl_4', seriesTitle: 'Hotel Del Luna (호텔 델루나)', zone: 'โซล: Jongno & Myeongdong', name: 'ทางเดินกำแพงหิน Seosulla-gil (서순라길) — มุมเดินเล่นยามค่ำ', kr: '서순라길', sceneTag: 'Night Stroll • Stone Wall Alley', sceneTheme: 'from-slate-950 via-indigo-950 to-purple-950', sceneIcon: '🏮🌃', sceneCaption: 'ตรอกเลียบกำแพงหินชงมโย บรรยากาศโรแมนติกลึกลับยามค่ำคืน', desc: 'อยู่ติดกับอิกซอนดงและร้านคาเฟ่ Fikee เดินต่อจาก Jongno 3-ga ได้สะดวก' },
+            { id: 'ser_2521_1', seriesTitle: 'Twenty-Five Twenty-One (2521)', zone: 'โซล: Jongno & Seodaemun', name: 'Donuimun Museum Village (หมู่บ้านพิพิธภัณฑ์ยุค 1998)', kr: '돈의문박물관마을', sceneTag: '1998 Retro Street • Neon Signs', sceneTheme: 'from-emerald-950 via-teal-900 to-cyan-950', sceneIcon: '📼🏘️', sceneCaption: 'ตรอกร้านค้า ป้ายไฟ และบ้านเรือนยุคปี 1998 บรรยากาศย้อนยุค 90s', desc: 'สาย 5 สถานี Seodaemun ทางออก 4 เดิน 3 นาที • บรรยากาศย่านบ้านเรือน ร้านค้า และป้ายไฟยุคปลาย 90 ที่ใช้ถ่ายทำหลายซีนในเรื่อง 2521' },
+            { id: 'ser_2521_2', seriesTitle: 'Twenty-Five Twenty-One (2521)', zone: 'โซล: Jongno & Seochon', name: 'ตรอกย่านซอชน (Seochon Village) & ร้านเครื่องเขียนเก่า', kr: '서촌마을', sceneTag: 'Night Walk • Hee-do & Yi-jin Alley', sceneTheme: 'from-blue-950 via-indigo-900 to-sky-900', sceneIcon: '🚲🌙', sceneCaption: 'ซอยบ้านพักอาศัยเก่าแก่ยุค 90 ฟีลเดินคุยกันริมทางยามค่ำคืน', desc: 'สาย 3 สถานี Gyeongbokgung ทางออก 2 (อยู่ตรงข้ามย่านอันกุก/บุกชอน) • ซอยบ้านพักอาศัยยุค 90 ฟีลซอยบ้านนาฮีโดและแพคอีจินเดินคุยกันตอนกลางคืน' },
+            { id: 'ser_2521_3', seriesTitle: 'Twenty-Five Twenty-One (2521)', zone: 'โซล: Jongno & Myeongdong', name: 'ตรอกร้านอาหาร & บาร์ยุค 90 ย่านอึลจิโร 3-กา (Euljiro 3-ga)', kr: '을지로3가', sceneTag: '90s Hipjiro • Friends Gathering', sceneTheme: 'from-amber-950 via-red-950 to-slate-900', sceneIcon: '🍻🏮', sceneCaption: 'ตรอกร้านปิ้งย่างและป้ายไฟเรโทรย่านอึลจิโร ฉากนัดรวมตัวแก๊งเพื่อน', desc: 'สาย 2 / สาย 3 สถานี Euljiro 3-ga (เชื่อมเมียงดง & คลองชองกเยชอน) • โลเคชั่นฉากนัดกินเลี้ยงของแก๊งเพื่อนวัยทำงานยุค 90' },
+            { id: 'ser_2521_4', seriesTitle: 'Twenty-Five Twenty-One (2521)', zone: 'โซล: Seongsu & Ttukseom', name: 'อุโมงค์ใต้สะพานแม่น้ำฮัน Ttukseom Hangang Tunnel (ฉากซ้อมฟันดาบ)', kr: '뚝섬한강공원', sceneTag: 'Iconic Tunnel • Fencing Training', sceneTheme: 'from-orange-950 via-amber-900 to-stone-900', sceneIcon: '🤺🧡', sceneCaption: 'อุโมงค์ไฟสีส้มสลัวริมแม่น้ำฮัน ซีนซ้อมฟันดาบสุดไอคอนิกของนาฮีโด', desc: 'สาย 7 สถานี Jayang ทางออก 2/3 (ติดจุดชมวิว Starbucks Ttukseom ใน Day 5) • อุโมงค์ทางเดินริมแม่น้ำฮันไฟสีส้มสลัว ฉากนาฮีโดซ้อมฟันดาบและวิ่งกับแพคอีจิน' },
+            { id: 'ser_2521_5', seriesTitle: 'Twenty-Five Twenty-One (2521)', zone: 'โซล: Hongdae & Sinchon', name: 'สะพานลอย & ถนนย่านมหาวิทยาลัยชินชน (Sinchon)', kr: '신촌역', sceneTag: 'Y2K Campus • Book & CD Rental', sceneTheme: 'from-sky-950 via-blue-900 to-indigo-950', sceneIcon: '💿📖', sceneCaption: 'สะพานลอยและถนนย่านมหาวิทยาลัย บรรยากาศร้านเช่าหนังสือยุค Y2K', desc: 'สาย 2 สถานี Sinchon (ห่างจากฮงแด 1 สถานี) • ฉากเดินเล่นย่านมหาวิทยาลัยและร้านหนังสือ/ร้านเช่าซีดีเพลงของแพคอีจิน' },
+            { id: 'ser_b1', seriesTitle: 'Reply 1988 (응답하라 1988)', zone: 'โซล: Jongno & Seochon', name: 'ร้านขายของชำ & ตรอกซังมุนดง (ฉากบันไดและร้านขนมย้อนยุค)', kr: '쌍문동', sceneTag: '1988 Retro Alley • Neighborhood Steps', sceneTheme: 'from-yellow-950 via-amber-900 to-orange-950', sceneIcon: '📺🏡', sceneCaption: 'ร้านขายของชำหน้าปากซอยและบันไดรวมตัวของแก๊งซังมุนดงปี 1988', desc: 'ย่านซังมุนดง (Dobong-gu) และร้านขนมโบราณแถวซอชน/จงโน บรรยากาศยุคปี 1988 ของแก๊งด็อกซอน-จองฮวัน-แทค' },
+            { id: 'ser_b2', seriesTitle: 'Reply 1988 (응답하라 1988)', zone: 'โซล: Jongno & Samcheong', name: 'บันไดหินจงโน / ซัมชองดง (ฉากเดินกลับบ้านกับแทค & จองฮวัน)', kr: '삼청동길', sceneTag: 'Stone Stairs • Evening Walk Home', sceneTheme: 'from-stone-900 via-slate-800 to-amber-950', sceneIcon: '🪜🍂', sceneCaption: 'ตรอกบันไดหินและกำแพงบ้านโบราณ ฉากเดินกลับบ้านยามค่ำในซัมชองดง', desc: 'ตรอกบันไดหินและกำแพงบ้านโบราณย่านซัมชองดง–อันกุก ที่ใช้ถ่ายทำฉากเดินกลับบ้านยามค่ำ' },
+            { id: 'ser_b6', seriesTitle: 'Lovely Runner (선재 업고 튀어)', zone: 'คยองกี: Suwon', name: 'Mongted Cafe (ร้านกาแฟหน้าบ้านอิมซล & ซอนแจ)', kr: '몽테드', sceneTag: 'Blue & Yellow Brick • Umbrella Scene', sceneTheme: 'from-sky-900 via-blue-800 to-amber-700', sceneIcon: '☂️💛', sceneCaption: 'บ้านอิฐสีฟ้า-เหลืองในย่านแฮงกุงดง มุมกางร่มสีเหลืองหน้าบ้านอิมซล', desc: 'คาเฟ่บ้านอิฐสีฟ้า-เหลืองในย่าน Haenggung-dong เมืองซูวอน โลเคชั่นหลักหน้าบ้านนางเอก-พระเอก (แวะคู่กับ Gyeonggi Library ได้)' },
+            { id: 'ser_b7', seriesTitle: 'Goblin (도깨비)', zone: 'โซล: Jongno & Anguk', name: 'กำแพงหินพระราชวังถ็อกซูกุง & ย่านอันกุก (ฉากเดินกางร่ม)', kr: '덕수궁 돌담길', sceneTag: 'Rainy Encounter • Stone Wall Path', sceneTheme: 'from-slate-900 via-cyan-950 to-slate-800', sceneIcon: '☔🕯️', sceneCaption: 'ทางเดินเลียบกำแพงหินถ็อกซูกุง ซีนเดินสวนกันท่ามกลางสายฝนสุดคลาสสิก', desc: 'ถนนเลียบกำแพงหิน Deoksugung Doldam-gil และย่าน Anguk ฉากพบกันครั้งแรกท่ามกลางสายฝนของลุงยักษ์และอึนทัก' },
+            { id: 'ser_b8', seriesTitle: 'Our Beloved Summer (그 해 우리는)', zone: 'โซล: Jongno & Bukchon', name: 'บ้านชเวอุง & ตรอกบันไดย่านบุกชอน / ซอชน', kr: '북촌한옥마을', sceneTag: 'Artist Studio • Cherry Blossom Steps', sceneTheme: 'from-rose-900 via-pink-800 to-amber-800', sceneIcon: '🎨🌸', sceneCaption: 'ตรอกบันไดและบ้านเงียบสงบย่านบุกชอน สตูดิโอวาดภาพของชเวอุง', desc: 'มุมตรอกบ้านและบันไดหินย่านบุกชอน-ซอชน โลเคชั่นบ้านและสตูดิโอวาดภาพของชเวอุง' }
         ];
 
-        function renderAuthorBadge(author) {
-            if (author === 'PPWR') {
-                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">💜 PPWR</span>`;
-            }
-            if (author === 'PPSR') {
-                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800 border border-sky-200">💙 PPSR</span>`;
-            }
-            if (author === 'BOTH') {
-                return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">👫 PPWR &amp; PPSR</span>`;
-            }
-            return '';
-        }
-
-        function compressImageFile(file, maxWidth = 800, quality = 0.75) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width;
-                        let h = img.height;
-                        if (w > maxWidth) {
-                            h = Math.round((h * maxWidth) / w);
-                            w = maxWidth;
-                        }
-                        canvas.width = w;
-                        canvas.height = h;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
-                    };
-                    img.onerror = () => resolve(null);
-                    img.src = e.target.result;
-                };
-                reader.onerror = () => resolve(null);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function renderPhotoGalleryHtml(photos) {
-            if (!Array.isArray(photos) || photos.length === 0) return '';
-            const gridCols = photos.length === 1 ? 'grid-cols-1 max-w-xs' : photos.length === 2 ? 'grid-cols-2' : 'grid-cols-3';
-            return `
-                <div class="mt-2.5 grid ${gridCols} gap-2">
-                    ${photos.map((src, idx) => `
-                        <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 aspect-square group">
-                            <img src="${src}" onclick="openImageViewer('${src}')" alt="Memory Photo ${idx + 1}" class="w-full h-full object-cover cursor-zoom-in group-hover:scale-105 transition duration-300">
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
+        // ---------------------------------------------------------
+        // BASE LIBRARY SIGHTSEEING LIST (11 SPOTS)
+        // ---------------------------------------------------------
+        const baseLibraryItems = [
+            { id: 'lib_b1', zone: 'โซล: Gangnam', name: 'TERAROSA POSCO Center (@terarosacoffee)', kr: '테라로사 포스코센터점', desc: '📍 POSCO Center 1F, 440 Tehran-ro, Gangnam-gu, Seoul • ⌚️ จ.–ศ. 07:30–21:00 / ส.–อา. 08:30–21:00 น. (คาเฟ่ห้องสมุดผนังหนังสือสูงตระหง่าน)' },
+            { id: 'lib_b2', zone: 'โซล: Songpa & Jamsil', name: 'National Sports Museum Library (국립체육박물관 도서관)', kr: '국립체육박물관', desc: '📍 424 Olympic-ro, Songpa-gu, Seoul • ⌚️ 09:30–17:30 น. (ปิดวันจันทร์) • 🎟️ เข้าใช้บริการฟรี' },
+            { id: 'lib_b3', zone: 'คยองกี: Uijeongbu', name: 'Uijeongbu Art Library (의정부미술도서관)', kr: '의정부미술도서관', desc: '📍 248 Minrak-ro, Uijeongbu-si, Gyeonggi • ⌚️ อ.–ศ. 09:00–21:00 / ส.–อา. 09:00–18:00 น. (ปิดวันจันทร์) • 🎟️ เข้าฟรี' },
+            { id: 'lib_b4', zone: 'คยองกี: Suwon', name: 'Gyeonggi Library (경기도서관)', kr: '경기도서관', desc: '📍 40 Docheong-ro, Yeongtong-gu, Suwon-si, Gyeonggi • ⌚️ จ.–ศ. 10:00–21:00 / ส.–อา. 10:00–18:00 น. (ปิดวันจันทร์ที่ 2 และ 3 ของเดือน) • 🎟️ เข้าฟรี' },
+            { id: 'lib_b5', zone: 'โซล: Gangdong (ใกล้ที่พัก)', name: 'Gangdong Forest Library (강동숲속도서관)', kr: '강동숲속도서관', desc: '📍 587 Gucheon-myeon-ro, Gangdong-gu, Seoul • ⌚️ พ.–อา. 09:00–22:00 (ส.–อา. ถึง 17:00 น. / ปิดวันอังคาร) • 🎟️ เข้าฟรี' },
+            { id: 'lib_b6', zone: 'โซล: Songpa', name: 'Instead of Graphic Buy (B1 Wirye)', kr: '위례순환로 387', desc: '📍 B1F, 387 Wiryesunhwan-ro, Songpa-gu, Seoul • ⌚️ 10:00–21:00 น. (ปิดวันจันทร์) • 💳 มีค่าเข้าใช้บริการ (Paid)' },
+            { id: 'lib_b7', zone: 'โซล: Jongno', name: 'Inwang Mountain Forest Shelter (인왕산 숲속쉼터)', kr: '인왕산 숲속쉼터', desc: '📍 San 4-36 Cheongun-dong, Jongno-gu, Seoul • ⌚️ 10:00–17:00 น. (ปิดวันจันทร์) • 🎟️ เข้าใช้บริการฟรี (ศาลาไม้กลางป่าบนเขาอินวังซาน)' },
+            { id: 'lib_b8', zone: 'คยองกี: Paju', name: 'Yeolhwa Party Book Museum / Youlhwadang (열화당 책박물관)', kr: '열화당 책박물관', desc: '📍 25 Gwanginsa-gil, Paju-si, Gyeonggi (Paju Book City) • ⌚️ 13:00–17:00 น. (ปิดวันอาทิตย์) • 💳 มีค่าเข้าชม (Paid)' },
+            { id: 'lib_b9', zone: 'โซล: Yongsan', name: 'War Memorial Library (전쟁기념관 도서관)', kr: '전쟁기념관', desc: '📍 2F War Memorial Hall, 29 Itaewon-ro, Yongsan-gu, Seoul • ⌚️ 09:30–18:00 น. (ปิดวันจันทร์) • 🎟️ เข้าใช้บริการฟรี' },
+            { id: 'lib_b10', zone: 'คยองกี: Bundang', name: 'Connect Lounge (NAVER Green Factory 2F)', kr: '네이버 그린팩토리', desc: '📍 2F Green Factory, 6 Buljeong-ro, Bundang-gu, Seongnam-si, Gyeonggi • ⌚️ จ.–ศ. 09:30–19:30 น. (ปิดเสาร์–อาทิตย์) • 🎟️ เข้าฟรี' },
+            { id: 'lib_b11', zone: 'โซล: Seocho', name: 'Seocho Bangbae Forest Environmental Library (서초구립 방배숲환경도서관)', kr: '서초구립방배숲환경도서관', desc: '📍 160-7 Seocho-daero, Seocho-gu, Seoul • ⌚️ จ.–พฤ. 09:00–22:00 / ส.–อา. 09:00–18:00 น. (ปิดวันศุกร์) • 🎟️ เข้าฟรี' }
+        ];
 
         // ---------------------------------------------------------
-        // COMPREHENSIVE CAFE, DESSERT & RESTAURANT LIST (44+ SPOTS)
+        // BASE CAFE, DESSERT & RESTAURANT GUIDE
         // ---------------------------------------------------------
         const baseCafeFoodItems = [
-            // ปูซาน (Busan)
-            { id: 'cf_b1', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'ตลาดแฮอุนแด (Haeundae Traditional Market)', kr: '해운대전통시장', menu: 'ต๊อกบกกี, โอเด้ง, ปลาไหลย่าง, ซีฟู้ด, โฮต็อกน้ำผึ้ง', note: 'เปิด 09:00–22:00 น. สาย 2 สถานี Haeundae ทางออก 3/5 เดิน 350 ม.' },
-            { id: 'cf_b2', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Baro Haejang (바로해장 ใกล้หาดกวางอัลลี)', kr: '바로해장 광안점', menu: 'ซุปเนื้อวัว (Beef Haejangguk), ก๋วยเตี๋ยวอูด้งซุปเนื้อ', note: 'เปิด 09:00–22:00 น. สาย 2 สถานี Geumnyeonsan ทางออก 1 (2 Gwangnam-ro 94beon-gil)' },
-            { id: 'cf_b3', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Having Moment (해빙모먼트 ยองโด)', kr: '해빙모먼트', menu: 'กาแฟสเปเชียลตี้ ขนมอบ และวิวทะเลเกาะยองโด', note: 'เปิด 09:00–20:00 น. สาย 1 สถานี Nampo ทางออก 6 ต่อรถบัสสาย 71 (ใกล้หมู่บ้านฮึนยออุล)' },
-            { id: 'cf_b4', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ATELIER:O Coffee Shop (ยองโด)', kr: '아뜰리에오 영도', menu: 'กาแฟดริป ขนมโฮมเมด วิวทะเลมุมสูงยองโด', note: 'เปิด 10:00–20:00 น. (Last order 19:30) 204 Jeoryeong-ro, Yeongdo-gu' },
-            { id: 'cf_b5', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Thrill On The Mug (스릴온더머그 ยองโด)', kr: '스릴온더머그', menu: 'คาเฟ่วิวทะเลและหน้าผาสุดอลังการบนเกาะยองโด', note: 'เปิด 10:00–22:00 น. Dongsam-dong, Yeongdo-gu' },
-            { id: 'cf_b6', zone: 'ปูซาน (Busan)', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Sogeumppang & Jayeondo Hae (자연도소금빵 ปูซาน)', kr: '자연도소금빵 해운대', menu: 'ขนมปังเกลืออบสดใหม่ (Salt Bread) ใกล้ Blueline Park Mipo', note: 'เปิด 09:00–22:00 น. สถานี Jungdong ทางออก 7 เดิน 7 นาที (12-1 Dalmaji-gil 62beon-gil)' },
-            { id: 'cf_b7', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Junggunanbang (중구난방 ย่านจุงกู)', kr: '중구난방', menu: 'อาหารเกาหลีฟิวชัน / กับแกล้มบรรยากาศอบอุ่น', note: '9 Daecheong-ro 138beon-gil, Jung-gu, Busan (ใกล้นัมโพดง)' },
-            { id: 'cf_b8', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'H.US Coffee (คาเฟ่ริมทางรถไฟ Cheongsapo)', kr: '에이치어스커피', menu: 'อเมริกาโน่, ลาเต้, วิวรางรถไฟและประภาคารแฝด', note: 'จุดแวะพักช่วงเดินชมวิว Blueline Park Cheongsapo' },
-            { id: 'cf_b9', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'ถนนคาเฟ่จอนโพ (Jeonpo Cafe Street)', kr: '전포카페거리', menu: 'Specialty Coffee, คาเฟ่สไตล์มินิมอลและตู้สติกเกอร์ Cambag', note: 'ย่านซอมยอน (สถานี Jeonpo / Seomyeon)' },
-
-            // โซล: Anguk & Bukchon
-            { id: 'cf_s1', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Anguk (런던 베이글 뮤지엄)', kr: '런던베이글뮤지엄 안국점', menu: 'Potato Cheese Bagel, Spring Onion Pretzel Bagel', note: 'เปิด 08:00–18:00 น. สถานี Anguk ทางออก 2 (จองคิวแอป CatchTable ได้ จ.–พฤ. ตั้งแต่ 09:00 น.)' },
-            { id: 'cf_s2', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery Anguk (아티스트 베이커리)', kr: '아티스트베이커리 안국', menu: 'ขนมปังเกลือ (Salt Bread) หลากไส้ เช่น Earl Grey, Lemon, Potato', note: 'เปิดทุกวัน 07:30–20:00 น. สถานี Anguk ทางออก 1' },
-            { id: 'cf_s3', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Thanks, Oat Bukchon (땡스오트 안국)', kr: '땡스오트 안국', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สดและกราโนล่า', note: 'เปิด 08:00–19:30 น. สถานี Anguk ทางออก 2 เดิน 3–5 นาที (21-10 Bukchon-ro)' },
-            { id: 'cf_s4', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Dotori Garden Anguk (도토리 가든)', kr: '도토리 가든 안국', menu: 'กรีกโยเกิร์ตน้ำผึ้งรังผึ้ง, ขนมปังรูปผลโอ๊ค (บรรยากาศสวนสไตล์ Ghibli)', note: 'เปิดทุกวัน 08:00–23:00 น. สถานี Anguk ทางออก 3 (19-8 Gyedong-gil)' },
-            { id: 'cf_s5', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Blue Bottle Samcheong Cafe (블루보틀 삼청)', kr: '블루보틀 삼청 카페', menu: 'New Orleans Iced Coffee, Gibraltar Latte วิวหลังคาบ้านฮันอก', note: 'สถานี Anguk ทางออก 1 เดินผ่านหมู่บ้านฮันอก 10–15 นาที (76 Bukchon-ro 5-gil)' },
-            { id: 'cf_s6', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Layered Bukchon (레이어드 안국)', kr: '카페 레이어드 안국점', menu: 'สโคนหลากหลายรส, เค้กสไตล์อังกฤษในบ้านฮันอก', note: 'เปิดทุกวัน 08:00–22:00 น. 2-3 Bukchon-ro 2-gil, Jongno' },
-            { id: 'cf_s7', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Anguk (카페 어니언 안국점)', kr: '카페 어니언 안국점', menu: 'Pandoro ขนมปังภูเขาหิมะ, อเมริกาโน่', note: 'คาเฟ่บ้านฮันอกโบราณ สถานี Anguk ทางออก 3' },
-
-            // โซล: Jongno, Hyehwa & Myeongdong
-            { id: 'cf_s8', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Fikee (피키 ย่าน Seosulla-gil)', kr: '피키 서순라길', menu: 'กาแฟและขนมในย่านสุดฮิต Seosulla-gil ใกล้อิกซอนดง', note: 'สถานี Jongno 3-ga ทางออก 8 (แนะนำมาช่วงร้านเปิด แสงหน้าร้านสวย)' },
-            { id: 'cf_s9', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'MeBut (미벗 โมจิผลไม้ย่านทงแดมุน)', kr: '미벗 동대문', menu: 'Chapssaltteok Cake / ไดฟุกุโมจิสอดไส้ครีมและผลไม้สด', note: 'อ.–ส. 10:00–21:30 น. / อา. 10:00–18:00 น. (ปิดวันจันทร์) สถานี Dongdaemun ทางออก 1 หรือ 3' },
-            { id: 'cf_s10', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Gobongdang Hyehwa (고봉당 혜화대학로본점)', kr: '고봉당 혜화대학로본점', menu: 'Grilled Injeolmi Rice Cake (ต๊อกย่างโรยผงถั่ว), บิงซู', note: 'สาย 4 สถานี Hyehwa ทางออก 4 เดินเข้าซอยข้างร้าน Shoe Marker (1F, 8 Daemyeong 1-gil)' },
-            { id: 'cf_s11', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Baskin Robbins Jongno Branch (배스킨라빈스 종로)', kr: '배스킨라빈스 종로', menu: 'ไอศกรีมรสพิเศษเฉพาะเกาหลี', note: 'ย่านจงโน (Jongno)' },
-            { id: 'cf_s12', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านขนม / เบเกอรี', name: 'Eoreumkkot Ice Cream / Ppungeodang / Chidish / Les Amis Honnêtes', kr: '붕어빵 맛집', menu: 'ขนมปังปลา Bungeoppang ไส้ครีม ถั่วแดง และ Salt Bread Bungeoppang', note: 'ลิสต์ร้านขนมปังปลา Bungeoppang ในโซล' },
-            { id: 'cf_s13', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Cheongsudang Bakery (청수당 อิกซอนดง)', kr: '청수당 베이커리', menu: 'Souffle Castella, Matcha Cream Milk, สวนไผ่', note: 'หมู่บ้านฮันอกอิกซอนดง (Day 3)' },
-            { id: 'cf_s14', zone: 'โซล: Jongno & Myeongdong', type: 'ร้านอาหาร', name: 'Myeongdong Kyoja & สตรีทฟู้ดเมียงดง', kr: '명동교자 본점', menu: 'บะหมี่คัลกุกซู, เกี๊ยวนึ่งมันดู, ต๊อกบกกี, ขนมไข่', note: 'ย่านเมียงดง (Day 4)' },
-
-            // โซล: Yongsan, Hannam & Haebangchon
-            { id: 'cf_s15', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Tortoise Haebangchon (토터스 แฮบังชน)', kr: '토터스 해방촌', menu: 'ซูเฟล่แพนเค้กนุ่มฟู, เค้กโฮมเมด และกาแฟ', note: 'ย่านแฮบังชน (นั่งสาย 6 ลง Noksapyeong ทางออก 2 ต่อรถบัส Yongsan 02)' },
-            { id: 'cf_s16', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Haus Bakery Service (하우스베이커리서비스 แฮบังชน)', kr: '하우스베이커리서비스', menu: 'เบเกอรีอบสดใหม่ ครัวซองต์ และกาแฟในซอยเนินเขาแฮบังชน', note: 'เปิด 10:00–19:00 น. (เสาร์ถึง 20:00 น. / ปิดวันพุธ) สถานี Noksapyeong ทางออก 2' },
-            { id: 'cf_s17', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'CURVE HILL (커브힐 Brunch & Cafe ยงซาน)', kr: '커브힐', menu: 'เมนูบรันช์ ขนมปังซาวโดวจ์ และกาแฟ', note: 'จ.–ศ. 08:30–19:00 / ส. 09:00–19:00 น. สถานี Noksapyeong ทางออก 1/3 เดินขึ้นเนิน 2–6 นาที' },
-            { id: 'cf_s18', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'SAAN (산 เดิม FODI by SAAN ยงซาน)', kr: '산 용산', menu: 'กาแฟและขนมบรรยากาศสงบติดรางรถไฟ', note: 'เปิด 10:00–20:30 น. สาย 4 สถานี Ichon ทางออก 5 เดินเข้าซอยสุดทางติดรางรถไฟ' },
-            { id: 'cf_s19', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'mahā hannam (마하한남 คาเฟ่ตามรอยบยอนอูซอก)', kr: '마하한남', menu: 'ขนมและเครื่องดื่มจัด Display สวย ดีไซน์ร้านโดดเด่นชั้น 4', note: '4F, 85 Seobinggo-ro 91na-gil, Yongsan (แนะนำนั่งบัสหรือแท็กซี่มาสะดวกสุด)' },
-            { id: 'cf_s20', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Joosic (주식 ย่านอิแทวอน)', kr: '주식 이태원', menu: 'อาหารเกาหลีร่วมสมัยและเครื่องดื่ม', note: 'สาย 6 สถานี Itaewon ทางออก 1 เดินเข้าซอย Noksapyeong-daero 32-gil' },
-            { id: 'cf_s21', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'HBC Restaurant (해방식당 แฮบังชน)', kr: '해방식당', menu: 'Gamtae Salmon Roll, Galchi Sokjeot Pasta', note: 'ย่านแฮบังชน ใกล้ตลาดชินฮึง' },
-            { id: 'cf_s22', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'A Glass Of (어글라스오브 แฮบังชน)', kr: '어글라스오브', menu: 'เจลาโต้มัทฉะโรยเกลือ Maldon, บาแก็ตจิ้ม Kaymak & น้ำผึ้ง', note: 'ย่านแฮบังชน (บาร์ไอศกรีมตอนกลางวัน / ไวน์ตอนกลางคืน)' },
-            { id: 'cf_s23', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'คาเฟ่ / กาแฟ', name: 'Laundry Project (론드리프로젝트 ฮูอัมดง)', kr: '론드리프로젝트', menu: 'อเมริกาโน่, วานิลลาลาเต้ (คาเฟ่ธีมร้านซักผ้ามีระเบียงนั่งชิล)', note: 'เดินลงเนินจากตรอก Sweet Bottle มาทางฮูอัมดง' },
-            { id: 'cf_s24', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Gubok Mandu (구복만두 มิชลิน บิบ กูร์มองด์ 10 ปีซ้อน)', kr: '구복만두', menu: 'เกี๊ยวทอดน้ำกรอบนอกนุ่มใน (Gubok Traditional Mandu), เกี๊ยวกุ้ง', note: 'ใกล้สถานี Sookmyung Women\'s Univ.' },
-
-            // โซล: Seongsu & Ttukseom
-            { id: 'cf_s25', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Sesam House (세삼하우스 ไอศกรีมซองซู)', kr: '세삼하우스 성수', menu: 'ไอศกรีมโฮมเมดรสชาติพิเศษสไตล์เกาหลี', note: 'เปิดทุกวัน 12:00–21:00 น. สถานี Seongsu ทางออก 4 (49 Seongsu-ilro 4-gil)' },
-            { id: 'cf_s26', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Turtlehip (터틀힙 เค้กโมจิ Chapssaltteok ซองซู)', kr: '터틀힙 성수', menu: 'Chapssaltteok Cake เค้กโมจิไส้แน่นสุดฮิตในซองซู', note: 'เปิดทุกวัน 11:00–20:30 น. สถานี Ttukseom ทางออก 2 เดิน 2 นาที' },
-            { id: 'cf_s27', zone: 'โซล: Seongsu & Ttukseom', type: 'ร้านขนม / เบเกอรี', name: 'Lazy Yogurt Seongsu (레이지요거트 성수점)', kr: '레이지요거트 성수점', menu: 'กรีกโยเกิร์ตเนื้อแน่น ผลไม้สด และกราโนล่า', note: 'โซน Seongsu Yeonbang ตึก B ห้อง 102 (สถานี Seongsu ทางออก 3)' },
-            { id: 'cf_s28', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'CafeCite (카페사이트 ซองซู)', kr: '카페사이트 성수', menu: 'กาแฟและขนม บรรยากาศเงียบสงบ 2 ชั้น (ชั้น 2 ถ่ายรูปสวย)', note: 'สถานี Seongsu ทางออก 3 (แนะนำวันธรรมดาคนไม่พลุกพล่าน)' },
-            { id: 'cf_s29', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'POINTTWOFIVE·SECOND (025S) Seongsu Haus', kr: '포인트투파이브세컨드 성수', menu: 'สเปซและสถาปัตยกรรมสุดเท่ พร้อมเครื่องดื่มและของดีไซน์', note: 'เปิดทุกวัน 12:00–19:00 น. สถานี Seoul Forest / Ttukseom / Seongsu' },
-            { id: 'cf_s30', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Starbucks Ttukseom Hangang Park (วิวพระอาทิตย์ตก)', kr: '스타벅스 뚝섬한강공원점', menu: 'กาแฟชมวิวพระอาทิตย์ตกริมแม่น้ำฮันและตึก Lotte World Tower', note: 'สถานี Jayang (Ttukseom Resort) ทางออก 2 หรือ 3' },
-            { id: 'cf_s31', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Cafe Onion Seongsu & Nudake Seongsu', kr: '카페 어니언 성수점', menu: 'Pandoro, Peak Cake ครัวซองต์มัทฉะ', note: 'ย่านซองซู (Day 5)' },
-
-            // โซล: Hongdae, Yeonnam & Hapjeong
-            { id: 'cf_s32', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'JangJakJip (장작집 ยอนนัมดง)', kr: '장작집 연남', menu: 'ไก่ย่างเตาฟืนสอดไส้ข้าวเหนียว / อาหารเกาหลี', note: '570-38 Yeonnam-dong, Mapo-gu (สถานี Hongik Univ. ทางออก 3)' },
-            { id: 'cf_s33', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'Kukbogam Hongdae Main Branch (국보감 홍대본점)', kr: '국보감 홍대본점', menu: 'อาหารเกาหลีต้นตำรับย่านฮงแด', note: '1F, 21 Wausan-ro 21-gil, Mapo-gu, Seoul' },
-            { id: 'cf_s34', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านอาหาร', name: 'RUF Tap Beer (러프 ยอนนัมดง)', kr: '러프 연남', menu: 'คราฟต์เบียร์สด (Tap Beer) และกับแกล้มนั่งชิลย่านยอนนัมดง', note: '276 Donggyo-ro, Mapo-gu, Seoul (สถานี Hongik Univ. ทางออก 3)' },
-            { id: 'cf_s35', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Yuki Mochi Yeonnam (유키모찌 ยอนนัมดง)', kr: '유키모찌 연남', menu: 'ไอศกรีมโมจิแป้งนุ่มหลากรส เดินเล่นเลียบสวนป่า ยอนทรัลพาร์ค', note: 'เปิด 11:30–22:30 น. สถานี Hongik Univ. ทางออก 3 (240 Donggyo-ro)' },
-            { id: 'cf_s36', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'BEANBROTHERS COFFEEHOUSE SEOUL (ซังซู)', kr: '빈브라더스 합정', menu: 'กาแฟสเปเชียลตี้ ชั้น 7 และ Rooftop ชมวิวแม่น้ำฮันสวยมาก', note: 'สถานี Sangsu ทางออก 3 (แนะนำมาช่วงร้านเปิด แสงสวยคนน้อย)' },
-            { id: 'cf_s37', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'POLY CAFE (폴리카페 ฮับจอง)', kr: '폴리카페 합정', menu: 'กาแฟและขนมโฮมเมดบรรยากาศอบอุ่นย่านฮับจอง', note: 'เปิดทุกวัน 09:00–21:00 น. สถานี Hapjeong ทางออก 8 เดิน 5–10 นาที (2F, 14 Poeun-ro)' },
-            { id: 'cf_s38', zone: 'โซล: Hongdae & Yeonnam', type: 'ร้านขนม / เบเกอรี', name: 'Miss Dore Dore (미스도레도레)', kr: '도레도레', menu: 'เค้กสายรุ้งและเบเกอรีสีสันสดใส', note: 'มีหลายสาขาในโซล (ฮงแด / ชินซา)' },
-
-            // โซล: Gangnam & Jamsil
-            { id: 'cf_s39', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านอาหาร', name: 'Shaburo 21 Gangnam (샤브로21 강남)', kr: '샤브로21 강남', menu: 'ชาบูหม้อเดี่ยว (Individual Shabu-shabu) ราคาคุ้มค่า', note: 'สถานี Sinnonhyeon ทางออก 6 หรือ Gangnam ทางออก 11 (หลัง CGV)' },
-            { id: 'cf_s40', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'Lazy Yogurt Gangnam (레이지요거트 강남점)', kr: '레이지요거트 강남점', menu: 'กรีกโยเกิร์ตโฮมเมดผลไม้สด', note: 'สถานี Gangnam ทางออก 4 เดิน 4 นาที (109 Yeoksam-ro #105)' },
-            { id: 'cf_s41', zone: 'โซล: Gangnam & Jamsil', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Dosan / Lotte World Mall Jamsil', kr: '런던베이글뮤지엄 잠실점', menu: 'เบเกิลอบสดใหม่ สาขาโดซาน (Apgujeong Rodeo ทางออก 5) และสาขาจัมชิล', note: 'สาขาจัมชิลเปิด 10:30 น. (ไปกดคิวก่อนห้างเปิดได้ตั้งแต่ 09:30 น.)' },
-            { id: 'cf_s42', zone: 'โซล: Gangnam & Jamsil', type: 'คาเฟ่ / กาแฟ', name: '% Arabica Starfield COEX & Knotted Donut Jamsil', kr: '응커피 코엑스', menu: 'Kyoto Latte, Milk Cream Donut', note: 'COEX Mall / Lotte World Mall (Day 5)' },
-
-            // โซล: Yeouido
-            { id: 'cf_s43', zone: 'โซล: Yeouido', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery The Hyundai Seoul (아티스트 베이커리 여의도)', kr: '아티스트베이커리 더현대서울', menu: 'ขนมปังเกลือ (Salt Bread) สาขาห้าง The Hyundai Seoul', note: 'จ.–พฤ. 10:30–20:00 น. / ศ.–อา. 10:30–20:30 น.' },
-            { id: 'cf_s44', zone: 'โซล: Yeouido', type: 'คาเฟ่ / กาแฟ', name: 'Camel Coffee & Teddy Beurre House (The Hyundai Seoul)', kr: '카멜커피 더현대서울', menu: 'Camel Coffee, ครัวซองต์เนยสดชั้น B1', note: 'ชั้น B1 The Hyundai Seoul (Day 6)' }
+            { id: 'cf_1', zone: 'ปูซาน (Busan)', type: 'ร้านขนม / เบเกอรี', name: 'Jayeondo Sogeumppang (ขนมปังเกลือแฮอุนแด)', kr: '자연도소금빵 해운대', menu: 'Salt Bread อบสดร้อนๆ (เซ็ต 4 ชิ้น)', note: 'อยู่ใกล้ Blueline Park Mipo / สถานี Jungdong ทางออก 7' },
+            { id: 'cf_2', zone: 'ปูซาน (Busan)', type: 'ร้านอาหาร', name: 'Baro Haejang (바로해장 ซุปเนื้อกวางอัลลี)', kr: '바로해장 광안점', menu: 'ซุปเนื้อตุ๋นร้อนๆ (해장국)', note: 'ใกล้สถานี Geumnyeonsan ทางออก 1 เดินไปหาดกวางอัลลีได้' },
+            { id: 'cf_3', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Having Moment (해빙모먼트 เกาะยองโด)', kr: '해빙모먼트', menu: 'Einspanner / ลาเต้งาดำ วิวทะเล', note: 'ติดหมู่บ้านฮึนยออุล เกาะยองโด' },
+            { id: 'cf_4', zone: 'ปูซาน (Busan)', type: 'คาเฟ่ / กาแฟ', name: 'Thrill On The Mug (스릴온더머그 เกาะยองโด)', kr: '스릴온더머그', menu: 'กาแฟดริป & เบเกอรี วิวหน้าผาและทะเลปูซาน', note: 'มุมกระจกบานใหญ่ชมวิวทะเล 180 องศา' },
+            { id: 'cf_5', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'London Bagel Museum Anguk', kr: '런던베이글뮤지엄 안국점', menu: 'Spring Onion Pretzel Bagel / Brick Lane', note: 'แนะนำกดคิวผ่านแอป Catch Table ตั้งแต่ช่วงเช้า' },
+            { id: 'cf_6', zone: 'โซล: Anguk & Bukchon', type: 'ร้านขนม / เบเกอรี', name: 'Artist Bakery Anguk (아티스트베이커리)', kr: '아티스트베이커리 안국', menu: 'ขนมปังเกลือ (Salt Bread) หลากหลายไส้', note: 'สถานี Anguk ทางออก 1 กดคิว Catch Table ได้' },
+            { id: 'cf_7', zone: 'โซล: Anguk & Bukchon', type: 'คาเฟ่ / กาแฟ', name: 'Dotori Garden Anguk (도토리 가든)', kr: '도토리 가든 안국', menu: 'กรีกโยเกิร์ตรวงผึ้ง & ขนมปังรูปผลโอ๊ค', note: 'บรรยากาศบ้านฮันอกและสวนสวยมาก' },
+            { id: 'cf_8', zone: 'โซล: Jongno & Myeongdong', type: 'คาเฟ่ / กาแฟ', name: 'Fikee Cafe (피키 ซอซุนรากิล)', kr: '서순라길 피키', menu: 'กาแฟ & ขนมหวานริมกำแพงหินชงมโย', note: 'เดินเชื่อมจากอิกซอนดงได้' },
+            { id: 'cf_9', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านขนม / เบเกอรี', name: 'Tortoise Haebangchon (토터스)', kr: '토터스 해방촌', menu: 'Souffle Pancake นุ่มฟู', note: 'อยู่ใน Route เดินเที่ยวแฮบังชน' },
+            { id: 'cf_10', zone: 'โซล: Yongsan, Hannam & Haebangchon', type: 'ร้านอาหาร', name: 'Gubok Mandu (구복만두 ฮูอัมดง)', kr: '구복만두', menu: 'เสี่ยวหลงเปา & เกี๊ยวกุ้งมิชลิน บิบ กูร์มองด์', note: 'ใกล้สถานี Sookmyung Women\'s Univ.' },
+            { id: 'cf_11', zone: 'โซล: Seongsu & Ttukseom', type: 'คาเฟ่ / กาแฟ', name: 'Onion Seongsu / Cafe Lowide', kr: '어니언 성수', menu: 'Pandoro & ครัวซองต์', note: 'ย่านคาเฟ่ซองซู' },
+            { id: 'cf_12', zone: 'โซล: Hongdae & Yeonnam', type: 'คาเฟ่ / กาแฟ', name: 'BEANBROTHERS Coffeehouse Seoul (วิวแม่น้ำฮัน)', kr: '빈브라더스 합정', menu: 'Specialty Drip Coffee ชั้น 7 + Rooftop', note: 'สถานี Sangsu ทางออก 3' }
         ];
 
         // ---------------------------------------------------------
@@ -1662,15 +982,15 @@
                 city: 'ปูซาน',
                 badgeColor: 'bg-sky-100 text-sky-700',
                 date: 'อา. 6 ธ.ค.',
-                title: 'เดินทางถึงเกาหลี • KTX สู่ปูซาน • แฮอุนแด & Christmas Village',
-                highlightNote: '⚠️ คืนนี้ต้องไป Christmas Village Busan (Centum City) เพราะงานเปิดเฉพาะ พฤ.–อา. เท่านั้น!',
+                title: 'เดินทางถึงเกาหลี • KTX 047 สู่ปูซาน • แฮอุนแด & Christmas Village',
+                highlightNote: '🎫 ตั๋ว KTX ขาไปจองแล้ว: 14:58–17:47 น. ขบวน KTX 047 (Seoul Station → Busan Station) • Car 13 / Seat 8A-8B (คืนนี้แวะ Christmas Village Busan เพราะงานเปิดเฉพาะ พฤ.–อา.)',
                 events: [
                     {
                         id: 'd1_e1',
-                        time: '09:00 – 11:00',
-                        transit: 'ICN Terminal 1 ชั้น B1 → AREX Express',
-                        title: 'ถึงสนามบินอินชอน (TW102 09:00) • รับ K-Heritage Passport & ขึ้น AREX',
-                        desc: 'ผ่าน ตม. รับกระเป๋า แวะรับสมุด <strong>Korean Heritage Visitor Passport</strong> ฟรีที่ K-Heritage Visitor Center (ICN T1 ชั้น B1 ศูนย์คมนาคม แถว Burger King ใกล้ทางไปรถไฟ AREX) แล้วนั่ง AREX (11:00–12:00 น.) เข้า Seoul Station',
+                        time: '10:30 – 12:00',
+                        transit: 'ICN AIRPORT (T1) 11:00–12:00 → SEOUL STATION (AREX)',
+                        title: 'ถึงสนามบินอินชอน (ICN T1) • รับ K-Heritage Passport & ขึ้น AREX เข้า Seoul Station',
+                        desc: 'ถึงสนามบินอินชอน Terminal 1 ประมาณ 10:30 น. ผ่าน ตม. รับกระเป๋า แวะรับสมุด <strong>Korean Heritage Visitor Passport</strong> ฟรีที่ K-Heritage Visitor Center (ICN T1 ชั้น B1 ศูนย์คมนาคม แถว Burger King) แล้วนั่งรถไฟ AREX รอบ 11:00–12:00 น. สู่ Seoul Station',
                         places: [
                             { name: 'สนามบินอินชอน ICN T1 (K-Heritage Center ชั้น B1)', kr: '인천국제공항' },
                             { name: 'สถานี Seoul Station', kr: '서울역' }
@@ -1678,10 +998,21 @@
                     },
                     {
                         id: 'd1_e2',
-                        time: '12:00 – 18:30',
-                        transit: 'KTX (Seoul Station → Busan Station)',
-                        title: 'พักทานมื้อเที่ยง Seoul Station • นั่ง KTX สู่ปูซาน & เช็กอินที่พัก',
-                        desc: 'ช่วง 12:00–14:30 น. พักทานอาหารที่ Seoul Station จากนั้นนั่งรถไฟ KTX (15:00–18:30 น.) มุ่งหน้าสู่สถานี Busan Station ต่อรถไฟใต้ดินสาย 2 ลงสถานี Haeundae เช็กอินที่พัก <strong>Busan Yeongmu Parade Hotel Haeundae Beach</strong>',
+                        time: '12:00 – 14:30',
+                        transit: 'Seoul Station (พักทานมื้อเที่ยง & เตรียมขึ้น KTX)',
+                        title: 'พักทานมื้อเที่ยงที่ Seoul Station (12:00 – 14:30 น.)',
+                        desc: 'พักทานอาหารกลางวัน เดินเล่นซื้อขนม/กาแฟในสถานี Seoul Station และเตรียมตัวไปที่ชานชาลาก่อนรถไฟออกเวลา 14:58 น.',
+                        places: [
+                            { name: 'สถานี Seoul Station (โซนร้านอาหาร)', kr: '서울역' }
+                        ]
+                    },
+                    {
+                        id: 'd1_e2b',
+                        isKtxEvent: true,
+                        time: '14:58 – 17:47',
+                        transit: 'KTX 047 (Seoul Station → Busan Station) • Car 13 / Seat 8A-8B',
+                        title: 'นั่งรถไฟ KTX 047 สู่ปูซาน (Car 13 • Seat 8A-8B) & เช็กอินที่พัก',
+                        desc: 'ออกเดินทางจาก Seoul Station เวลา <strong>14:58 น.</strong> ถึง Busan Station เวลา <strong>17:47 น.</strong> (ขบวน KTX 047 ตู้ 13 ที่นั่ง 8A-8B) จากนั้นต่อรถไฟใต้ดินสาย 2 ลงสถานี Haeundae เช็กอินที่พัก <strong>Busan Yeongmu Parade Hotel Haeundae Beach</strong>',
                         places: [
                             { name: 'สถานี Busan Station', kr: '부산역' },
                             { name: 'Busan Yeongmu Parade Hotel Haeundae Beach', kr: '영무파라드호텔' }
@@ -1768,16 +1099,16 @@
                 city: 'ปูซาน → โซล',
                 badgeColor: 'bg-indigo-100 text-indigo-700',
                 date: 'อ. 8 ธ.ค.',
-                title: 'เดินทางกลับโซล • เช็กอิน Gangdong • อิกซอนดง & คลองชองกเยชอน',
-                highlightNote: '🚇 เช็กอินที่พัก STAYMIN Gangdong (สาย 5 สีม่วง) เดินทางเข้าย่าน Jongno / Gwanghwamun ได้ต่อเดียวไม่ต้องเปลี่ยนสาย!',
+                title: 'KTX 047 กลับโซล • เช็กอิน Gangdong • อิกซอนดง & คลองชองกเยชอน',
+                highlightNote: '🎫 ตั๋ว KTX ขากลับจองแล้ว: 13:17–16:34 น. ขบวน KTX 047 (Busan Station → Seoul Station) • Car 1 / Seat 9A-9B • เช็กอิน STAYMIN Gangdong (สาย 5 สีม่วง)',
                 events: [
                     {
                         id: 'd3_e1',
                         isKtxEvent: true,
-                        time: 'รอลงตารางเวลา KTX',
-                        transit: 'KTX (Busan → Seoul Station)',
-                        title: 'เช็กเอาต์ปูซาน & นั่ง KTX กลับเข้ากรุงโซล',
-                        desc: 'นั่งรถไฟความเร็วสูง KTX กลับสู่ Seoul Station จากนั้นต่อรถไฟใต้ดินสาย 5 ไปยังสถานี Gangdong (STAYMIN Gangdong)',
+                        time: '13:17 – 16:34',
+                        transit: 'KTX 047 (Busan Station → Seoul Station) • Car 1 / Seat 9A-9B',
+                        title: 'เช็กเอาต์ปูซาน & นั่ง KTX 047 กลับเข้ากรุงโซล (Car 1 • Seat 9A-9B)',
+                        desc: 'ออกเดินทางจาก Busan Station เวลา <strong>13:17 น.</strong> ถึง Seoul Station เวลา <strong>16:34 น.</strong> (ขบวน KTX 047 ตู้ 1 ที่นั่ง 9A-9B) จากนั้นต่อรถไฟใต้ดินสาย 5 ไปยังสถานี Gangdong เช็กอินที่พัก <strong>STAYMIN Gangdong</strong>',
                         places: [
                             { name: 'สถานี Busan Station', kr: '부산역' },
                             { name: 'STAYMIN Gangdong (สถานี Gangdong)', kr: '강동역' }
@@ -1785,7 +1116,7 @@
                     },
                     {
                         id: 'd3_e2',
-                        time: '15:30 – 18:00',
+                        time: '17:30 – 19:30',
                         transit: 'รถไฟสาย 5 → สถานี Jongno 3-ga ทางออก 4',
                         title: 'เดินเล่นหมู่บ้านฮันอกอิกซอนดง (Ikseon-dong Hanok Village)',
                         desc: 'ตรอกบ้านโบราณที่รีโนเวตเป็นคาเฟ่สุดชิค ร้านขนมปังเกลือ และร้านอาหารบรรยากาศอบอุ่น',
@@ -1795,7 +1126,7 @@
                     },
                     {
                         id: 'd3_e3',
-                        time: '18:30 – 21:00',
+                        time: '19:30 – 21:30',
                         transit: 'เดินต่อจากอิกซอนดงไปคลองชองกเยชอน',
                         title: 'เดินชมไฟประดับคลองชองกเยชอน & จัตุรัสควางฮวามุน',
                         desc: 'เดินเลียบคลองชองกเยชอนยามค่ำคืน ชมเทศกาลโคมไฟฤดูหนาวและตลาดคริสต์มาสบริเวณ Gwanghwamun Square',
@@ -2034,6 +1365,12 @@
 
         const baseStampItems = [
             { id: 'st_0', day: 'Day 1 • อินชอน', name: 'Korean Heritage Visitor Passport (ICN T1 ชั้น B1)', loc: 'K-Heritage Visitor Center ศูนย์คมนาคม ICN T1 ชั้น B1 (แถว Burger King ใกล้ทางไป AREX)', kr: '인천국제공항' },
+            { id: 'st_kodak_1', day: 'Kodak Stamp (1/6)', name: 'Kodak Corner Shop Bukchon (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 1/6 ย่านบุกชอน (Anguk / Bukchon)', kr: '코닥코너샵 북촌' },
+            { id: 'st_kodak_2', day: 'Kodak Stamp (2/6)', name: 'Kodak Corner Shop Hongdae (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 2/6 ย่านฮงแด (Hongdae)', kr: '코닥코너샵 홍대' },
+            { id: 'st_kodak_3', day: 'Kodak Stamp (3/6)', name: 'Kodak Corner Shop Myeongdong (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 3/6 ย่านเมียงดง (Myeongdong)', kr: '코닥코너샵 명동' },
+            { id: 'st_kodak_4', day: 'Kodak Stamp (4/6)', name: 'Kodak Corner Shop Seongsu (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 4/6 ย่านซองซู (Seongsu)', kr: '코닥코너샵 성수' },
+            { id: 'st_kodak_5', day: 'Kodak Stamp (5/6)', name: 'Kodak Corner Shop Dosan (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 5/6 ย่านโดซาน / อับกูจอง (Dosan)', kr: '코닥코너샵 도산' },
+            { id: 'st_kodak_6', day: 'Kodak Stamp (6/6)', name: 'Kodak Corner Shop Gwangjang Market (@kodakstyle_kr)', loc: 'สะสม Stamp สาขาที่ 6/6 ตลาดควังจัง (Gwangjang Market) — ครบ 6 สาขา!', kr: '코닥코너샵 광장시장' },
             { id: 'st_1', day: 'Day 1 • ปูซาน', name: 'Incheon Airport Tourist Info Stamp', loc: 'ศูนย์ข้อมูลท่องเที่ยว สนามบินอินชอน (ICN)', kr: '인천국제공항' },
             { id: 'st_2', day: 'Day 1 • ปูซาน', name: 'Busan Station Tourist Center Stamp', loc: 'ศูนย์บริการนักท่องเที่ยว สถานี Busan Station', kr: '부산역' },
             { id: 'st_3', day: 'Day 1 • ปูซาน', name: 'Haeundae Tourist Information Center', loc: 'จุดบริการนักท่องเที่ยวหน้าหาดแฮอุนแด', kr: '해운대관광안내소' },
@@ -2113,8 +1450,751 @@
             { name: 'Lotte World Aquarium & Seoul Sky (จัมซิล)', kr: '롯데월드 아쿠아리움', zone: 'โซล: Gangnam & Jamsil', addr: 'สถานี Jamsil ทางออก 10, 11' },
             { name: 'Starfield Library (COEX) & Shaburo 21 Gangnam', kr: '별마당도서관', zone: 'โซล: Gangnam & Jamsil', addr: 'สถานี Samseong / Sinnonhyeon / Gangnam' },
             { name: 'The Hyundai Seoul (หมู่บ้านคริสต์มาส & Artist Bakery)', kr: '더현대 서울', zone: 'โซล: Yeouido', addr: 'สาย 5 สถานี Yeouinaru ทางออก 1' },
-            { name: 'Chroma, Paradise City (ติดสนามบินอินชอน)', kr: '파라다이스시티 크로마', zone: 'อินชอน (Incheon Airport)', addr: 'Shuttle Bus ฟรีจาก ICN T1 ป้าย 3C / 14C' }
+            { name: 'Chroma, Paradise City (ติดสนามบินอินชอน)', kr: '파라다이스시티 크로마', zone: 'อินชอน (Incheon Airport)', addr: 'Shuttle Bus ฟรีจาก ICN T1 ป้าย 3C / 14C' },
+            { name: 'TERAROSA POSCO Center (คาเฟ่ห้องสมุดกังนัม)', kr: '테라로사 포스코센터점', zone: 'โซล: Gangnam & Jamsil', addr: 'POSCO Center 1F, 440 Tehran-ro, Gangnam-gu' },
+            { name: 'National Sports Museum Library', kr: '국립체육박물관', zone: 'โซล: Gangnam & Jamsil', addr: '424 Olympic-ro, Songpa-gu, Seoul' },
+            { name: 'Gangdong Forest Library (ห้องสมุดใกล้ที่พัก)', kr: '강동숲속도서관', zone: 'โซล: Gangdong (ที่พัก)', addr: '587 Gucheon-myeon-ro, Gangdong-gu, Seoul' },
+            { name: 'Inwang Mountain Forest Shelter (ศาลาหนังสืออินวังซาน)', kr: '인왕산 숲속쉼터', zone: 'โซล: Anguk & Bukchon', addr: 'San 4-36 Cheongun-dong, Jongno-gu, Seoul' },
+            { name: 'War Memorial Library (ห้องสมุดอนุสรณ์สถานสงคราม)', kr: '전쟁기념관', zone: 'โซล: Yongsan, Hannam & Haebangchon', addr: '2F, 29 Itaewon-ro, Yongsan-gu, Seoul' },
+            { name: 'Seocho Bangbae Forest Environmental Library', kr: '서초구립방배숲환경도서관', zone: 'โซล: Gangnam & Jamsil', addr: '160-7 Seocho-daero, Seocho-gu, Seoul' },
+            { name: 'Uijeongbu Art Library', kr: '의정부미술도서관', zone: 'คยองกี (Gyeonggi-do)', addr: '248 Minrak-ro, Uijeongbu-si, Gyeonggi' },
+            { name: 'Gyeonggi Library (Suwon)', kr: '경기도서관', zone: 'คยองกี (Gyeonggi-do)', addr: '40 Docheong-ro, Yeongtong-gu, Suwon-si' },
+            { name: 'Yeolhwa Party Book Museum (Paju Book City)', kr: '열화당 책박물관', zone: 'คยองกี (Gyeonggi-do)', addr: '25 Gwanginsa-gil, Paju-si, Gyeonggi' },
+            { name: 'Connect Lounge (NAVER Green Factory 2F)', kr: '네이버 그린팩토리', zone: 'คยองกี (Gyeonggi-do)', addr: '6 Buljeong-ro, Bundang-gu, Seongnam-si' },
+            { name: 'Kodak Corner Shop (Bukchon / Hongdae / Myeongdong / Seongsu / Dosan / Gwangjang)', kr: '코닥코너샵', zone: 'โซล: Jongno & Myeongdong', addr: '6 สาขาในโซลสำหรับสะสม Stamp (@kodakstyle_kr)' },
+            { name: 'Donuimun Museum Village (ตามรอย 2521)', kr: '돈의문박물관마을', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Seodaemun ทางออก 4 เดิน 3 นาที' },
+            { name: 'Seochon Village (ตรอกย่านซอชน ตามรอย 2521)', kr: '서촌마을', zone: 'โซล: Anguk & Bukchon', addr: 'สาย 3 สถานี Gyeongbokgung ทางออก 2' },
+            { name: 'Euljiro 3-ga (ตรอกอึลจิโร ตามรอย 2521)', kr: '을지로3가', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 2 / สาย 3 สถานี Euljiro 3-ga' },
+            { name: 'Sinchon Station & Street (ตามรอย 2521)', kr: '신촌역', zone: 'โซล: Hongdae & Yeonnam', addr: 'สาย 2 สถานี Sinchon (ห่างจาก Hongik Univ. 1 สถานี)' },
+            { name: 'Hotel Seine Cafe (ตามรอย Hotel Del Luna)', kr: '호텔세느장', zone: 'โซล: Jongno & Myeongdong', addr: 'สาย 5 สถานี Jongno 3-ga ทางออก 4 (อิกซอนดง)' },
+            { name: 'Changhwadang Ikseon (เกี๊ยวทอด Hotel Del Luna)', kr: '창화당 익선점', zone: 'โซล: Jongno & Myeongdong', addr: 'ติดกับ Hotel Seine Cafe ย่านอิกซอนดง' },
+            { name: 'Seoul Book Bogo (อุโมงค์หนังสือ Hotel Del Luna)', kr: '서울책보고', zone: 'โซล: Gangnam & Jamsil', addr: 'สาย 2 สถานี Jamsillaru ทางออก 1 (ใกล้จัมซิล)' }
         ];
+
+        // ---------------------------------------------------------
+        // FIREBASE REALTIME DATABASE INIT & GLOBAL APP STATE
+        // ---------------------------------------------------------
+        const firebaseConfig = {
+            databaseURL: "https://ppr-korea-2026-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        let dbRef = null;
+        try {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                dbRef = firebase.database().ref('trips/ppr_korea_2026_v1');
+            }
+        } catch (err) {
+            console.warn('Firebase init fallback to local mode:', err);
+        }
+
+        const soloDaysMeta = [
+            { dateKey: '2026-11-30', shortDate: '30 พ.ย.', label: 'จ. 30 พ.ย. 2569', subtitle: 'วันที่ 1 ช่วงเดินทางล่วงหน้า (30 พ.ย.)' },
+            { dateKey: '2026-12-01', shortDate: '1 ธ.ค.', label: 'อ. 1 ธ.ค. 2569', subtitle: 'วันที่ 2 ช่วงเดินทางล่วงหน้า (1 ธ.ค.)' },
+            { dateKey: '2026-12-02', shortDate: '2 ธ.ค.', label: 'พ. 2 ธ.ค. 2569', subtitle: 'วันที่ 3 ช่วงเดินทางล่วงหน้า (2 ธ.ค.)' },
+            { dateKey: '2026-12-03', shortDate: '3 ธ.ค.', label: 'พฤ. 3 ธ.ค. 2569', subtitle: 'วันที่ 4 ช่วงเดินทางล่วงหน้า (3 ธ.ค.)' },
+            { dateKey: '2026-12-04', shortDate: '4 ธ.ค.', label: 'ศ. 4 ธ.ค. 2569', subtitle: 'วันที่ 5 ช่วงเดินทางล่วงหน้า (4 ธ.ค.)' },
+            { dateKey: '2026-12-05', shortDate: '5 ธ.ค.', label: 'ส. 5 ธ.ค. 2569', subtitle: 'วันที่ 6 ช่วงเดินทางล่วงหน้า (5 ธ.ค.)' }
+        ];
+
+        const defaultTravelerData = {
+            lastSaved: '',
+            travelers: [
+                {
+                    label: 'ผู้เดินทางคนที่ 1 (PPWR)',
+                    nickname: 'PPWR',
+                    fullName: '',
+                    passportNo: '',
+                    dob: '',
+                    expiryDate: '',
+                    passportImg: '',
+                    flights: { outNo: '', outPnr: '', outTime: '', outSeat: '', inNo: '', inPnr: '', inTime: '', inSeat: '' }
+                },
+                {
+                    label: 'ผู้เดินทางคนที่ 2 (PPSR)',
+                    nickname: 'PPSR',
+                    fullName: '',
+                    passportNo: '',
+                    dob: '',
+                    expiryDate: '',
+                    passportImg: '',
+                    flights: { outNo: '', outPnr: '', outTime: '', outSeat: '', inNo: '', inPnr: '', inTime: '', inSeat: '' }
+                }
+            ],
+            notes: { busanHotel: '', seoulHotel: '', insurance: '', esim: '', general: '' }
+        };
+
+        let completedIds = JSON.parse(localStorage.getItem('ppr2026_checked') || '{}');
+        let checkinNotes = JSON.parse(localStorage.getItem('ppr2026_checkin_notes') || '{}');
+        let placePhotos = JSON.parse(localStorage.getItem('ppr2026_place_photos') || '{}');
+        let noteAuthors = JSON.parse(localStorage.getItem('ppr2026_note_authors') || '{}');
+        let placeThreads = JSON.parse(localStorage.getItem('ppr2026_place_threads') || '{}');
+        let userCustomPlaces = JSON.parse(localStorage.getItem('ppr2026_custom_places') || '[]');
+        let eventOverrides = JSON.parse(localStorage.getItem('ppr2026_event_overrides') || '{}');
+        let versionState = JSON.parse(localStorage.getItem('ppr2026_version') || '{"major":6,"minor":5,"updatedAt":"23 พ.ย. 2569"}');
+        let lastSyncTimestamp = Number(localStorage.getItem('ppr2026_last_sync_ts') || '0');
+        let travelerData = defaultTravelerData;
+        try {
+            const savedTrav = JSON.parse(localStorage.getItem('ppr2026_traveler_data') || 'null');
+            if (savedTrav && Array.isArray(savedTrav.travelers)) {
+                travelerData = {
+                    ...defaultTravelerData,
+                    ...savedTrav,
+                    travelers: defaultTravelerData.travelers.map((defT, i) => ({
+                        ...defT,
+                        ...(savedTrav.travelers[i] || {}),
+                        flights: { ...defT.flights, ...((savedTrav.travelers[i] && savedTrav.travelers[i].flights) || {}) }
+                    })),
+                    notes: { ...defaultTravelerData.notes, ...(savedTrav.notes || {}) }
+                };
+            }
+        } catch (e) {}
+
+        let currentDay = 1;
+        let currentSoloDate = 'ALL';
+        let currentCafeZone = 'ALL';
+        let currentCafeType = 'ALL';
+        let currentMapZone = 'ALL';
+        let currentGroupFilter = 'all';
+        let lastAddedId = null;
+        let isApplyingRemote = false;
+        let isTravelerUnlocked = false;
+        let tempNotePhotos = [];
+        let tempAddPhotos = [];
+        let confirmCallback = null;
+
+        // ---------------------------------------------------------
+        // CORE HELPERS, VERSIONING, AUTHORS & BUBBLE THREADS
+        // ---------------------------------------------------------
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = msg;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+            }, 2600);
+        }
+
+        function copyText(text) {
+            if (!text) return;
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast(`คัดลอก "${text.length > 24 ? text.slice(0, 24) + '...' : text}" แล้ว!`);
+            } catch (e) {
+                showToast('ไม่สามารถคัดลอกข้อความได้');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function updateCloudSyncBadge(status, label) {
+            const badge = document.getElementById('cloud-sync-badge');
+            const dot = document.getElementById('cloud-sync-dot');
+            const txt = document.getElementById('cloud-sync-text');
+            if (!badge || !dot || !txt) return;
+            txt.textContent = label;
+            if (status === 'live') {
+                badge.className = 'inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-400/35 px-2.5 py-1 rounded-full text-[11px] font-semibold text-emerald-200 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400 sync-dot-live';
+            } else if (status === 'syncing') {
+                badge.className = 'inline-flex items-center gap-1.5 bg-sky-500/20 border border-sky-400/35 px-2.5 py-1 rounded-full text-[11px] font-semibold text-sky-200 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-sky-400 animate-ping';
+            } else {
+                badge.className = 'inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/30 px-2.5 py-1 rounded-full text-[11px] font-semibold text-amber-200 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            }
+        }
+
+        function getCheckinTimestamp() {
+            const now = new Date();
+            const d = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            return `${d}, ${hh}:${mm}`;
+        }
+
+        function renderVersionBadge() {
+            const el = document.getElementById('version-text');
+            if (el) el.textContent = `v${versionState.major}.${versionState.minor} • อัปเดต: ${versionState.updatedAt}`;
+        }
+
+        function bumpMinorVersion() {
+            const now = new Date();
+            versionState.minor = (Number(versionState.minor) || 0) + 1;
+            versionState.updatedAt = now.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+            renderVersionBadge();
+        }
+
+        function openVersionModal() {
+            const m = document.getElementById('version-modal');
+            if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+        }
+
+        function closeVersionModal() {
+            const m = document.getElementById('version-modal');
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+        }
+
+        function openConfirmModal(msg, onConfirm) {
+            const m = document.getElementById('confirm-modal');
+            const txt = document.getElementById('confirm-modal-text');
+            const yesBtn = document.getElementById('confirm-modal-yes');
+            if (!m || !txt || !yesBtn) return;
+            txt.textContent = msg;
+            confirmCallback = onConfirm;
+            yesBtn.onclick = () => {
+                closeConfirmModal();
+                if (typeof confirmCallback === 'function') confirmCallback();
+            };
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const m = document.getElementById('confirm-modal');
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+        }
+
+        function openImageViewer(src) {
+            const m = document.getElementById('image-viewer-modal');
+            const img = document.getElementById('viewer-img');
+            if (!m || !img) return;
+            img.src = src;
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeImageViewer() {
+            const m = document.getElementById('image-viewer-modal');
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+        }
+
+        function compressImageFile(file, maxWidth = 800, quality = 0.75) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxWidth) {
+                            h = Math.round((h * maxWidth) / w);
+                            w = maxWidth;
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = () => resolve(null);
+                    img.src = ev.target.result;
+                };
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderAuthorBadge(author) {
+            if (!author) return '';
+            if (author === 'PPWR') {
+                return `<span class="inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200">💜 PPWR</span>`;
+            }
+            if (author === 'PPSR') {
+                return `<span class="inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">💙 PPSR</span>`;
+            }
+            return `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">👫 ด้วยกัน</span>`;
+        }
+
+        function getThreadsForItem(itemId) {
+            if (Array.isArray(placeThreads[itemId]) && placeThreads[itemId].length > 0) {
+                return placeThreads[itemId];
+            }
+            const legacyNote = checkinNotes[itemId] || '';
+            const legacyPhotos = Array.isArray(placePhotos[itemId]) ? placePhotos[itemId] : [];
+            if (legacyNote || legacyPhotos.length > 0) {
+                return [{
+                    id: 'legacy_' + itemId,
+                    author: noteAuthors[itemId] || 'BOTH',
+                    text: legacyNote,
+                    photos: legacyPhotos,
+                    timestamp: ''
+                }];
+            }
+            return [];
+        }
+
+        function renderBubbleThreadHtml(itemId, title) {
+            const posts = getThreadsForItem(itemId);
+            if (!posts.length) return '';
+            const safeTitle = (title || '').replace(/'/g, "\\'");
+            return `<div class="mt-3 space-y-2">
+                ${posts.map(post => {
+                    const isPpwr = post.author === 'PPWR';
+                    const isPpsr = post.author === 'PPSR';
+                    const bubbleClass = isPpwr
+                        ? 'bg-purple-50/90 border-purple-200 text-purple-950'
+                        : isPpsr
+                            ? 'bg-sky-50/90 border-sky-200 text-sky-950'
+                            : 'bg-amber-50/80 border-amber-200 text-slate-800';
+                    const photosHtml = (Array.isArray(post.photos) && post.photos.length)
+                        ? `<div class="grid grid-cols-3 gap-1.5 mt-2">
+                            ${post.photos.map(src => `<img src="${src}" onclick="openImageViewer('${src}')" class="w-full h-20 sm:h-24 object-cover rounded-xl border border-black/10 cursor-zoom-in">`).join('')}
+                        </div>`
+                        : '';
+                    return `<div onclick="openNoteModal('${itemId}', '${safeTitle}')" class="p-3 rounded-2xl border ${bubbleClass} cursor-pointer hover:opacity-95 transition">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            ${renderAuthorBadge(post.author)}
+                            ${post.timestamp ? `<span class="text-[10px] text-slate-400 font-medium">${post.timestamp}</span>` : ''}
+                        </div>
+                        ${post.text ? `<p class="text-xs leading-relaxed whitespace-pre-line">${post.text}</p>` : ''}
+                        ${photosHtml}
+                    </div>`;
+                }).join('')}
+            </div>`;
+        }
+
+        function saveState() {
+            lastSyncTimestamp = Date.now();
+            localStorage.setItem('ppr2026_last_sync_ts', String(lastSyncTimestamp));
+            localStorage.setItem('ppr2026_checked', JSON.stringify(completedIds));
+            localStorage.setItem('ppr2026_checkin_notes', JSON.stringify(checkinNotes));
+            localStorage.setItem('ppr2026_place_photos', JSON.stringify(placePhotos));
+            localStorage.setItem('ppr2026_note_authors', JSON.stringify(noteAuthors));
+            localStorage.setItem('ppr2026_place_threads', JSON.stringify(placeThreads));
+            localStorage.setItem('ppr2026_custom_places', JSON.stringify(userCustomPlaces));
+            localStorage.setItem('ppr2026_traveler_data', JSON.stringify(travelerData));
+            localStorage.setItem('ppr2026_event_overrides', JSON.stringify(eventOverrides));
+            localStorage.setItem('ppr2026_version', JSON.stringify(versionState));
+
+            if (dbRef && !isApplyingRemote) {
+                updateCloudSyncBadge('syncing', 'Syncing...');
+                dbRef.set(buildSyncPayload())
+                    .then(() => updateCloudSyncBadge('live', 'Cloud Synced'))
+                    .catch(() => updateCloudSyncBadge('offline', 'Offline Mode'));
+            }
+            updateProgressUI();
+        }
+
+        function toggleCheck(itemId) {
+            if (completedIds[itemId]) {
+                delete completedIds[itemId];
+                showToast('ยกเลิกการเช็กอินจุดนี้แล้ว');
+            } else {
+                completedIds[itemId] = getCheckinTimestamp();
+                showToast('ประทับตรา VISITED เรียบร้อย!');
+            }
+            saveState();
+        }
+
+        function resetAllProgress() {
+            completedIds = {};
+            checkinNotes = {};
+            placePhotos = {};
+            noteAuthors = {};
+            placeThreads = {};
+            saveState();
+            refreshAllViews();
+            showToast('รีเซ็ตบันทึกการเช็กอินทั้งหมดเรียบร้อยแล้ว');
+        }
+
+        // ---------------------------------------------------------
+        // DATA AGGREGATORS FOR EACH TAB
+        // ---------------------------------------------------------
+        function getDailyPlanWithCustom() {
+            return baseDailyPlans.map(dayObj => {
+                const baseEvents = dayObj.events.map(ev => {
+                    const ov = eventOverrides[ev.id];
+                    if (ov) {
+                        return { ...ev, ...ov, isEdited: true };
+                    }
+                    return { ...ev };
+                });
+
+                const customEvents = userCustomPlaces
+                    .filter(cp => cp.addDaily && Number(cp.day) === dayObj.day)
+                    .map(cp => ({
+                        id: `ev_${cp.id}`,
+                        customId: cp.id,
+                        isCustom: true,
+                        author: cp.author || 'BOTH',
+                        time: cp.time || 'แวะเพิ่มเติม',
+                        transit: cp.zone,
+                        title: cp.name,
+                        desc: cp.addr || '',
+                        places: cp.kr ? [{ name: cp.name, kr: cp.kr }] : []
+                    }));
+
+                return { ...dayObj, events: [...baseEvents, ...customEvents] };
+            });
+        }
+
+        function getAllCafeFoodItems() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.addCafe)
+                .map(cp => ({
+                    id: `cf_${cp.id}`,
+                    customId: cp.id,
+                    isCustom: true,
+                    zone: cp.zone,
+                    type: cp.cafeType || 'คาเฟ่ / กาแฟ',
+                    name: cp.name,
+                    kr: cp.kr || '',
+                    menu: cp.addr || '',
+                    note: ''
+                }));
+            return [...custom, ...baseCafeFoodItems];
+        }
+
+        function getAllLibraryItems() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.addLibrary)
+                .map(cp => ({
+                    id: `lib_${cp.id}`,
+                    customId: cp.id,
+                    isCustom: true,
+                    author: cp.author || 'BOTH',
+                    zone: cp.zone,
+                    name: cp.name,
+                    kr: cp.kr || '',
+                    desc: cp.addr || ''
+                }));
+            return [...custom, ...baseLibraryItems];
+        }
+
+        function getAllSeriesItems() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.addSeries)
+                .map(cp => ({
+                    id: `ser_${cp.id}`,
+                    customId: cp.id,
+                    isCustom: true,
+                    author: cp.author || 'BOTH',
+                    seriesTitle: cp.seriesTitle || 'K-Drama Location',
+                    zone: cp.zone,
+                    name: cp.name,
+                    kr: cp.kr || '',
+                    desc: cp.addr || ''
+                }));
+            return [...custom, ...baseSeriesItems];
+        }
+
+        function getAllStamps() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.addStamp)
+                .map(cp => ({
+                    id: `st_${cp.id}`,
+                    day: cp.zone,
+                    name: cp.name,
+                    loc: cp.addr || cp.zone,
+                    kr: cp.kr || ''
+                }));
+            return [...custom, ...baseStampItems];
+        }
+
+        function getAllGacha() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.addGacha)
+                .map(cp => ({
+                    id: `gc_${cp.id}`,
+                    tag: cp.zone,
+                    name: cp.name,
+                    desc: cp.addr || '',
+                    kr: cp.kr || ''
+                }));
+            return [...custom, ...baseGachaItems];
+        }
+
+        function getAllPlaces() {
+            const custom = userCustomPlaces
+                .filter(cp => cp.kr)
+                .map(cp => ({
+                    id: cp.id,
+                    isCustom: true,
+                    name: cp.name,
+                    kr: cp.kr,
+                    zone: cp.zone,
+                    addr: cp.addr || ''
+                }));
+            return [...custom, ...baseNaverPlaces];
+        }
+
+        function updateProgressUI() {
+            const plans = getDailyPlanWithCustom();
+            const allDailyEvs = plans.flatMap(p => p.events);
+            const soloEntries = userCustomPlaces.filter(cp => cp.addSolo);
+            const allCafes = getAllCafeFoodItems();
+            const allLibs = getAllLibraryItems();
+            const allSer = getAllSeriesItems();
+            const allStamps = getAllStamps();
+            const allGacha = getAllGacha();
+            const allGroupSpots = [
+                ...photoboothAndShops.map((_, i) => `grp_pb_${i}`),
+                ...sunsetAndArchSpots.map((_, i) => `grp_ss_${i}`),
+                ...christmasSpots.map((_, i) => `grp_xm_${i}`),
+                ...freeGalleries.map((_, i) => `grp_gl_${i}`)
+            ];
+
+            const totalPoints = allDailyEvs.length + soloEntries.length + allCafes.length + allLibs.length + allSer.length + allStamps.length + allGacha.length + baseFreebieItems.length + allGroupSpots.length;
+            const visitedCount =
+                allDailyEvs.filter(e => completedIds[e.id]).length +
+                soloEntries.filter(s => completedIds[`solo_${s.id}`]).length +
+                allCafes.filter(c => completedIds[c.id]).length +
+                allLibs.filter(l => completedIds[l.id]).length +
+                allSer.filter(s => completedIds[s.id]).length +
+                allStamps.filter(s => completedIds[s.id]).length +
+                allGacha.filter(g => completedIds[g.id]).length +
+                baseFreebieItems.filter(f => completedIds[f.id]).length +
+                allGroupSpots.filter(id => completedIds[id]).length;
+
+            const pct = totalPoints > 0 ? Math.round((visitedCount / totalPoints) * 100) : 0;
+            const gpText = document.getElementById('global-progress-text');
+            const gpBar = document.getElementById('global-progress-bar');
+            if (gpText) gpText.textContent = `${visitedCount}/${totalPoints} จุด (${pct}%)`;
+            if (gpBar) gpBar.style.width = `${pct}%`;
+
+            const cafeVisited = allCafes.filter(c => completedIds[c.id]).length;
+            const cvEl = document.getElementById('cafe-visited-count');
+            if (cvEl) cvEl.textContent = `เช็กอินแล้ว ${cafeVisited}/${allCafes.length} ร้าน`;
+
+            const libVisited = allLibs.filter(l => completedIds[l.id]).length;
+            const lvEl = document.getElementById('library-visited-count');
+            if (lvEl) lvEl.textContent = `เช็กอินแล้ว ${libVisited}/${allLibs.length} แห่ง`;
+
+            const serVisited = allSer.filter(s => completedIds[s.id]).length;
+            const svEl = document.getElementById('series-visited-count');
+            if (svEl) svEl.textContent = `ตามรอยแล้ว ${serVisited}/${allSer.length} จุด`;
+
+            const stampVisited = allStamps.filter(s => completedIds[s.id]).length;
+            const stCountEl = document.getElementById('stamp-count');
+            const stTotalEl = document.getElementById('stamp-total-label');
+            const stBarEl = document.getElementById('stamp-progress-bar');
+            if (stCountEl) stCountEl.textContent = `${stampVisited}/${allStamps.length}`;
+            if (stTotalEl) stTotalEl.textContent = String(allStamps.length);
+            if (stBarEl) stBarEl.style.width = `${allStamps.length ? Math.round((stampVisited / allStamps.length) * 100) : 0}%`;
+
+            const gachaVisited = allGacha.filter(g => completedIds[g.id]).length + baseFreebieItems.filter(f => completedIds[f.id]).length;
+            const gachaTotal = allGacha.length + baseFreebieItems.length;
+            const gcEl = document.getElementById('gacha-count');
+            if (gcEl) gcEl.textContent = `${gachaVisited}/${gachaTotal}`;
+        }
+
+        // ---------------------------------------------------------
+        // TAB SWITCHING & TRAVELER PIN PROTECTION (PIN: 070910)
+        // ---------------------------------------------------------
+        function switchTab(tabName) {
+            if (tabName === 'traveler' && !isTravelerUnlocked) {
+                openPinModal();
+                return;
+            }
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabName}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.tab === tabName) {
+                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition bg-slate-900 text-white shadow-sm font-semibold';
+                } else {
+                    btn.className = 'tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium';
+                }
+            });
+        }
+
+        function openPinModal() {
+            const m = document.getElementById('pin-modal');
+            const inp = document.getElementById('pin-input');
+            const err = document.getElementById('pin-error');
+            if (!m || !inp) return;
+            inp.value = '';
+            if (err) err.classList.add('hidden');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+            setTimeout(() => inp.focus(), 100);
+        }
+
+        function closePinModal() {
+            const m = document.getElementById('pin-modal');
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+        }
+
+        function verifyTravelerPin(e) {
+            e.preventDefault();
+            const val = (document.getElementById('pin-input')?.value || '').trim();
+            const err = document.getElementById('pin-error');
+            if (val === '070910') {
+                isTravelerUnlocked = true;
+                closePinModal();
+                switchTab('traveler');
+                showToast('ปลดล็อกข้อมูลผู้เดินทางเรียบร้อยแล้ว');
+            } else {
+                if (err) err.classList.remove('hidden');
+            }
+        }
+
+        function lockTravelerTab() {
+            isTravelerUnlocked = false;
+            switchTab('daily');
+            showToast('ล็อกหน้าข้อมูลผู้เดินทางแล้ว');
+        }
+
+        function saveTravelerInfo() {
+            travelerData.travelers.forEach((t, idx) => {
+                t.fullName = (document.getElementById(`t-fullname-${idx}`)?.value || '').trim();
+                t.nickname = (document.getElementById(`t-nickname-${idx}`)?.value || '').trim();
+                t.passportNo = (document.getElementById(`t-passport-${idx}`)?.value || '').trim();
+                t.dob = (document.getElementById(`t-dob-${idx}`)?.value || '').trim();
+                t.expiryDate = (document.getElementById(`t-expiry-${idx}`)?.value || '').trim();
+                t.flights = {
+                    outNo: (document.getElementById(`t-flight-out-no-${idx}`)?.value || '').trim(),
+                    outPnr: (document.getElementById(`t-flight-out-pnr-${idx}`)?.value || '').trim(),
+                    outTime: (document.getElementById(`t-flight-out-time-${idx}`)?.value || '').trim(),
+                    outSeat: (document.getElementById(`t-flight-out-seat-${idx}`)?.value || '').trim(),
+                    inNo: (document.getElementById(`t-flight-in-no-${idx}`)?.value || '').trim(),
+                    inPnr: (document.getElementById(`t-flight-in-pnr-${idx}`)?.value || '').trim(),
+                    inTime: (document.getElementById(`t-flight-in-time-${idx}`)?.value || '').trim(),
+                    inSeat: (document.getElementById(`t-flight-in-seat-${idx}`)?.value || '').trim()
+                };
+            });
+            travelerData.notes = {
+                busanHotel: (document.getElementById('note-busan-hotel')?.value || '').trim(),
+                seoulHotel: (document.getElementById('note-seoul-hotel')?.value || '').trim(),
+                insurance: (document.getElementById('note-insurance')?.value || '').trim(),
+                esim: (document.getElementById('note-esim')?.value || '').trim(),
+                general: (document.getElementById('note-general')?.value || '').trim()
+            };
+            travelerData.lastSaved = getCheckinTimestamp();
+            bumpMinorVersion();
+            saveState();
+            renderTravelerTab();
+            showToast('บันทึกข้อมูลผู้เดินทางและเที่ยวบินเรียบร้อยแล้ว!');
+        }
+
+        async function handlePassportUpload(e, idx) {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            showToast('กำลังย่อขนาดรูปพาสปอร์ต...');
+            const compressed = await compressImageFile(file, 900, 0.8);
+            if (compressed) {
+                travelerData.travelers[idx].passportImg = compressed;
+                saveTravelerInfo();
+            }
+        }
+
+        function removePassportImage(idx) {
+            travelerData.travelers[idx].passportImg = '';
+            saveTravelerInfo();
+            showToast('ลบรูปพาสปอร์ตออกแล้ว');
+        }
+
+        // ---------------------------------------------------------
+        // EXPORT COMPLETE TRAVEL SCRAPBOOK (30 NOV - 12 DEC 2026)
+        // ---------------------------------------------------------
+        function exportScrapbookHTML() {
+            const soloEntries = userCustomPlaces.filter(cp => cp.addSolo).sort((a, b) => (a.soloDate || '').localeCompare(b.soloDate || ''));
+            const plans = getDailyPlanWithCustom();
+            const libs = getAllLibraryItems().filter(l => completedIds[l.id] || getThreadsForItem(l.id).length > 0);
+            const series = getAllSeriesItems().filter(s => completedIds[s.id] || getThreadsForItem(s.id).length > 0);
+
+            const renderThreadsPrint = (itemId) => {
+                const posts = getThreadsForItem(itemId);
+                if (!posts.length) return '';
+                return posts.map(p => `
+                    <div class="mt-2.5 p-3 rounded-2xl border border-slate-200 ${p.author === 'PPWR' ? 'bg-purple-50' : p.author === 'PPSR' ? 'bg-sky-50' : 'bg-amber-50'}">
+                        <div class="text-[11px] font-bold text-slate-800 mb-1">${p.author === 'PPWR' ? '💜 PPWR' : p.author === 'PPSR' ? '💙 PPSR' : '👫 ด้วยกัน'} ${p.timestamp ? '• ' + p.timestamp : ''}</div>
+                        ${p.text ? `<div class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">${p.text}</div>` : ''}
+                        ${Array.isArray(p.photos) && p.photos.length ? `<div class="grid grid-cols-3 gap-2 mt-2">${p.photos.map(src => `<img src="${src}" onclick="openImageViewer('${src}')" class="w-full h-24 sm:h-32 object-cover rounded-xl border border-black/10 cursor-zoom-in">`).join('')}</div>` : ''}
+                    </div>
+                `).join('');
+            };
+
+            const soloSectionHtml = soloEntries.length ? `
+                <h2 class="text-base sm:text-lg font-extrabold text-purple-950 border-b-2 border-purple-200 pb-1.5 mt-6 mb-3">💜 ช่วงเดินทางล่วงหน้า: PPWR Solo Log (30 พ.ย. – 5 ธ.ค. 2569)</h2>
+                <div class="space-y-3">
+                    ${soloEntries.map(cp => `
+                        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs">
+                            <div class="text-[11px] text-slate-500 mb-1">${cp.soloDate || ''} ${cp.soloTime ? '• ' + cp.soloTime : ''} • ${cp.zone}</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-900 flex flex-wrap items-center gap-2">
+                                <span>${cp.name}</span>
+                                ${completedIds['solo_' + cp.id] ? '<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>' : ''}
+                            </div>
+                            ${cp.addr ? `<div class="text-xs text-slate-600 mt-1 leading-relaxed">${cp.addr}</div>` : ''}
+                            ${renderThreadsPrint('solo_' + cp.id)}
+                        </div>
+                    `).join('')}
+                </div>
+            ` : '';
+
+            const dailySectionHtml = plans.map(d => `
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 border-b-2 border-slate-200 pb-1.5 mt-6 mb-3">🗓️ Day ${d.day} (${d.date} 2569) — ${d.city}: ${d.title}</h2>
+                <div class="space-y-3">
+                    ${d.events.map(ev => `
+                        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs">
+                            <div class="text-[11px] text-slate-500 mb-1">${ev.time} • ${ev.transit}</div>
+                            <div class="text-sm sm:text-base font-bold text-slate-900 flex flex-wrap items-center gap-2">
+                                <span>${ev.title}</span>
+                                ${completedIds[ev.id] ? '<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>' : ''}
+                            </div>
+                            <div class="text-xs text-slate-600 mt-1 leading-relaxed">${ev.desc}</div>
+                            ${renderThreadsPrint(ev.id)}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            const extraSectionsHtml = `
+                ${libs.length ? `<h2 class="text-base sm:text-lg font-extrabold text-teal-950 border-b-2 border-teal-200 pb-1.5 mt-6 mb-3">📚 Library Sightseeing ที่แวะเยือน</h2><div class="space-y-3">${libs.map(l => `<div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs"><div class="text-[11px] text-slate-500 mb-1">${l.zone}</div><div class="text-sm font-bold text-slate-900">${l.name}</div>${renderThreadsPrint(l.id)}</div>`).join('')}</div>` : ''}
+                ${series.length ? `<h2 class="text-base sm:text-lg font-extrabold text-rose-950 border-b-2 border-rose-200 pb-1.5 mt-6 mb-3">🎬 Series Snap ที่ตามรอย</h2><div class="space-y-3">${series.map(s => `<div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs"><div class="text-[11px] text-slate-500 mb-1">${s.seriesTitle} • ${s.zone}</div><div class="text-sm font-bold text-slate-900">${s.name}</div>${renderThreadsPrint(s.id)}</div>`).join('')}</div>` : ''}
+            `;
+
+            const overlayBody = document.getElementById('scrapbook-overlay-body');
+            const overlay = document.getElementById('scrapbook-overlay');
+            if (overlayBody && overlay) {
+                overlayBody.innerHTML = `
+                    <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-900 text-white p-6 rounded-3xl shadow-lg mb-4">
+                        <h1 class="text-xl sm:text-2xl font-extrabold font-jakarta">🇰🇷📸 PP_R in KOREA 2026 — Travel Scrapbook</h1>
+                        <p class="text-xs sm:text-sm text-sky-200 mt-1">บันทึกการเดินทางฉบับสมบูรณ์ • 30 พ.ย. – 12 ธ.ค. 2569 (ปูซาน &amp; โซล)</p>
+                    </div>
+                    ${soloSectionHtml}
+                    ${dailySectionHtml}
+                    ${extraSectionsHtml}
+                    <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-center gap-3">
+                        <button type="button" onclick="closeScrapbookOverlay()" class="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer">
+                            <i class="ph-bold ph-arrow-left text-base"></i> กลับหน้าหลัก
+                        </button>
+                        <button type="button" onclick="printScrapbookOverlay()" class="px-5 py-3 bg-royal hover:bg-blue-700 text-white rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer">
+                            <i class="ph-bold ph-printer text-base"></i> พิมพ์ / บันทึกเป็น PDF
+                        </button>
+                    </div>
+                `;
+                overlay.classList.remove('hidden');
+                overlay.scrollTop = 0;
+            }
+        }
+
+        function closeScrapbookOverlay() {
+            const overlay = document.getElementById('scrapbook-overlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        function printScrapbookOverlay() {
+            const content = document.getElementById('scrapbook-overlay-body')?.innerHTML || '';
+            const win = window.open('', '_blank');
+            if (win) {
+                win.document.open();
+                win.document.write(`<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><title>PP_R in KOREA 2026 — Travel Scrapbook</title><script src="https://cdn.tailwindcss.com"><\/script><style>body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans Thai',sans-serif;max-width:800px;margin:0 auto;padding:20px;}@media print{button{display:none!important;}}</style></head><body>${content}<script>setTimeout(()=>window.print(),600);<\/script></body></html>`);
+                win.document.close();
+            } else {
+                window.print();
+            }
+        }
 
         // ---------------------------------------------------------
         // FIREBASE REALTIME LISTENER & SYNC HELPERS
@@ -2509,10 +2589,39 @@
             }
         }
 
+        function toggleSeriesField() {
+            const checked = document.getElementById('chk-add-series').checked;
+            const box = document.getElementById('series-extra-box');
+            if (checked) {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        }
+
         function openAddCafeModal() {
             openAddModal();
             document.getElementById('chk-add-cafe').checked = true;
             toggleCafeCategoryField();
+        }
+
+        function openAddLibraryModal() {
+            openAddModal();
+            document.getElementById('chk-add-library').checked = true;
+            document.getElementById('chk-add-daily').checked = false;
+            toggleDailyFields();
+            document.getElementById('input-kr').required = false;
+            document.getElementById('input-kr').placeholder = 'ชื่อเกาหลี / อังกฤษสำหรับเปิดแผนที่ (ไม่ใส่ก็ได้)';
+        }
+
+        function openAddSeriesModal() {
+            openAddModal();
+            document.getElementById('chk-add-series').checked = true;
+            toggleSeriesField();
+            document.getElementById('chk-add-daily').checked = false;
+            toggleDailyFields();
+            document.getElementById('input-kr').required = false;
+            document.getElementById('input-kr').placeholder = 'ชื่อเกาหลี / อังกฤษสำหรับเปิดแผนที่ (ไม่ใส่ก็ได้)';
         }
 
         function openAddSoloModal(presetSoloDate = null) {
@@ -2544,6 +2653,7 @@
             document.getElementById('solo-extra-fields').classList.add('hidden');
             document.getElementById('solo-extra-fields').classList.remove('grid');
             document.getElementById('cafe-category-box').classList.add('hidden');
+            document.getElementById('series-extra-box').classList.add('hidden');
             tempAddPhotos = [];
 
             if (editId) {
@@ -2556,6 +2666,9 @@
 
                     document.getElementById('input-name').value = target.name || '';
                     document.getElementById('input-kr').value = target.kr || '';
+                    if (target.addLibrary || target.addSeries || target.addSolo) {
+                        document.getElementById('input-kr').required = false;
+                    }
                     const zoneSelect = document.getElementById('input-zone');
                     const options = Array.from(zoneSelect.options).map(o => o.value);
                     if (options.includes(target.zone)) {
@@ -2566,15 +2679,8 @@
                         document.getElementById('input-custom-zone').classList.remove('hidden');
                     }
                     document.getElementById('input-addr').value = target.addr || '';
-                    tempAddPhotos = Array.isArray(placePhotos[`ev_${editId}`])
-                        ? [...placePhotos[`ev_${editId}`]]
-                        : Array.isArray(placePhotos[`solo_${editId}`])
-                        ? [...placePhotos[`solo_${editId}`]]
-                        : Array.isArray(placePhotos[`cf_${editId}`])
-                        ? [...placePhotos[`cf_${editId}`]]
-                        : [];
 
-                    document.getElementById('chk-auto-checkin').checked = !!completedIds[`ev_${editId}`] || !!completedIds[`solo_${editId}`] || !!completedIds[`cf_${editId}`];
+                    document.getElementById('chk-auto-checkin').checked = !!completedIds[`ev_${editId}`] || !!completedIds[`solo_${editId}`] || !!completedIds[`cf_${editId}`] || !!completedIds[`lib_${editId}`] || !!completedIds[`ser_${editId}`];
                     document.getElementById('chk-add-solo').checked = !!target.addSolo;
                     toggleSoloFields();
                     if (target.addSolo) {
@@ -2585,6 +2691,12 @@
                     if (target.addCafe) {
                         toggleCafeCategoryField();
                         document.getElementById('input-cafe-type').value = target.cafeType || 'คาเฟ่ / กาแฟ';
+                    }
+                    document.getElementById('chk-add-library').checked = !!target.addLibrary;
+                    document.getElementById('chk-add-series').checked = !!target.addSeries;
+                    toggleSeriesField();
+                    if (target.addSeries) {
+                        document.getElementById('input-series-title').value = target.seriesTitle || '';
                     }
                     document.getElementById('chk-add-daily').checked = !!target.addDaily;
                     toggleDailyFields();
@@ -2663,6 +2775,9 @@
             const soloTime = document.getElementById('input-solo-time').value.trim();
             const addCafe = document.getElementById('chk-add-cafe').checked;
             const cafeType = document.getElementById('input-cafe-type').value;
+            const addLibrary = document.getElementById('chk-add-library').checked;
+            const addSeries = document.getElementById('chk-add-series').checked;
+            const seriesTitle = document.getElementById('input-series-title').value.trim();
             const addDaily = document.getElementById('chk-add-daily').checked;
             const day = document.getElementById('input-day').value;
             const time = document.getElementById('input-time').value.trim();
@@ -2673,16 +2788,16 @@
             if (editId) {
                 const idx = userCustomPlaces.findIndex(p => p.id === editId);
                 if (idx !== -1) {
-                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addDaily, day, time, addStamp, addGacha };
+                    userCustomPlaces[idx] = { ...userCustomPlaces[idx], author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addLibrary, addSeries, seriesTitle, addDaily, day, time, addStamp, addGacha };
                     lastAddedId = editId;
                 }
             } else {
                 targetId = 'custom_' + Date.now();
-                userCustomPlaces.unshift({ id: targetId, author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addDaily, day, time, addStamp, addGacha });
+                userCustomPlaces.unshift({ id: targetId, author, name, kr, zone, addr, addSolo, soloDate, soloTime, addCafe, cafeType, addLibrary, addSeries, seriesTitle, addDaily, day, time, addStamp, addGacha });
                 lastAddedId = targetId;
             }
 
-            const linkedKeys = [`ev_${targetId}`, `solo_${targetId}`, `cf_${targetId}`, `st_${targetId}`, `gc_${targetId}`];
+            const linkedKeys = [`ev_${targetId}`, `solo_${targetId}`, `cf_${targetId}`, `lib_${targetId}`, `ser_${targetId}`, `st_${targetId}`, `gc_${targetId}`];
             linkedKeys.forEach(k => {
                 noteAuthors[k] = author;
                 if (tempAddPhotos.length > 0 && !editId) {
@@ -2701,6 +2816,8 @@
                 if (addDaily) completedIds[`ev_${targetId}`] = stampTime;
                 if (addSolo) completedIds[`solo_${targetId}`] = stampTime;
                 if (addCafe) completedIds[`cf_${targetId}`] = stampTime;
+                if (addLibrary) completedIds[`lib_${targetId}`] = stampTime;
+                if (addSeries) completedIds[`ser_${targetId}`] = stampTime;
                 if (addStamp) completedIds[`st_${targetId}`] = stampTime;
                 if (addGacha) completedIds[`gc_${targetId}`] = stampTime;
             }
@@ -2716,7 +2833,7 @@
 
         function deleteCustomPlace(id) {
             userCustomPlaces = userCustomPlaces.filter(p => p.id !== id);
-            ['ev_', 'solo_', 'cf_', 'st_', 'gc_'].forEach(prefix => {
+            ['ev_', 'solo_', 'cf_', 'lib_', 'ser_', 'st_', 'gc_'].forEach(prefix => {
                 delete completedIds[`${prefix}${id}`];
                 delete placePhotos[`${prefix}${id}`];
                 delete noteAuthors[`${prefix}${id}`];
@@ -2768,6 +2885,262 @@
             } catch (err) {
                 showToast('รูปแบบโค้ดข้อมูลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง');
             }
+        }
+
+        // ---------------------------------------------------------
+        // RENDER LIBRARY SIGHTSEEING & SERIES SNAP TABS
+        // ---------------------------------------------------------
+        function renderLibraryTab() {
+            const allItems = getAllLibraryItems();
+            const search = (document.getElementById('library-search')?.value || '').toLowerCase().trim();
+            const filtered = allItems.filter(item => {
+                if (!search) return true;
+                const hay = `${item.name} ${item.kr} ${item.zone} ${item.desc}`.toLowerCase();
+                return hay.includes(search);
+            });
+
+            const countEl = document.getElementById('library-result-count');
+            if (countEl) countEl.textContent = `แสดง ${filtered.length} แห่งจากทั้งหมด ${allItems.length} แห่ง`;
+
+            const container = document.getElementById('library-list-container');
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-3xl p-8 text-center border-2 border-dashed border-teal-200 space-y-2.5">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center mx-auto">
+                            <i class="ph-fill ph-books text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">ยังไม่มีรายการ Library Sightseeing</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">กดปุ่ม <strong>"+ เพิ่มห้องสมุด / Book Cafe"</strong> ด้านบนเพื่อเพิ่มลิสต์ห้องสมุดหรือคาเฟ่หนังสือที่อยากไปได้เลยครับ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                ${filtered.map(item => {
+                    const checkVal = completedIds[item.id];
+                    const isVisited = !!checkVal;
+                    const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
+                    const threads = getThreadsForItem(item.id);
+                    const author = noteAuthors[item.id] || item.author || '';
+                    return `
+                    <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-teal-300 bg-teal-50/20' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+                                <div class="flex flex-wrap items-center gap-1">
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-teal-100 text-teal-800">📚 ${item.zone}</span>
+                                    ${renderAuthorBadge(author)}
+                                </div>
+                                ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : ''}
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
+                            ${item.kr ? `<p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>` : ''}
+                            ${item.desc ? `<p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${item.desc}</p>` : ''}
+                            ${renderBubbleThreadHtml(item.id, item.name)}
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                            <div class="flex items-center gap-1">
+                                <button onclick="toggleCheck('${item.id}');renderLibraryTab()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-teal-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                                    <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
+                                </button>
+                                <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
+                                    <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
+                                </button>
+                                ${item.isCustom ? `
+                                    <button onclick="openAddModal(null, '${item.customId}')" class="p-1.5 text-slate-400 hover:text-royal rounded-lg" title="แก้ไข"><i class="ph-bold ph-pencil-simple"></i></button>
+                                    <button onclick="openConfirmModal('ต้องการลบรายการนี้ออกจาก Library Sightseeing ใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                                ` : ''}
+                            </div>
+                            ${item.kr ? `
+                                <div class="flex items-center gap-1">
+                                    <button onclick="copyText('${item.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
+                                    <a href="${nMap(item.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
+        }
+
+        function renderSeriesTab() {
+            const allItems = getAllSeriesItems();
+            const search = (document.getElementById('series-search')?.value || '').toLowerCase().trim();
+            const filtered = allItems.filter(item => {
+                if (!search) return true;
+                const hay = `${item.seriesTitle} ${item.name} ${item.kr} ${item.zone} ${item.desc}`.toLowerCase();
+                return hay.includes(search);
+            });
+
+            const countEl = document.getElementById('series-result-count');
+            if (countEl) countEl.textContent = `แสดง ${filtered.length} จุดจากทั้งหมด ${allItems.length} จุด`;
+
+            const container = document.getElementById('series-list-container');
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-3xl p-8 text-center border-2 border-dashed border-rose-200 space-y-2.5">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto">
+                            <i class="ph-fill ph-film-slate text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">ยังไม่มีรายการ Series Snap</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">กดปุ่ม <strong>"+ เพิ่มโลเคชั่นซีรีส์"</strong> ด้านบนเพื่อเพิ่มพิกัดฉากตามรอยซีรีส์เรื่องโปรดได้เลยครับ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                ${filtered.map(item => {
+                    const checkVal = completedIds[item.id];
+                    const isVisited = !!checkVal;
+                    const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
+                    const threads = getThreadsForItem(item.id);
+                    const author = noteAuthors[item.id] || item.author || '';
+                    const sceneBannerHtml = item.sceneCaption ? `
+                        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br ${item.sceneTheme || 'from-rose-950 via-slate-900 to-indigo-950'} p-3.5 text-white mb-2.5 border border-white/10 shadow-xs">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/15 text-amber-200 backdrop-blur-xs">🎬 ${item.sceneTag || 'Scene Reference'}</span>
+                                <span class="text-xl leading-none">${item.sceneIcon || '📸'}</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white/95 leading-snug">${item.sceneCaption}</p>
+                            <div class="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-white/70">
+                                <span>มุมแนะนำ: ถ่ายแนวตั้งหรือแนวนอนเทียบเฟรมซีรีส์</span>
+                                <span class="font-mono">SNAP #${item.id.replace('ser_', '').toUpperCase()}</span>
+                            </div>
+                        </div>
+                    ` : '';
+                    return `
+                    <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-rose-300 bg-rose-50/20' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
+                        <div>
+                            ${sceneBannerHtml}
+                            <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+                                <div class="flex flex-wrap items-center gap-1">
+                                    ${item.seriesTitle ? `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800">🎬 ${item.seriesTitle}</span>` : ''}
+                                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700">${item.zone}</span>
+                                    ${renderAuthorBadge(author)}
+                                </div>
+                                ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">SNAPPED • ${stampLabel}</span>` : ''}
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
+                            ${item.kr ? `<p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>` : ''}
+                            ${item.desc ? `<p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${item.desc}</p>` : ''}
+                            ${renderBubbleThreadHtml(item.id, item.name)}
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                            <div class="flex items-center gap-1">
+                                <button onclick="toggleCheck('${item.id}');renderSeriesTab()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                                    <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-camera'}"></i> ${isVisited ? 'Snapped' : 'เช็กอิน'}
+                                </button>
+                                <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
+                                    <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
+                                </button>
+                                ${item.isCustom ? `
+                                    <button onclick="openAddModal(null, '${item.customId}')" class="p-1.5 text-slate-400 hover:text-royal rounded-lg" title="แก้ไข"><i class="ph-bold ph-pencil-simple"></i></button>
+                                    <button onclick="openConfirmModal('ต้องการลบรายการนี้ออกจาก Library Sightseeing ใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                                ` : ''}
+                            </div>
+                            ${item.kr ? `
+                                <div class="flex items-center gap-1">
+                                    <button onclick="copyText('${item.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
+                                    <a href="${nMap(item.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
+        }
+
+        function renderSeriesTab() {
+            const allItems = getAllSeriesItems();
+            const search = (document.getElementById('series-search')?.value || '').toLowerCase().trim();
+            const filtered = allItems.filter(item => {
+                if (!search) return true;
+                const hay = `${item.seriesTitle} ${item.name} ${item.kr} ${item.zone} ${item.desc}`.toLowerCase();
+                return hay.includes(search);
+            });
+
+            const countEl = document.getElementById('series-result-count');
+            if (countEl) countEl.textContent = `แสดง ${filtered.length} จุดจากทั้งหมด ${allItems.length} จุด`;
+
+            const container = document.getElementById('series-list-container');
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-3xl p-8 text-center border-2 border-dashed border-rose-200 space-y-2.5">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center mx-auto">
+                            <i class="ph-fill ph-film-slate text-2xl"></i>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-900">ยังไม่มีรายการ Series Snap</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto">กดปุ่ม <strong>"+ เพิ่มโลเคชั่นซีรีส์"</strong> ด้านบนเพื่อเพิ่มพิกัดฉากตามรอยซีรีส์เรื่องโปรดได้เลยครับ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                ${filtered.map(item => {
+                    const isVisited = !!completedIds[item.id];
+                    const threads = getThreadsForItem(item.id);
+                    const author = noteAuthors[item.id] || item.author || '';
+                    const sceneBannerHtml = item.sceneCaption ? `
+                        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br ${item.sceneTheme || 'from-rose-950 via-slate-900 to-indigo-950'} p-3.5 text-white mb-2.5 border border-white/10 shadow-xs">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/15 text-amber-200 backdrop-blur-xs">🎬 ${item.sceneTag || 'Scene Reference'}</span>
+                                <span class="text-xl leading-none">${item.sceneIcon || '📸'}</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white/95 leading-snug">${item.sceneCaption}</p>
+                            <div class="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-white/70">
+                                <span>มุมแนะนำ: ถ่ายแนวตั้งหรือแนวนอนเทียบเฟรมซีรีส์</span>
+                                <span class="font-mono">SNAP #${item.id.replace('ser_', '').toUpperCase()}</span>
+                            </div>
+                        </div>
+                    ` : '';
+                    return `
+                    <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-rose-300 bg-rose-50/20' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
+                        <div>
+                            ${sceneBannerHtml}
+                            <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+                                <div class="flex flex-wrap items-center gap-1">
+                                    ${item.seriesTitle ? `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800">🎬 ${item.seriesTitle}</span>` : ''}
+                                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700">${item.zone}</span>
+                                    ${renderAuthorBadge(author)}
+                                </div>
+                                ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">SNAPPED ✓</span>` : ''}
+                            </div>
+                            <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
+                            ${item.kr ? `<p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>` : ''}
+                            ${item.desc ? `<p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${item.desc}</p>` : ''}
+                            ${renderBubbleThreadHtml(item.id, item.name)}
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                            <div class="flex items-center gap-1">
+                                <button onclick="toggleCheck('${item.id}');renderSeriesTab()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                                    <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-camera'}"></i> ${isVisited ? 'ตามรอยแล้ว' : 'เช็กอิน'}
+                                </button>
+                                <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
+                                    <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
+                                </button>
+                                ${item.isCustom ? `
+                                    <button onclick="openAddModal(null, '${item.customId}')" class="p-1.5 text-slate-400 hover:text-royal rounded-lg" title="แก้ไข"><i class="ph-bold ph-pencil-simple"></i></button>
+                                    <button onclick="openConfirmModal('ต้องการลบรายการนี้ออกจาก Series Snap ใช่ไหมครับ?', () => deleteCustomPlace('${item.customId}'))" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="ลบ"><i class="ph-bold ph-trash"></i></button>
+                                ` : ''}
+                            </div>
+                            ${item.kr ? `
+                                <div class="flex items-center gap-1">
+                                    <button onclick="copyText('${item.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
+                                    <a href="${nMap(item.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-2xs"><i class="ph-bold ph-map-pin"></i> Map</a>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>`;
         }
 
         // ---------------------------------------------------------
@@ -2893,7 +3266,7 @@
                             <div class="flex flex-wrap items-center gap-1.5">
                                 <button onclick="toggleCheck('${key}');renderSoloLog()" class="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isVisited ? 'bg-purple-700 text-white shadow-xs' : 'bg-slate-900 hover:bg-slate-800 text-white'}">
                                     <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'} text-base"></i>
-                                    <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
+                                    <span>${isVisited ? 'Visited' : 'เช็กอิน'}</span>
                                 </button>
                                 <button onclick="openNoteModal('${key}', '${cp.name.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
                                     <i class="ph-bold ph-chats-circle"></i>
@@ -3009,7 +3382,7 @@
                         <div class="flex flex-wrap items-center gap-1.5">
                             <button onclick="toggleCheck('${ev.id}');renderDaily()" class="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-900 hover:bg-slate-800 text-white'}">
                                 <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'} text-base"></i>
-                                <span>${isVisited ? 'เช็กอินแล้ว' : 'กดเช็กอินจุดนี้'}</span>
+                                <span>${isVisited ? 'Visited' : 'เช็กอิน'}</span>
                             </button>
                             <button onclick="openNoteModal('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
                                 <i class="ph-bold ph-chats-circle"></i>
@@ -3109,6 +3482,7 @@
                         ${list.map(item => {
                             const checkVal = completedIds[item.id];
                             const isVisited = !!checkVal;
+                            const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                             const threads = getThreadsForItem(item.id);
                             const author = noteAuthors[item.id] || '';
                             return `
@@ -3119,7 +3493,7 @@
                                             <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${typeBadgeStyle(item.type)}">${typeEmoji(item.type)} ${item.type}</span>
                                             ${renderAuthorBadge(author)}
                                         </div>
-                                        ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>` : item.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">บันทึกใหม่</span>' : ''}
+                                        ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : item.isCustom ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-royal">บันทึกใหม่</span>' : ''}
                                     </div>
                                     <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
                                     <p class="text-[11px] font-mono text-slate-400 mt-0.5">${item.kr}</p>
@@ -3130,7 +3504,7 @@
                                 <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
                                     <div class="flex items-center gap-1">
                                         <button onclick="toggleCheck('${item.id}');renderCafeTab()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
-                                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'ไปลองแล้ว' : 'เช็กอิน'}
+                                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
                                         </button>
                                         <button onclick="openNoteModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold">
                                             <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
@@ -3152,6 +3526,7 @@
         }
 
         function filterGroup(type = 'all') {
+            currentGroupFilter = type;
             document.querySelectorAll('.gfilter-btn').forEach(btn => {
                 if (btn.dataset.gfilter === type) {
                     btn.className = 'gfilter-btn px-3.5 py-2 rounded-xl text-xs bg-royal text-white shadow-sm font-semibold transition whitespace-nowrap';
@@ -3162,6 +3537,41 @@
 
             const container = document.getElementById('group-content');
             let html = '';
+
+            const renderGroupCard = (itemId, badgeHtml, title, desc, subLoc, kr) => {
+                const checkVal = completedIds[itemId];
+                const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
+                const threads = getThreadsForItem(itemId);
+                const safeTitle = (title || '').replace(/'/g, "\\'");
+                return `
+                <div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-2.5 transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            ${badgeHtml}
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : ''}
+                        </div>
+                        <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1">${title}</h4>
+                        <p class="text-xs text-slate-600 mt-0.5">${desc}</p>
+                        ${subLoc ? `<p class="text-[11px] text-slate-400 mt-1">${subLoc}</p>` : ''}
+                        ${renderBubbleThreadHtml(itemId, title)}
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                        <div class="flex items-center gap-1">
+                            <button onclick="toggleCheck('${itemId}');filterGroup(currentGroupFilter)" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                                <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
+                            </button>
+                            <button onclick="openNoteModal('${itemId}', '${safeTitle}')" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-xl text-[11px] font-semibold cursor-pointer">
+                                <i class="ph-bold ph-chats-circle"></i> + โพสต์ ${threads.length ? '(' + threads.length + ')' : ''}
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="copyText('${kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs" title="คัดลอกชื่อเกาหลี (${kr})"><i class="ph ph-copy"></i></button>
+                            <a href="${nMap(kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
+                        </div>
+                    </div>
+                </div>`;
+            };
 
             if (type === 'all' || type === 'haebangchon') {
                 html += `<div class="bg-gradient-to-br from-amber-50 via-orange-50/70 to-rose-50/50 border border-amber-200/90 rounded-3xl p-4 sm:p-5 space-y-3">
@@ -3208,18 +3618,14 @@
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🎞️ พิกัดตู้ Photobooth &amp; แหล่งช้อปปิ้งจากโน้ต</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${photoboothAndShops.map(p => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
-                            <div>
-                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${p.cat === 'Photobooth' ? 'bg-pink-100 text-pink-700' : 'bg-amber-100 text-amber-800'}">${p.cat}</span>
-                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${p.name}</h4>
-                                <p class="text-xs text-slate-600 mt-0.5">${p.info}</p>
-                                <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-map-pin"></i> ${p.loc}</p>
-                            </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
-                                <button onclick="copyText('${p.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(p.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
-                            </div>
-                        </div>`).join('')}
+                        ${photoboothAndShops.map((p, idx) => renderGroupCard(
+                            `grp_pb_${idx}`,
+                            `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${p.cat === 'Photobooth' ? 'bg-pink-100 text-pink-700' : 'bg-amber-100 text-amber-800'}">${p.cat}</span>`,
+                            p.name,
+                            p.info,
+                            `<i class="ph-fill ph-map-pin"></i> ${p.loc}`,
+                            p.kr
+                        )).join('')}
                     </div>
                 </div>`;
             }
@@ -3228,18 +3634,14 @@
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🌇 จุดชมพระอาทิตย์ตก (Sunset Spots) &amp; สถาปัตยกรรมน่าถ่ายรูป</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${sunsetAndArchSpots.map(s => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
-                            <div>
-                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-orange-100 text-orange-800">${s.tag}</span>
-                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${s.name}</h4>
-                                <p class="text-xs text-slate-600 mt-0.5">${s.info}</p>
-                                <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-train"></i> ${s.loc}</p>
-                            </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
-                                <button onclick="copyText('${s.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(s.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
-                            </div>
-                        </div>`).join('')}
+                        ${sunsetAndArchSpots.map((s, idx) => renderGroupCard(
+                            `grp_ss_${idx}`,
+                            `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-orange-100 text-orange-800">${s.tag}</span>`,
+                            s.name,
+                            s.info,
+                            `<i class="ph-fill ph-train"></i> ${s.loc}`,
+                            s.kr
+                        )).join('')}
                     </div>
                 </div>`;
             }
@@ -3267,20 +3669,14 @@
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🎄 จุดเช็กอิน Christmas Spots (6–12 ธ.ค. 2569)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${christmasSpots.map(c => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
-                            <div>
-                                <div class="flex items-center justify-between gap-2 mb-1">
-                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${c.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'}">${c.city}</span>
-                                    <span class="text-[11px] text-slate-400">${c.transit}</span>
-                                </div>
-                                <h4 class="font-bold text-xs sm:text-sm text-slate-900">${c.name}</h4>
-                                <p class="text-xs text-slate-600 mt-1">${c.info}</p>
-                            </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
-                                <button onclick="copyText('${c.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(c.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
-                            </div>
-                        </div>`).join('')}
+                        ${christmasSpots.map((c, idx) => renderGroupCard(
+                            `grp_xm_${idx}`,
+                            `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg ${c.city === 'ปูซาน' ? 'bg-sky-100 text-sky-700' : 'bg-rose-100 text-rose-700'}">${c.city}</span>`,
+                            c.name,
+                            c.info,
+                            `<i class="ph-fill ph-train"></i> ${c.transit}`,
+                            c.kr
+                        )).join('')}
                     </div>
                 </div>`;
             }
@@ -3289,18 +3685,14 @@
                 html += `<div class="space-y-2.5">
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-1.5">🖼️ Free Art Galleries ในโซล (เปิด อังคาร–เสาร์)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${freeGalleries.map(g => `<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col justify-between gap-2.5">
-                            <div>
-                                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-700">${g.zone}</span>
-                                <h4 class="font-bold text-xs sm:text-sm text-slate-900 mt-1.5">${g.name}</h4>
-                                <p class="text-xs text-slate-600 mt-0.5">${g.info}</p>
-                                <p class="text-[11px] text-slate-400 mt-1"><i class="ph-fill ph-train"></i> ${g.transit}</p>
-                            </div>
-                            <div class="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
-                                <button onclick="copyText('${g.kr}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-medium"><i class="ph ph-copy"></i> คัดลอกชื่อ</button>
-                                <a href="${nMap(g.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
-                            </div>
-                        </div>`).join('')}
+                        ${freeGalleries.map((g, idx) => renderGroupCard(
+                            `grp_gl_${idx}`,
+                            `<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-700">${g.zone}</span>`,
+                            g.name,
+                            g.info,
+                            `<i class="ph-fill ph-train"></i> ${g.transit}`,
+                            g.kr
+                        )).join('')}
                     </div>
                 </div>`;
             }
@@ -3331,18 +3723,19 @@
             document.getElementById('stamp-list').innerHTML = items.map(s => {
                 const checkVal = completedIds[s.id];
                 const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-3">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-1.5">
                             <span class="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800">${s.day}</span>
-                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">STAMPED ✓</span>` : ''}
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : ''}
                         </div>
                         <h4 class="font-bold text-sm text-slate-900">${s.name}</h4>
                         <p class="text-xs text-slate-600 mt-1">${s.loc}</p>
                     </div>
                     <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
                         <button onclick="toggleCheck('${s.id}');renderStamps()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-amber-500 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
-                            <i class="${isVisited ? 'ph-fill ph-stamp' : 'ph-bold ph-stamp'}"></i> ${isVisited ? 'เก็บ Stamp แล้ว' : 'ปั๊ม Stamp'}
+                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
                         </button>
                         <div class="flex items-center gap-1">
                             <button onclick="copyText('${s.kr}')" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600" title="คัดลอกชื่อเกาหลี"><i class="ph ph-copy"></i></button>
@@ -3356,19 +3749,21 @@
         function renderGachaAndFreebies() {
             const gachas = getAllGacha();
             document.getElementById('gacha-spots-list').innerHTML = gachas.map(g => {
-                const isVisited = !!completedIds[g.id];
+                const checkVal = completedIds[g.id];
+                const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-pink-300 bg-pink-50/25' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-2.5">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-1">
                             <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-pink-100 text-pink-700">${g.tag}</span>
-                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED ✓</span>` : ''}
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : ''}
                         </div>
                         <h4 class="font-bold text-sm text-slate-900 mt-1">${g.name}</h4>
                         <p class="text-xs text-slate-600 mt-0.5">${g.desc}</p>
                     </div>
                     <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
                         <button onclick="toggleCheck('${g.id}');renderGachaAndFreebies()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-pink-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
-                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'หมุนแล้ว' : 'เช็กอินจุดนี้'}
+                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
                         </button>
                         <a href="${nMap(g.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
                     </div>
@@ -3376,19 +3771,21 @@
             }).join('');
 
             document.getElementById('freebies-list').innerHTML = baseFreebieItems.map(f => {
-                const isVisited = !!completedIds[f.id];
+                const checkVal = completedIds[f.id];
+                const isVisited = !!checkVal;
+                const stampLabel = typeof checkVal === 'string' ? checkVal : 'เช็กอินแล้ว';
                 return `<div class="bg-white rounded-3xl p-4 border-2 ${isVisited ? 'border-emerald-300 bg-emerald-50/25' : 'border-slate-200/80'} shadow-xs flex flex-col justify-between gap-2.5">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-1">
                             <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-700">${f.tag}</span>
-                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">COLLECTED ✓</span>` : ''}
+                            ${isVisited ? `<span class="visited-stamp px-2 py-0.5 rounded-md text-[10px] font-extrabold">VISITED • ${stampLabel}</span>` : ''}
                         </div>
                         <h4 class="font-bold text-sm text-slate-900 mt-1">${f.name}</h4>
                         <p class="text-xs text-slate-600 mt-0.5">${f.desc}</p>
                     </div>
                     <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
                         <button onclick="toggleCheck('${f.id}');renderGachaAndFreebies()" class="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition cursor-pointer ${isVisited ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}">
-                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-gift'}"></i> ${isVisited ? 'รับของฟรีแล้ว' : 'บันทึกว่ารับแล้ว'}
+                            <i class="${isVisited ? 'ph-fill ph-check-circle' : 'ph-bold ph-map-pin-check'}"></i> ${isVisited ? 'Visited' : 'เช็กอิน'}
                         </button>
                         <a href="${nMap(f.kr)}" target="_blank" class="px-3 py-1.5 bg-naver hover:bg-naverDark text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="ph-bold ph-map-pin"></i> Map</a>
                     </div>
@@ -3594,7 +3991,9 @@
             renderSoloLog();
             renderDaily();
             renderCafeTab();
-            filterGroup('all');
+            renderLibraryTab();
+            renderSeriesTab();
+            filterGroup(currentGroupFilter);
             renderStamps();
             renderGachaAndFreebies();
             renderNaverDirectory();
