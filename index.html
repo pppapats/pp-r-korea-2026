@@ -50,7 +50,8 @@
             body { background: white !important; }
             .no-print { display: none !important; }
             #scrapbook-modal { position: static !important; background: white !important; padding: 0 !important; }
-            #scrapbook-box { box-shadow: none !important; max-height: none !important; overflow: visible !important; }
+            #scrapbook-box { box-shadow: none !important; max-height: none !important; overflow: visible !important; border: none !important; }
+            #scrapbook-body { padding: 0 !important; overflow: visible !important; }
         }
     </style>
 </head>
@@ -78,7 +79,7 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="openScrapbookModal()" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white flex items-center gap-1.5 transition cursor-pointer">
+                    <button onclick="openScrapbookModal('itinerary')" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white flex items-center gap-1.5 transition cursor-pointer">
                         <i class="ph-bold ph-book-open-text text-sky-300"></i> Export Scrapbook
                     </button>
                     <button onclick="openTravelerModal()" class="px-3.5 py-1.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
@@ -131,7 +132,7 @@
     </nav>
 
     <!-- Main Content Container -->
-    <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-5">
+    <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-5 no-print">
 
         <!-- TAB: SOLO LOG -->
         <section id="tab-solo" class="tab-content hidden">
@@ -268,7 +269,7 @@
     <!-- ========================================================= -->
     <!-- SPLIT-VIEW PLACE DETAIL MODAL (z-50)                      -->
     <!-- ========================================================= -->
-    <div id="detail-modal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden items-center justify-center p-2.5 sm:p-5" onclick="if(event.target===this) closeDetailModal()">
+    <div id="detail-modal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs hidden items-center justify-center p-2.5 sm:p-5 no-print" onclick="if(event.target===this) closeDetailModal()">
         <div class="bg-white w-full max-w-4xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
             <!-- Modal Header -->
             <div id="detail-modal-header" class="px-4 sm:px-6 py-3.5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50/80">
@@ -391,7 +392,7 @@
     <!-- ========================================================= -->
 
     <!-- Post Note / Photo Modal (z-[70]) -->
-    <div id="note-modal" class="fixed inset-0 z-[70] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4" onclick="if(event.target===this) closeNoteModal()">
+    <div id="note-modal" class="fixed inset-0 z-[70] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeNoteModal()">
         <div class="bg-white w-full max-w-md rounded-3xl p-5 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -431,7 +432,7 @@
     </div>
 
     <!-- Schedule / Time Edit Modal (z-[70]) -->
-    <div id="schedule-modal" class="fixed inset-0 z-[70] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4" onclick="if(event.target===this) closeScheduleModal()">
+    <div id="schedule-modal" class="fixed inset-0 z-[70] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeScheduleModal()">
         <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-base font-extrabold text-slate-900">แก้ไขเวลา / ช่วงเวลา</h3>
@@ -447,7 +448,7 @@
     </div>
 
     <!-- Add / Edit Place Modal (z-[75]) -->
-    <div id="add-modal" class="fixed inset-0 z-[75] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4" onclick="if(event.target===this) closeAddModal()">
+    <div id="add-modal" class="fixed inset-0 z-[75] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeAddModal()">
         <div class="bg-white w-full max-w-lg rounded-3xl p-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-3">
                 <h3 id="add-modal-heading" class="text-base font-extrabold text-slate-900">บันทึกจุดแวะใหม่</h3>
@@ -567,7 +568,7 @@
     </div>
 
     <!-- Traveler Info Modal (z-[75]) -->
-    <div id="traveler-modal" class="fixed inset-0 z-[75] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4" onclick="if(event.target===this) closeTravelerModal()">
+    <div id="traveler-modal" class="fixed inset-0 z-[75] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeTravelerModal()">
         <div class="bg-white w-full max-w-lg rounded-3xl p-5 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -608,7 +609,7 @@
                     </div>
                     <div>
                         <h4 id="vault-lock-title" class="text-sm font-extrabold">ข้อมูลส่วนตัวผู้เดินทาง (ล็อกด้วยรหัส PIN)</h4>
-                        <p id="vault-lock-desc" class="text-[11px] text-slate-300 mt-0.5">กรอกรหัส PIN 4–6 หลักเพื่อดูเลขพาสปอร์ต K-ETA ประกัน และข้อมูลส่วนตัว</p>
+                        <p id="vault-lock-desc" class="text-[11px] text-slate-300 mt-0.5">กรอกรหัส PIN 6 หลักเพื่อดูเลขพาสปอร์ต K-ETA ประกัน และข้อมูลส่วนตัว</p>
                     </div>
                     <div class="max-w-[220px] mx-auto">
                         <input type="password" inputmode="numeric" maxlength="6" id="vault-pin-input" onkeydown="if(event.key==='Enter') submitVaultPin()" placeholder="••••••" class="w-full text-center tracking-[0.4em] text-lg font-extrabold py-2.5 px-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400">
@@ -699,30 +700,41 @@
         </div>
     </div>
 
-    <!-- Scrapbook Export Modal (z-[75]) -->
+    <!-- Scrapbook & Immigration Itinerary Export Modal (z-[75]) -->
     <div id="scrapbook-modal" class="fixed inset-0 z-[75] bg-slate-950/75 backdrop-blur-xs hidden items-center justify-center p-2 sm:p-5" onclick="if(event.target===this) closeScrapbookModal()">
         <div id="scrapbook-box" class="bg-white w-full max-w-5xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
+            <!-- Top Toolbar -->
             <div class="px-4 sm:px-6 py-3.5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 bg-slate-50 no-print">
-                <div class="flex items-center gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
                     <button onclick="closeScrapbookModal()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                         <i class="ph-bold ph-arrow-left text-royal"></i> กลับหน้าหลัก
                     </button>
-                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-                        <i class="ph-fill ph-book-open-text text-royal"></i> Travel Scrapbook
-                    </h3>
+                    <!-- Mode Switcher: Immigration Itinerary vs Scrapbook Memories -->
+                    <div class="inline-flex rounded-xl bg-slate-200/80 p-1 gap-1">
+                        <button id="sb-tab-itinerary" onclick="switchScrapbookView('itinerary')" class="px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer bg-white text-slate-900 shadow-2xs">
+                            🛂 ตารางเดินทางยื่น ตม.
+                        </button>
+                        <button id="sb-tab-memories" onclick="switchScrapbookView('memories')" class="px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer text-slate-600 hover:text-slate-900">
+                            📸 สมุดภาพ & เช็กอิน
+                        </button>
+                    </div>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="downloadScrapbookHtml()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
-                        <i class="ph-bold ph-download-simple"></i> บันทึกไฟล์เก็บไว้ (.html)
+                        <i class="ph-bold ph-download-simple"></i> บันทึกไฟล์ (.html)
                     </button>
                     <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-royal hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                         <i class="ph-bold ph-printer"></i> พิมพ์ / บันทึก PDF
                     </button>
                 </div>
             </div>
-            <div id="scrapbook-body" class="p-4 sm:p-8 overflow-y-auto space-y-6 bg-gradient-to-b from-slate-50/70 to-white"></div>
+
+            <!-- Scrollable Document Body -->
+            <div id="scrapbook-body" class="p-4 sm:p-8 overflow-y-auto space-y-6 bg-white"></div>
+
+            <!-- Bottom Bar -->
             <div class="px-4 sm:px-6 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between no-print">
-                <span class="text-[11px] text-slate-400">PP_R in KOREA 2026 • Memory Album</span>
+                <span class="text-[11px] text-slate-400">PP_R in KOREA 2026 • Travel Itinerary & Memory Album</span>
                 <button onclick="closeScrapbookModal()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer">
                     <i class="ph-bold ph-house"></i> กลับหน้าหลัก
                 </button>
@@ -731,12 +743,12 @@
     </div>
 
     <!-- Fullscreen Image Viewer (z-[90]) -->
-    <div id="image-viewer-modal" class="fixed inset-0 z-[90] bg-black/90 hidden items-center justify-center p-4" onclick="closeImageViewer()">
+    <div id="image-viewer-modal" class="fixed inset-0 z-[90] bg-black/90 hidden items-center justify-center p-4 no-print" onclick="closeImageViewer()">
         <img id="viewer-img" src="" alt="Full view" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain">
     </div>
 
     <!-- Reset Checked Confirmation Modal (z-[85]) -->
-    <div id="reset-confirm-modal" class="fixed inset-0 z-[85] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4" onclick="if(event.target===this) closeResetConfirmModal()">
+    <div id="reset-confirm-modal" class="fixed inset-0 z-[85] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-4 no-print" onclick="if(event.target===this) closeResetConfirmModal()">
         <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl border border-slate-200 text-center">
             <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3 text-2xl">
                 <i class="ph-fill ph-warning-circle"></i>
@@ -767,8 +779,9 @@
 
         const baseDailyPlan = [
             {
-                day: 1, city: 'ปูซาน', date: 'อา. 6 ธ.ค.', badgeColor: 'bg-purple-100 text-purple-800',
+                day: 1, city: 'ปูซาน', enCity: 'Busan', date: 'อา. 6 ธ.ค.', enDate: 'Sun, 6 Dec 2026', badgeColor: 'bg-purple-100 text-purple-800',
                 title: 'เดินทางถึงเกาหลี • KTX 047 สู่ปูซาน • แฮอุนแด & Christmas Village',
+                enTitle: 'Arrival at Incheon Airport (ICN) → KTX 047 to Busan → Haeundae & Christmas Village',
                 highlightNote: '🎫 ตั๋ว KTX ขาไปจองแล้ว: 14:58–17:47 น. ขบวน KTX 047 (Seoul Station → Busan Station) • Car 13 / Seat 8A-8B (คืนนี้แวะ Christmas Village Busan เพราะงานเปิดเฉพาะ พฤ.–อา.)',
                 events: [
                     { id: 'd1_e1', time: '10:30 – 12:00', title: 'ถึงสนามบินอินชอน (ICN T1) • รับ K-Heritage Passport & ขึ้น AREX เข้า Seoul Station', krName: '인천국제공항', transit: 'ICN AIRPORT (T1) 11:00–12:00 → SEOUL STATION (AREX)', desc: 'ถึงสนามบินอินชอน Terminal 1 ประมาณ 10:30 น. ผ่าน ตม. รับกระเป๋า แวะรับสมุด Korean Heritage Visitor Passport ฟรีที่ K-Heritage Visitor Center (ICN T1 ชั้น B1 ศูนย์คมนาคม แถว Burger King) แล้วนั่งรถไฟ AREX รอบ 11:00–12:00 น. สู่ Seoul Station', tips: 'จุดรับสมุด K-Heritage Visitor Passport อยู่ชั้น B1 ศูนย์คมนาคม ใกล้ทางเดินไปรถไฟ AREX' },
@@ -779,8 +792,9 @@
                 ]
             },
             {
-                day: 2, city: 'ปูซาน', date: 'จ. 7 ธ.ค.', badgeColor: 'bg-blue-100 text-blue-800',
+                day: 2, city: 'ปูซาน', enCity: 'Busan', date: 'จ. 7 ธ.ค.', enDate: 'Mon, 7 Dec 2026', badgeColor: 'bg-blue-100 text-blue-800',
                 title: 'Blueline Park • หมู่บ้านคัมชอน • BIFF Square & หาดกวางอัลลี (Gwangalli)',
+                enTitle: 'Haeundae Blueline Park → Gamcheon Culture Village → BIFF Square → Gwangalli Beach',
                 highlightNote: '📸 แวะเดินชมวิว Blueline Park แฮอุนแด (แวะซื้อขนมปังเกลือ Jayeondo Sogeumppang) ต่อด้วยหมู่บ้านคัมชอน BIFF Square และปิดท้ายวิวสะพาน Gwangan ยามค่ำที่หาดกวางอัลลี',
                 events: [
                     { id: 'd2_e1', time: '09:30 – 11:30', title: 'เดินชมวิว Blueline Park แฮอุนแด & ขนมปังเกลือ Jayeondo Sogeumppang', krName: '자연도소금빵 해운대', transit: 'เดินเลียบทางเดินไม้ Green Railway / สถานี Jungdong ทางออก 7', desc: 'เดินเล่นชมวิวทางรถไฟเลียบทะเลโซน Mipo – Cheongsapo (เน้นเดินชมวิว ไม่นั่ง Sky Capsule) และแวะซื้อขนมปังเกลือเจ้าดัง Jayeondo Sogeumppang & Jayeondo Hae', tips: 'ขนมปังเกลือ Jayeondo Sogeumppang ขายเป็นเซ็ต 4 ชิ้นอบสดร้อนๆ ใกล้สถานี Mipo' },
@@ -790,8 +804,9 @@
                 ]
             },
             {
-                day: 3, city: 'ปูซาน → โซล', date: 'อ. 8 ธ.ค.', badgeColor: 'bg-emerald-100 text-emerald-800',
+                day: 3, city: 'ปูซาน → โซล', enCity: 'Busan → Seoul', date: 'อ. 8 ธ.ค.', enDate: 'Tue, 8 Dec 2026', badgeColor: 'bg-emerald-100 text-emerald-800',
                 title: 'KTX 047 กลับโซล • เช็กอิน Gangdong • อิกซอนดง & คลองชองกเยชอน',
+                enTitle: 'KTX 047 Busan to Seoul → Check-in STAYMIN Gangdong → Ikseon-dong & Cheonggyecheon',
                 highlightNote: '🎫 ตั๋ว KTX ขากลับจองแล้ว: 13:17–16:34 น. ขบวน KTX 047 (Busan Station → Seoul Station) • Car 1 / Seat 9A-9B • เช็กอิน STAYMIN Gangdong (สาย 5 สีม่วง)',
                 events: [
                     { id: 'd3_e1', time: '13:17 – 16:34', title: 'เช็กเอาต์ปูซาน & นั่ง KTX 047 กลับเข้ากรุงโซล (Car 1 • Seat 9A-9B)', krName: '강동역', transit: 'KTX 047 (Busan Station → Seoul Station) • Car 1 / Seat 9A-9B', desc: 'ออกเดินทางจาก Busan Station เวลา 13:17 น. ถึง Seoul Station เวลา 16:34 น. (ขบวน KTX 047 ตู้ 1 ที่นั่ง 9A-9B) จากนั้นต่อรถไฟใต้ดินสาย 5 ไปยังสถานี Gangdong เช็กอินที่พัก STAYMIN Gangdong', tips: 'ที่พักโซล 4 คืน: STAYMIN Gangdong เดินทางสะดวกด้วยรถไฟใต้ดินสาย 5 (สีม่วง) สถานี Gangdong' },
@@ -800,8 +815,9 @@
                 ]
             },
             {
-                day: 4, city: 'โซล', date: 'พ. 9 ธ.ค.', badgeColor: 'bg-amber-100 text-amber-800',
+                day: 4, city: 'โซล', enCity: 'Seoul', date: 'พ. 9 ธ.ค.', enDate: 'Wed, 9 Dec 2026', badgeColor: 'bg-amber-100 text-amber-800',
                 title: 'อันกุก • หมู่บ้านบุกชอน • ซัมชองดง • เมียงดง & ชินเซเก ไฟคริสต์มาส',
+                enTitle: 'Anguk & Bukchon Hanok Village → Samcheong-dong → Myeongdong & Shinsegae Lights',
                 highlightNote: '🎄 ช่วงค่ำห้ามพลาดโชว์ไฟ LED หน้าห้าง Shinsegae Main Branch (เมียงดง) และต้นคริสต์มาสหน้าห้าง Lotte!',
                 events: [
                     { id: 'd4_e1', time: '09:30 – 12:30', title: 'ย่านอันกุก (Anguk) • คาเฟ่ London Bagel / Artist Bakery & บุกชอนฮันอก', krName: '북촌한옥마을', transit: 'รถไฟสาย 5 → Jongno 3-ga ต่อสาย 3 → สถานี Anguk', desc: 'เดินเล่นย่าน Anguk แวะแกลเลอรีศิลปะฟรีแถว Samcheong-dong (MMCA / Kukje Gallery) และถ่ายรูปวิวหมู่บ้านโบราณ Bukchon Hanok Village', tips: 'แวะร้าน London Bagel Museum / Artist Bakery / Dotori Garden และช็อป NYUNYU Mansion Anguk' },
@@ -810,8 +826,9 @@
                 ]
             },
             {
-                day: 5, city: 'โซล', date: 'พฤ. 10 ธ.ค.', badgeColor: 'bg-orange-100 text-orange-800',
+                day: 5, city: 'โซล', enCity: 'Seoul', date: 'พฤ. 10 ธ.ค.', enDate: 'Thu, 10 Dec 2026', badgeColor: 'bg-orange-100 text-orange-800',
                 title: 'Lotte World Aquarium • Starfield Library • ซองซู (Seongsu)',
+                enTitle: 'Lotte World Aquarium (Jamsil) → Starfield Library (COEX) → Seongsu-dong',
                 highlightNote: '🐋 วันธรรมดาคนน้อย เหมาะสำหรับเข้า Lotte World Aquarium ช่วงเช้า และไปเดินเล่นย่านซองซูช่วงบ่าย',
                 events: [
                     { id: 'd5_e1', time: '10:00 – 12:30', title: 'Lotte World Aquarium & ช้อปปิ้ง Lotte World Mall', krName: '롯데월드 아쿠아리움', transit: 'สาย 5 → Cheonho ต่อสาย 8 → สถานี Jamsil ทางออก 10', desc: 'ชมอุโมงค์ใต้น้ำและน้องวาฬเบลูก้าที่ Lotte World Aquarium พร้อมเก็บ Stamp และเดินเล่นโซนคริสต์มาสใน Lotte World Mall', tips: 'เดินทางจากที่พัก STAYMIN Gangdong เพียง 1 สถานีไป Cheonho แล้วต่อสาย 8 ลง Jamsil ทางออก 10/11' },
@@ -820,8 +837,9 @@
                 ]
             },
             {
-                day: 6, city: 'โซล', date: 'ศ. 11 ธ.ค.', badgeColor: 'bg-rose-100 text-rose-800',
+                day: 6, city: 'โซล', enCity: 'Seoul', date: 'ศ. 11 ธ.ค.', enDate: 'Fri, 11 Dec 2026', badgeColor: 'bg-rose-100 text-rose-800',
                 title: 'ฮันนัมดง • เส้นทางเดินแฮบังชน–ฮูอัมดง • The Hyundai Seoul • ฮงแด',
+                enTitle: 'Hannam-dong → Haebangchon–Huam-dong Walk → The Hyundai Seoul → Hongdae',
                 highlightNote: '🗺️ Route แฮบังชน–ฮูอัมดง (13:00–15:45 น.): นั่งลิฟต์เอียง 108 ขั้นขึ้นด้านบน แล้วเดินลงเนินเรื่อยๆ ผ่านตลาดชินฮึง → คาเฟ่ → มุมถ่ายรูปตรอก Sweet Bottle → ฮูอัมดง (ไม่ต้องเดินขึ้นเนินให้เหนื่อย!)',
                 events: [
                     { id: 'd6_e1', time: '10:00 – 12:30', title: 'เดินเล่นย่านฮันนัมดง (Hannam-dong) & แกลเลอรีศิลปะ', krName: '한남동', transit: 'รถไฟสาย 6 → สถานี Hangangjin ทางออก 3', desc: 'ช้อปปิ้งแบรนด์ดีไซเนอร์เกาหลี Mardi Mercredi, Marithe, Grove และแวะชม Leeum Museum of Art / Pace Gallery ในย่านฮันนัม', tips: 'สถานี Hangangjin ทางออก 1 หรือ 3 เดินเชื่อมโซนร้านค้าฮันนัมดงได้สะดวก' },
@@ -831,8 +849,9 @@
                 ]
             },
             {
-                day: 7, city: 'โซล → กรุงเทพฯ', date: 'ส. 12 ธ.ค.', badgeColor: 'bg-slate-800 text-white',
+                day: 7, city: 'โซล → กรุงเทพฯ', enCity: 'Seoul → Bangkok', date: 'ส. 12 ธ.ค.', enDate: 'Sat, 12 Dec 2026', badgeColor: 'bg-slate-800 text-white',
                 title: 'เก็บตกช้อปปิ้ง Lotte Mart Seoul Station & เดินทางกลับสนามบินอินชอน',
+                enTitle: 'Check-out → Lotte Mart Seoul Station → AREX to Incheon Airport (ICN) → Departure',
                 highlightNote: '✈️ เที่ยวบินขากลับออก 19:50 / 20:15 น. ควรถึงสนามบินอินชอนไม่เกิน 16:30–17:00 น. เพื่อทำ Tax Refund และเช็กอิน',
                 events: [
                     { id: 'd7_e1', time: '10:30 – 14:30', title: 'เช็กเอาต์ที่พัก • ฝากกระเป๋า & ช้อปปิ้งของฝากที่ Lotte Mart (Seoul Station)', krName: '롯데마트 제타플렉스 서울역점', transit: 'สาย 5 → Gongdeok ต่อ AREX → Seoul Station', desc: 'ซื้อขนม สาหร่าย รามยอน และของฝากที่ Lotte Mart ZETTAPLEX สาขา Seoul Station สามารถทำ Tax Refund ได้ทันทีในห้าง', tips: 'มีจุดฝากกระเป๋าขนาดใหญ่และเคาน์เตอร์ Tax Refund ภายใน Lotte Mart Seoul Station' },
@@ -1035,6 +1054,7 @@
         let currentDay = 1;
         let currentCafeFilter = 'all';
         let currentZoneFilter = 'all';
+        let currentScrapbookView = 'itinerary';
         let activeAuthor = 'PPWR';
         let activeDetailItem = null;
         let activeNoteTargetId = null;
@@ -2113,7 +2133,131 @@
             showToast('บันทึกข้อมูลส่วนตัวผู้เดินทางเรียบร้อย!');
         }
 
-        function openScrapbookModal() {
+        // =========================================================
+        // 9. SCRAPBOOK & IMMIGRATION ITINERARY EXPORT
+        // =========================================================
+        function openScrapbookModal(initialView) {
+            if (initialView) {
+                currentScrapbookView = initialView;
+            }
+            renderScrapbookView();
+            document.getElementById('scrapbook-modal').classList.remove('hidden');
+            document.getElementById('scrapbook-modal').classList.add('flex');
+        }
+
+        function switchScrapbookView(viewMode) {
+            currentScrapbookView = viewMode;
+            renderScrapbookView();
+        }
+
+        function renderScrapbookView() {
+            const tabItin = document.getElementById('sb-tab-itinerary');
+            const tabMem = document.getElementById('sb-tab-memories');
+            if (currentScrapbookView === 'itinerary') {
+                tabItin.className = 'px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer bg-white text-slate-900 shadow-2xs';
+                tabMem.className = 'px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer text-slate-600 hover:text-slate-900';
+                renderImmigrationItinerary();
+            } else {
+                tabMem.className = 'px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer bg-white text-slate-900 shadow-2xs';
+                tabItin.className = 'px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer text-slate-600 hover:text-slate-900';
+                renderMemoriesScrapbook();
+            }
+        }
+
+        function renderImmigrationItinerary() {
+            const plans = getDailyPlanWithCustom();
+            const body = document.getElementById('scrapbook-body');
+
+            const daysTableHtml = plans.map(day => {
+                const rowsHtml = day.events.map(ev => `
+                    <tr class="border-b border-slate-200/80 last:border-b-0 align-top">
+                        <td class="py-2.5 px-3 text-xs font-bold text-slate-800 whitespace-nowrap w-[115px] bg-slate-50/60">${ev.time || '-'}</td>
+                        <td class="py-2.5 px-3 text-xs text-slate-900">
+                            <div class="font-bold leading-snug">${ev.title}</div>
+                            ${ev.krName ? `<div class="text-[11px] text-slate-500 mt-0.5">${ev.krName}</div>` : ''}
+                        </td>
+                        <td class="py-2.5 px-3 text-[11px] text-slate-600 w-[34%]">${ev.transit || '-'}</td>
+                    </tr>
+                `).join('');
+
+                return `
+                    <div class="border border-slate-300 rounded-2xl overflow-hidden break-inside-avoid">
+                        <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-300 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-md bg-slate-900 text-white text-xs font-extrabold">DAY ${day.day}</span>
+                                <span class="text-xs sm:text-sm font-extrabold text-slate-900">${day.enDate} (${day.date})</span>
+                                <span class="text-xs font-bold text-royal">• ${day.enCity} (${day.city})</span>
+                            </div>
+                            <span class="text-[11px] font-semibold text-slate-600">${day.enTitle}</span>
+                        </div>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                                    <th class="py-1.5 px-3">Time</th>
+                                    <th class="py-1.5 px-3">Destination / Activity</th>
+                                    <th class="py-1.5 px-3">Transport / Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                    </div>
+                `;
+            }).join('');
+
+            body.innerHTML = `
+                <!-- Immigration Document Header -->
+                <div class="border-2 border-slate-900 rounded-2xl p-5 sm:p-6 bg-white space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                        <div>
+                            <div class="text-[11px] font-extrabold uppercase tracking-widest text-royal">TRAVEL ITINERARY FOR IMMIGRATION</div>
+                            <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-950">SOUTH KOREA TOURIST ITINERARY (6 – 12 DEC 2026)</h2>
+                            <p class="text-xs text-slate-600 mt-0.5">ตารางกำหนดการเดินทางท่องเที่ยวประเทศเกาหลีใต้ (ปูซาน 2 คืน • โซล 4 คืน)</p>
+                        </div>
+                        <div class="text-left sm:text-right text-xs">
+                            <div class="font-extrabold text-slate-900">Travelers: PPWR & PPSR (2 Pax)</div>
+                            <div class="text-slate-600">Duration: 7 Days 6 Nights</div>
+                            <div class="text-slate-600">Purpose: Sightseeing / Tourism</div>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation & Intercity KTX Summary Box -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                            <div class="font-extrabold text-slate-900 flex items-center gap-1.5">
+                                <i class="ph-fill ph-buildings text-royal"></i> ACCOMMODATIONS (ที่พักตลอดทริป)
+                            </div>
+                            <div class="text-slate-700 leading-relaxed">
+                                <p><b>1. Busan (6 – 8 Dec 2026 • 2 Nights):</b><br>
+                                Busan Yeongmu Parade Hotel Haeundae Beach<br>
+                                <span class="text-[11px] text-slate-500">25 Haeundaehaebyeon-ro 298beon-gil, Haeundae-gu, Busan</span></p>
+                                <p class="mt-1.5"><b>2. Seoul (8 – 12 Dec 2026 • 4 Nights):</b><br>
+                                STAYMIN Gangdong<br>
+                                <span class="text-[11px] text-slate-500">Gangdong-gu, Seoul (Subway Line 5 Gangdong Station)</span></p>
+                            </div>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                            <div class="font-extrabold text-slate-900 flex items-center gap-1.5">
+                                <i class="ph-fill ph-train text-emerald-600"></i> AIRPORT & KTX TRAIN RESERVATIONS
+                            </div>
+                            <div class="text-slate-700 leading-relaxed">
+                                <p><b>• Arrival (6 Dec 2026):</b> Incheon Int'l Airport (ICN T1) ~10:30 → AREX to Seoul Station</p>
+                                <p><b>• KTX Outbound (6 Dec 2026):</b> Train <b>KTX 047</b> (Seoul → Busan) <b>14:58 – 17:47</b> • Car 13, Seat 8A-8B</p>
+                                <p><b>• KTX Return (8 Dec 2026):</b> Train <b>KTX 047</b> (Busan → Seoul) <b>13:17 – 16:34</b> • Car 1, Seat 9A-9B</p>
+                                <p><b>• Departure (12 Dec 2026):</b> Incheon Int'l Airport (ICN T1) Flight 19:50 / 20:15</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7-Day Detailed Schedule -->
+                <div class="space-y-4">
+                    ${daysTableHtml}
+                </div>
+            `;
+        }
+
+        function renderMemoriesScrapbook() {
             const all = getAllPlacesFlat();
             const checkedOnly = all.filter(i => completedIds[i.id]);
             const visited = all.filter(i => completedIds[i.id] || (userNotes[i.id] && userNotes[i.id].length));
@@ -2222,13 +2366,10 @@
                             <i class="ph-fill ph-camera"></i>
                         </div>
                         <h4 class="text-sm font-extrabold text-slate-800">ยังไม่มีรายการเช็กอินหรือโพสต์บันทึก</h4>
-                        <p class="text-xs text-slate-500 max-w-md mx-auto">เมื่อคุณกดเช็กอินสถานที่ หรือโพสต์รูปภาพความทรงจำในแต่ละจุด รายการทั้งหมดจะถูกรวบรวมมาจัดหน้าเป็นสมุดภาพสวยๆ ที่หน้านี้อัตโนมัติครับ</p>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">เมื่อคุณกดเช็กอินสถานที่ หรือโพสต์รูปภาพความทรงจำในแต่ละจุด รายการทั้งหมดจะถูกรวบรวมมาจัดหน้าเป็นสมุดภาพสวยๆ ที่หน้านี้อัตโนมัติครับ (หากต้องการพิมพ์ตารางเดินทางยื่น ตม. ให้กดสลับไปที่ปุ่ม <b>"🛂 ตารางเดินทางยื่น ตม."</b> ด้านบนได้เลย)</p>
                     </div>
                 `}
             `;
-
-            document.getElementById('scrapbook-modal').classList.remove('hidden');
-            document.getElementById('scrapbook-modal').classList.add('flex');
         }
 
         function closeScrapbookModal() {
@@ -2238,15 +2379,18 @@
 
         function downloadScrapbookHtml() {
             const content = document.getElementById('scrapbook-body').innerHTML;
+            const isItin = currentScrapbookView === 'itinerary';
+            const docTitle = isItin ? 'PP_R in KOREA 2026 — Travel Itinerary (Immigration)' : 'PP_R in KOREA 2026 — Travel Scrapbook';
+            const fileName = isItin ? 'PP_R-in-KOREA-2026-Immigration-Itinerary.html' : 'PP_R-in-KOREA-2026-Scrapbook.html';
             const fullHtml = `<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PP_R in KOREA 2026 — Travel Scrapbook</title>
+<title>${docTitle}</title>
 <script src="https://cdn.tailwindcss.com"><\/script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>body { font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif; background: #F8FAFC; color: #1E293B; }</style>
+<style>body { font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif; background: #FFFFFF; color: #1E293B; }</style>
 </head>
 <body class="p-4 sm:p-8 max-w-5xl mx-auto space-y-6">
 ${content}
@@ -2256,12 +2400,12 @@ ${content}
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'PP_R-in-KOREA-2026-Scrapbook.html';
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('ดาวน์โหลดไฟล์ Scrapbook (.html) เรียบร้อยแล้ว!');
+            showToast(`ดาวน์โหลดไฟล์ ${fileName} เรียบร้อยแล้ว!`);
         }
 
         function openImageViewer(src) {
@@ -2314,7 +2458,7 @@ ${content}
             openAddModal, openEditPlaceModal, closeAddModal, handleSavePlace,
             openTravelerModal, closeTravelerModal, submitVaultPin, lockTravelerVault,
             promptChangeVaultPin, saveNewVaultPin, saveTravelerVaultData,
-            openScrapbookModal, closeScrapbookModal, downloadScrapbookHtml,
+            openScrapbookModal, switchScrapbookView, closeScrapbookModal, downloadScrapbookHtml,
             openImageViewer, closeImageViewer, setCafeFilter, renderCafe, setZoneFilter, renderZones, renderAllDirectory,
             openResetConfirmModal, closeResetConfirmModal, executeResetChecked
         });
