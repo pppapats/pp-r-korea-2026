@@ -223,7 +223,7 @@
 
     <!-- Sticky Main Navigation Tabs -->
     <nav class="sticky top-0 z-30 glass-header border-b border-slate-200/80 shadow-xs">
-        <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div id="main-nav-scroll" onwheel="if(window.innerWidth<768&&event.deltaY!==0){event.preventDefault();this.scrollLeft+=event.deltaY;}" class="max-w-5xl mx-auto px-3 sm:px-6 py-2 flex items-center md:flex-wrap gap-1.5 overflow-x-auto md:overflow-visible no-scrollbar">
             <button onclick="switchTab('solo')" data-tab="solo" class="tab-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs whitespace-nowrap transition text-slate-600 hover:bg-slate-100 font-medium">
                 <i class="ph-fill ph-sparkle text-purple-500 text-base"></i>
                 <span id="nav-solo-label">Solo Log (30 พ.ย.–5 ธ.ค.)</span>
