@@ -4,6 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PP_R in KOREA 2026 — Travel Log & Check-in Scrapbook</title>
+    <!-- Home Screen App Meta & Dynamic Icons (iOS & Android) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PP_R KOREA">
+    <meta name="application-name" content="PP_R KOREA">
+    <meta name="theme-color" content="#0B1120">
+    <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180">
+    <link id="favicon-icon" rel="icon" type="image/png" sizes="192x192">
+    <link id="pwa-manifest" rel="manifest">
+    <script>
+        (function setupHomeScreenIcons() {
+            function drawAppIcon(size) {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                // Deep Navy to Royal Blue Gradient Background
+                const grad = ctx.createLinearGradient(0, 0, size, size);
+                grad.addColorStop(0, '#0B1120');
+                grad.addColorStop(0.55, '#131C33');
+                grad.addColorStop(1, '#1D4ED8');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+
+                // Subtle Glow Accent Circle
+                const glow = ctx.createRadialGradient(size * 0.78, size * 0.22, size * 0.02, size * 0.78, size * 0.22, size * 0.45);
+                glow.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+                glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(0, 0, size, size);
+
+                // Decorative Border Frame
+                const pad = Math.round(size * 0.07);
+                const rad = Math.round(size * 0.18);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+                ctx.lineWidth = Math.max(2, Math.round(size * 0.014));
+                ctx.beginPath();
+                ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, rad);
+                ctx.stroke();
+
+                // Top Snowflake / Travel Badge
+                ctx.fillStyle = '#38BDF8';
+                ctx.font = `700 ${Math.round(size * 0.12)}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('❄', size * 0.5, size * 0.24);
+
+                // Main Brand Text: PP_R
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `800 ${Math.round(size * 0.24)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('PP_R', size * 0.5, size * 0.48);
+
+                // Subtitle: KOREA 2026
+                ctx.fillStyle = '#7DD3FC';
+                ctx.font = `800 ${Math.round(size * 0.115)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillText('KOREA 2026', size * 0.5, size * 0.71);
+
+                // Bottom Accent Pill Line
+                ctx.fillStyle = '#FBBF24';
+                ctx.beginPath();
+                ctx.roundRect(size * 0.34, size * 0.81, size * 0.32, Math.max(3, size * 0.022), 99);
+                ctx.fill();
+
+                return canvas.toDataURL('image/png');
+            }
+
+            try {
+                const icon180 = drawAppIcon(180);
+                const icon192 = drawAppIcon(192);
+                const icon512 = drawAppIcon(512);
+
+                const appleLink = document.getElementById('apple-touch-icon');
+                if (appleLink) appleLink.href = icon180;
+
+                const favLink = document.getElementById('favicon-icon');
+                if (favLink) favLink.href = icon192;
+
+                const manifestData = {
+                    name: 'PP_R in KOREA 2026',
+                    short_name: 'PP_R KOREA',
+                    start_url: window.location.href,
+                    display: 'standalone',
+                    background_color: '#0B1120',
+                    theme_color: '#0B1120',
+                    icons: [
+                        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+                        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    ]
+                };
+                const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+                const manifestLink = document.getElementById('pwa-manifest');
+                if (manifestLink) manifestLink.href = URL.createObjectURL(manifestBlob);
+            } catch (e) {}
+        })();
+    </script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Plus Jakarta Sans & Prompt -->
@@ -72,10 +168,10 @@
                     <span class="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] sm:text-xs font-medium text-sky-200 flex items-center gap-1.5">
                         <i class="ph-fill ph-snowflake text-sky-400"></i> 6–12 ธ.ค. 2569 • ปูซาน 2 คืน • โซล 4 คืน
                     </span>
-                    <span id="sync-status-pill" class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-[11px] sm:text-xs font-semibold text-emerald-300 flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span id="sync-status-text">กำลังเชื่อมต่อ Cloud...</span>
-                    </span>
+                    <button type="button" onclick="forceManualSync()" title="แตะเพื่อซิงก์ข้อมูลล่าสุดทันที" id="sync-status-pill" class="px-3 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-[11px] sm:text-xs font-semibold text-emerald-300 flex items-center gap-1.5 transition cursor-pointer">
+                        <span id="sync-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="sync-status-text">กำลังเชื่อมต่อ...</span>
+                    </button>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
@@ -768,7 +864,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================
         // 1. MASTER TRIP DATASET (PP_R in KOREA 2026 - VERIFIED)
@@ -1077,9 +1173,68 @@
         let isVaultUnlocked = false;
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'ppr-korea-2026';
+        const LOCAL_BACKUP_KEY = `ppr_korea_backup_${appId}`;
         let db = null;
         let auth = null;
         let currentUser = null;
+        let firestoreUnsubscribe = null;
+        let isCloudReady = false;
+        let isSavingCloud = false;
+        let pendingCloudSave = false;
+
+        function setSyncBadge(state, text) {
+            const pill = document.getElementById('sync-status-pill');
+            const dot = document.getElementById('sync-status-dot');
+            const label = document.getElementById('sync-status-text');
+            if (!pill || !dot || !label) return;
+            label.textContent = text;
+
+            if (state === 'synced') {
+                pill.className = 'px-3 py-1 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-[11px] sm:text-xs font-semibold text-emerald-300 flex items-center gap-1.5 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+            } else if (state === 'syncing') {
+                pill.className = 'px-3 py-1 rounded-full bg-sky-500/20 border border-sky-400/30 text-[11px] sm:text-xs font-semibold text-sky-200 flex items-center gap-1.5 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-sky-400 animate-ping';
+            } else {
+                pill.className = 'px-3 py-1 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 text-[11px] sm:text-xs font-semibold text-amber-200 flex items-center gap-1.5 transition cursor-pointer';
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            }
+        }
+
+        function saveLocalBackup() {
+            try {
+                localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify({
+                    completedIds,
+                    completedDays,
+                    userNotes,
+                    scheduleOverrides,
+                    itemOverrides,
+                    customPlaces,
+                    travelerVault,
+                    updatedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
+        function loadLocalBackup() {
+            try {
+                const raw = localStorage.getItem(LOCAL_BACKUP_KEY);
+                if (!raw) return false;
+                const data = JSON.parse(raw);
+                completedIds = data.completedIds || {};
+                completedDays = data.completedDays || {};
+                userNotes = data.userNotes || {};
+                scheduleOverrides = data.scheduleOverrides || {};
+                itemOverrides = data.itemOverrides || {};
+                customPlaces = data.customPlaces || [];
+                if (data.travelerVault) {
+                    travelerVault = { ...travelerVault, ...data.travelerVault };
+                }
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
 
         function getCheckinTimestamp() {
             const now = new Date();
@@ -1091,12 +1246,55 @@
             return `${day} ${month}, ${hh}:${mm}`;
         }
 
+        function attachFirestoreListener() {
+            if (!db || !currentUser) return;
+            if (firestoreUnsubscribe) {
+                firestoreUnsubscribe();
+                firestoreUnsubscribe = null;
+            }
+
+            const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
+            firestoreUnsubscribe = onSnapshot(tripDocRef, (snap) => {
+                isCloudReady = true;
+                if (snap.exists()) {
+                    const data = snap.data();
+                    completedIds = data.completedIds || {};
+                    completedDays = data.completedDays || {};
+                    userNotes = data.userNotes || {};
+                    scheduleOverrides = data.scheduleOverrides || {};
+                    itemOverrides = data.itemOverrides || {};
+                    customPlaces = data.customPlaces || [];
+                    if (data.travelerVault) {
+                        travelerVault = { ...travelerVault, ...data.travelerVault };
+                    }
+                    saveLocalBackup();
+                } else {
+                    // If cloud document doesn't exist yet and we have local data, push it to cloud
+                    const hasLocal = Object.keys(completedIds).length || Object.keys(completedDays).length ||
+                        Object.keys(userNotes).length || customPlaces.length;
+                    if (hasLocal) {
+                        saveState();
+                    }
+                }
+                setSyncBadge('synced', 'Cloud Synced');
+                renderAll();
+                if (isVaultUnlocked) populateTravelerVaultFields();
+                if (activeDetailItem) {
+                    const refreshed = findItemById(activeDetailItem.id);
+                    if (refreshed) openDetailModal(refreshed.id);
+                }
+            }, (err) => {
+                setSyncBadge('warn', 'Local Backup');
+            });
+        }
+
         async function initCloudSync() {
-            const statusText = document.getElementById('sync-status-text');
+            loadLocalBackup();
+            renderAll();
+
             try {
                 if (typeof __firebase_config === 'undefined') {
-                    statusText.textContent = 'Offline Mode (Session)';
-                    renderAll();
+                    setSyncBadge('warn', 'Local Mode');
                     return;
                 }
                 const firebaseConfig = JSON.parse(__firebase_config);
@@ -1104,52 +1302,68 @@
                 auth = getAuth(app);
                 db = getFirestore(app);
 
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        attachFirestoreListener();
+                    }
+                });
+
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-
-                currentUser = auth.currentUser;
-                if (!currentUser) return;
-
-                statusText.textContent = 'Cloud Synced';
-                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
-
-                onSnapshot(tripDocRef, (snap) => {
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        completedIds = data.completedIds || {};
-                        completedDays = data.completedDays || {};
-                        userNotes = data.userNotes || {};
-                        scheduleOverrides = data.scheduleOverrides || {};
-                        itemOverrides = data.itemOverrides || {};
-                        customPlaces = data.customPlaces || [];
-                        if (data.travelerVault) {
-                            travelerVault = { ...travelerVault, ...data.travelerVault };
-                        }
-                    }
-                    renderAll();
-                    if (isVaultUnlocked) populateTravelerVaultFields();
-                    if (activeDetailItem) {
-                        const refreshed = findItemById(activeDetailItem.id);
-                        if (refreshed) openDetailModal(refreshed.id);
-                    }
-                }, (err) => {
-                    statusText.textContent = 'Sync Warning';
-                });
             } catch (e) {
-                statusText.textContent = 'Local Session';
-                renderAll();
+                setSyncBadge('warn', 'Local Backup');
+            }
+        }
+
+        async function forceManualSync() {
+            if (!db || !currentUser) {
+                showToast('กำลังใช้งานโหมดสำรองข้อมูลในเครื่อง (Local Backup)');
+                return;
+            }
+            setSyncBadge('syncing', 'กำลังซิงก์...');
+            try {
+                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
+                const snap = await getDoc(tripDocRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    completedIds = data.completedIds || {};
+                    completedDays = data.completedDays || {};
+                    userNotes = data.userNotes || {};
+                    scheduleOverrides = data.scheduleOverrides || {};
+                    itemOverrides = data.itemOverrides || {};
+                    customPlaces = data.customPlaces || [];
+                    if (data.travelerVault) {
+                        travelerVault = { ...travelerVault, ...data.travelerVault };
+                    }
+                    saveLocalBackup();
+                    renderAll();
+                }
+                setSyncBadge('synced', 'Cloud Synced');
+                showToast('ซิงก์ข้อมูลล่าสุดกับ Cloud เรียบร้อยแล้ว');
+            } catch (e) {
+                setSyncBadge('warn', 'Sync Warning');
+                showToast('ไม่สามารถเชื่อมต่อ Cloud ชั่วคราว (ข้อมูลถูกเก็บในเครื่องแล้ว)');
             }
         }
 
         async function saveState() {
+            saveLocalBackup();
             renderAll();
             if (!db || !currentUser) return;
+
+            if (isSavingCloud) {
+                pendingCloudSave = true;
+                return;
+            }
+
+            isSavingCloud = true;
+            setSyncBadge('syncing', 'กำลังบันทึก...');
             try {
-                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
-                await setDoc(tripDocRef, {
+                const payload = {
                     completedIds,
                     completedDays,
                     userNotes,
@@ -1158,9 +1372,24 @@
                     customPlaces,
                     travelerVault,
                     updatedAt: Date.now()
-                }, { merge: true });
+                };
+                const approxBytes = new Blob([JSON.stringify(payload)]).size;
+                if (approxBytes > 950000) {
+                    setSyncBadge('warn', 'รูปภาพใกล้เต็มโควตา');
+                    showToast('คำเตือน: ขนาดรูปภาพรวมใกล้เต็ม 1MB ของ Cloud กรุณาลบรูปเก่าบางส่วนหากบันทึกไม่เข้า');
+                }
+                const tripDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'trip_state', 'main_2026');
+                await setDoc(tripDocRef, payload);
+                setSyncBadge('synced', 'Cloud Synced');
             } catch (e) {
-                // Silent fallback if offline
+                setSyncBadge('warn', 'บันทึกเฉพาะในเครื่อง');
+                showToast('บันทึกข้อมูลลง Cloud ไม่สำเร็จ (อาจเกิดจากขนาดรูปภาพรวมเกิน 1MB)');
+            } finally {
+                isSavingCloud = false;
+                if (pendingCloudSave) {
+                    pendingCloudSave = false;
+                    saveState();
+                }
             }
         }
 
@@ -1726,15 +1955,13 @@
             document.getElementById('note-author-BOTH').className = `px-3 py-1 rounded-full text-xs font-bold cursor-pointer ${who === 'BOTH' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'}`;
         }
 
-        function handleNotePhotoSelect(e) {
-            const file = e.target.files?.[0];
-            if (!file) return;
+        function compressImageFile(file, callback) {
             const reader = new FileReader();
             reader.onload = (ev) => {
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const maxDim = 900;
+                    const maxDim = 760;
                     let w = img.width, h = img.height;
                     if (w > maxDim || h > maxDim) {
                         if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
@@ -1743,13 +1970,21 @@
                     canvas.width = w;
                     canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    pendingPhotoBase64 = canvas.toDataURL('image/jpeg', 0.72);
-                    document.getElementById('note-photo-preview').src = pendingPhotoBase64;
-                    document.getElementById('note-photo-preview-wrap').classList.remove('hidden');
+                    callback(canvas.toDataURL('image/jpeg', 0.65));
                 };
                 img.src = ev.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        function handleNotePhotoSelect(e) {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            compressImageFile(file, (base64) => {
+                pendingPhotoBase64 = base64;
+                document.getElementById('note-photo-preview').src = pendingPhotoBase64;
+                document.getElementById('note-photo-preview-wrap').classList.remove('hidden');
+            });
         }
 
         function clearNotePhoto() {
@@ -1869,27 +2104,11 @@
         function handlePlacePhotoSelect(e) {
             const file = e.target.files?.[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 900;
-                    let w = img.width, h = img.height;
-                    if (w > maxDim || h > maxDim) {
-                        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-                        else { w = Math.round(w * maxDim / h); h = maxDim; }
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    pendingPlacePhotoBase64 = canvas.toDataURL('image/jpeg', 0.72);
-                    document.getElementById('place-photo-preview').src = pendingPlacePhotoBase64;
-                    document.getElementById('place-photo-preview-wrap').classList.remove('hidden');
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
+            compressImageFile(file, (base64) => {
+                pendingPlacePhotoBase64 = base64;
+                document.getElementById('place-photo-preview').src = pendingPlacePhotoBase64;
+                document.getElementById('place-photo-preview-wrap').classList.remove('hidden');
+            });
         }
 
         function clearPlacePhoto() {
@@ -2451,7 +2670,7 @@ ${content}
         // Expose functions to global window for inline onclick handlers
         Object.assign(window, {
             switchTab, selectDay, toggleCheck, toggleCompleteWholeDay, copyKoreanName,
-            toggleActiveAuthor, openDetailModal, closeDetailModal,
+            toggleActiveAuthor, openDetailModal, closeDetailModal, forceManualSync,
             openNoteModal, closeNoteModal, setNoteAuthor, handleNotePhotoSelect, clearNotePhoto, submitNotePost, deleteNote,
             openScheduleModal, closeScheduleModal, saveScheduleOverride,
             setPlaceAuthor, updateAddModalSubfields, handlePlacePhotoSelect, clearPlacePhoto,
