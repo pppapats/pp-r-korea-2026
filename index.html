@@ -20,280 +20,634 @@
             canvas.height = size;
             const ctx = canvas.getContext('2d');
 
+            // Shared helper to apply authentic rubber-stamp ink texture (uneven ink pressure + paper grain speckles)
+            const applyRubberStampTexture = (targetCtx, seedVal, intensity = 1.0) => {
+                targetCtx.save();
+                targetCtx.globalCompositeOperation = 'destination-out';
+
+                let seed = seedVal;
+                const rand = () => {
+                    seed = (seed * 1664525 + 1013904223) % 4294967296;
+                    return seed / 4294967296;
+                };
+
+                // Soft uneven ink-pressure patches
+                const patch1 = targetCtx.createRadialGradient(size * 0.16, size * 0.18, 0, size * 0.16, size * 0.18, size * 0.24);
+                patch1.addColorStop(0, `rgba(0,0,0,${(0.38 * intensity).toFixed(2)})`);
+                patch1.addColorStop(1, 'rgba(0,0,0,0)');
+                targetCtx.fillStyle = patch1;
+                targetCtx.fillRect(0, 0, size, size);
+
+                const patch2 = targetCtx.createRadialGradient(size * 0.85, size * 0.80, 0, size * 0.85, size * 0.80, size * 0.22);
+                patch2.addColorStop(0, `rgba(0,0,0,${(0.30 * intensity).toFixed(2)})`);
+                patch2.addColorStop(1, 'rgba(0,0,0,0)');
+                targetCtx.fillStyle = patch2;
+                targetCtx.fillRect(0, 0, size, size);
+
+                // Fine paper-fiber ink breaks / micro-speckles across the stamp
+                const dotCount = Math.round(size * 4.0 * intensity);
+                for (let i = 0; i < dotCount; i++) {
+                    const dx = rand() * size;
+                    const dy = rand() * size;
+                    const dr = (0.0016 + rand() * 0.0040) * size;
+                    const alpha = (0.20 + rand() * 0.55) * Math.min(1, intensity);
+                    targetCtx.fillStyle = `rgba(0,0,0,${alpha.toFixed(2)})`;
+                    targetCtx.beginPath();
+                    targetCtx.ellipse(dx, dy, dr, dr * (0.55 + rand() * 0.7), rand() * Math.PI, 0, Math.PI * 2);
+                    targetCtx.fill();
+                }
+                targetCtx.restore();
+            };
+
             if (styleId === 'sunset') {
-                // Style 2: Seoul Sunset Pastel (Pink -> Purple -> Indigo)
-                const grad = ctx.createLinearGradient(0, 0, size, size);
-                grad.addColorStop(0, '#F43F5E');
-                grad.addColorStop(0.5, '#9333EA');
-                grad.addColorStop(1, '#312E81');
+                // Style 2: Vintage Crimson Postage Stamp with Authentic Distressed Ink Texture
+                const ink = '#B9382C'; // Vintage Crimson Ink
+                const paper = '#FBF6EE'; // Warm Stamp Paper
+                ctx.fillStyle = paper;
+                ctx.fillRect(0, 0, size, size);
+
+                // Subtle Paper Grain Tint
+                const grad = ctx.createRadialGradient(size * 0.5, size * 0.45, size * 0.05, size * 0.5, size * 0.5, size * 0.7);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+                grad.addColorStop(1, 'rgba(232, 217, 197, 0.35)');
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, size, size);
 
-                // Soft Sun Disc
-                ctx.fillStyle = 'rgba(253, 224, 71, 0.28)';
-                ctx.beginPath();
-                ctx.arc(size * 0.5, size * 0.36, size * 0.24, 0, Math.PI * 2);
-                ctx.fill();
+                // Draw stamp ink onto an offscreen layer first so we can apply realistic ink distress/fading
+                const inkCanvas = document.createElement('canvas');
+                inkCanvas.width = size;
+                inkCanvas.height = size;
+                const ictx = inkCanvas.getContext('2d');
 
-                // Namsan Tower Silhouette Minimal
-                ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-                ctx.lineWidth = Math.max(2, size * 0.018);
-                ctx.beginPath();
-                ctx.moveTo(size * 0.5, size * 0.14);
-                ctx.lineTo(size * 0.5, size * 0.34);
-                ctx.stroke();
+                // Outer Wavy Postage Stamp Border (Straight)
+                const m = size * 0.095;
+                const w = size - m * 2;
+                const waves = 11;
+                const step = w / waves;
+                const amp = size * 0.016;
 
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.beginPath();
-                ctx.roundRect(size * 0.42, size * 0.24, size * 0.16, size * 0.055, 8);
-                ctx.fill();
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(3, size * 0.023);
+                ictx.lineCap = 'round';
+                ictx.lineJoin = 'round';
+                ictx.beginPath();
 
-                // Text
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = `800 ${Math.round(size * 0.23)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('PP_R', size * 0.5, size * 0.56);
+                // Top edge
+                ictx.moveTo(m, m);
+                for (let i = 0; i < waves; i++) {
+                    const x0 = m + i * step;
+                    ictx.quadraticCurveTo(x0 + step * 0.25, m - amp, x0 + step * 0.5, m);
+                    ictx.quadraticCurveTo(x0 + step * 0.75, m + amp, x0 + step, m);
+                }
+                // Right edge
+                for (let i = 0; i < waves; i++) {
+                    const y0 = m + i * step;
+                    ictx.quadraticCurveTo(m + w + amp, y0 + step * 0.25, m + w, y0 + step * 0.5);
+                    ictx.quadraticCurveTo(m + w - amp, y0 + step * 0.75, m + w, y0 + step);
+                }
+                // Bottom edge
+                for (let i = waves; i > 0; i--) {
+                    const x0 = m + i * step;
+                    ictx.quadraticCurveTo(x0 - step * 0.25, m + w + amp, x0 - step * 0.5, m + w);
+                    ictx.quadraticCurveTo(x0 - step * 0.75, m + w - amp, x0 - step, m + w);
+                }
+                // Left edge
+                for (let i = waves; i > 0; i--) {
+                    const y0 = m + i * step;
+                    ictx.quadraticCurveTo(m - amp, y0 - step * 0.25, m, y0 - step * 0.5);
+                    ictx.quadraticCurveTo(m + amp, y0 - step * 0.75, m, y0 - step);
+                }
+                ictx.closePath();
+                ictx.stroke();
 
-                ctx.fillStyle = '#FDE047';
-                ctx.font = `800 ${Math.round(size * 0.105)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('SEOUL • BUSAN', size * 0.5, size * 0.76);
-            } else if (styleId === 'ticket') {
-                // Style 3: Minimal Boarding Pass Ticket (Cream / Navy / Royal)
-                ctx.fillStyle = '#F8FAFC';
-                ctx.fillRect(0, 0, size, size);
+                // Inner Dotted Perforation Frame
+                const dPad = size * 0.145;
+                ictx.save();
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(2, size * 0.013);
+                ictx.setLineDash([size * 0.012, size * 0.024]);
+                ictx.strokeRect(dPad, dPad, size - dPad * 2, size - dPad * 2);
+                ictx.restore();
 
-                // Top Header Strip
-                ctx.fillStyle = '#0F172A';
-                ctx.fillRect(0, 0, size, size * 0.28);
+                // Top-Left "KR '26"
+                ictx.fillStyle = ink;
+                ictx.font = `800 ${Math.round(size * 0.088)}px "Plus Jakarta Sans", sans-serif`;
+                ictx.textAlign = 'left';
+                ictx.textBaseline = 'middle';
+                ictx.fillText("KR '26", size * 0.195, size * 0.22);
 
-                ctx.fillStyle = '#38BDF8';
-                ctx.font = `800 ${Math.round(size * 0.095)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('✈ BOARDING PASS • 2026', size * 0.5, size * 0.145);
-
-                // Main Route Code
-                ctx.fillStyle = '#0F172A';
-                ctx.font = `800 ${Math.round(size * 0.24)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('PP_R', size * 0.5, size * 0.48);
-
-                // Perforated Ticket Line
-                ctx.strokeStyle = '#CBD5E1';
-                ctx.lineWidth = Math.max(2, size * 0.012);
-                ctx.setLineDash([size * 0.03, size * 0.025]);
-                ctx.beginPath();
-                ctx.moveTo(size * 0.12, size * 0.65);
-                ctx.lineTo(size * 0.88, size * 0.65);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                // Bottom Destination Pill
-                ctx.fillStyle = '#2563EB';
-                ctx.beginPath();
-                ctx.roundRect(size * 0.16, size * 0.73, size * 0.68, size * 0.15, 99);
-                ctx.fill();
-
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = `800 ${Math.round(size * 0.095)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('ICN • PUS • SEL', size * 0.5, size * 0.805);
-            } else if (styleId === 'retro_cam') {
-                // Style 4: Retro Polaroid Camera (Classic Instagram Mood)
-                // Bottom cream leather body
-                ctx.fillStyle = '#F5EFE6';
-                ctx.fillRect(0, 0, size, size);
-
-                // Top warm espresso brown leather cap
-                ctx.fillStyle = '#4A3222';
-                ctx.fillRect(0, 0, size, size * 0.34);
-
-                // Subtle seam line
-                ctx.fillStyle = '#2C1A10';
-                ctx.fillRect(0, size * 0.335, size, Math.max(2, size * 0.015));
-
-                // Classic 4-color retro rainbow stripe on left
-                const stripeX = size * 0.14;
-                const stripeW = size * 0.026;
-                const stripes = ['#E11D48', '#F59E0B', '#10B981', '#2563EB'];
-                stripes.forEach((col, i) => {
-                    ctx.fillStyle = col;
-                    ctx.fillRect(stripeX + i * stripeW, 0, stripeW, size * 0.34);
-                });
-
-                // Top-right viewfinder glass
-                ctx.fillStyle = '#1E293B';
-                ctx.beginPath();
-                ctx.roundRect(size * 0.72, size * 0.09, size * 0.15, size * 0.15, size * 0.035);
-                ctx.fill();
-                ctx.strokeStyle = '#94A3B8';
-                ctx.lineWidth = Math.max(2, size * 0.012);
-                ctx.stroke();
-
-                // Center Camera Lens Ring
+                // Center Minimalist Train Inside Open Circle
                 const cx = size * 0.5;
-                const cy = size * 0.53;
-                const outerR = size * 0.255;
+                const cy = size * 0.43;
+                const arcR = size * 0.165;
 
-                // Outer silver bezel
-                ctx.fillStyle = '#CBD5E1';
-                ctx.beginPath();
-                ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
-                ctx.fill();
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(2.5, size * 0.018);
+                ictx.lineCap = 'round';
+                ictx.beginPath();
+                ictx.arc(cx, cy, arcR, Math.PI * 0.72, Math.PI * 2.28, false);
+                ictx.stroke();
 
-                // Dark metallic barrel
-                ctx.fillStyle = '#1E293B';
-                ctx.beginPath();
-                ctx.arc(cx, cy, outerR * 0.84, 0, Math.PI * 2);
-                ctx.fill();
+                // Train Body Outline (clear interior so paper grain shows cleanly)
+                const tw = size * 0.155;
+                const th = size * 0.205;
+                const tx = cx - tw / 2;
+                const ty = cy - th * 0.48;
+                ictx.save();
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.beginPath();
+                ictx.roundRect(tx, ty, tw, th, [size * 0.045, size * 0.045, size * 0.032, size * 0.032]);
+                ictx.fill();
+                ictx.restore();
 
-                // Deep glass lens gradient
-                const lensGrad = ctx.createRadialGradient(cx - outerR * 0.2, cy - outerR * 0.2, outerR * 0.05, cx, cy, outerR * 0.68);
-                lensGrad.addColorStop(0, '#38BDF8');
-                lensGrad.addColorStop(0.45, '#1E3A8A');
-                lensGrad.addColorStop(1, '#090D16');
-                ctx.fillStyle = lensGrad;
-                ctx.beginPath();
-                ctx.arc(cx, cy, outerR * 0.68, 0, Math.PI * 2);
-                ctx.fill();
+                ictx.beginPath();
+                ictx.roundRect(tx, ty, tw, th, [size * 0.045, size * 0.045, size * 0.032, size * 0.032]);
+                ictx.stroke();
 
-                // Lens specular highlight
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-                ctx.beginPath();
-                ctx.arc(cx - outerR * 0.24, cy - outerR * 0.24, outerR * 0.13, 0, Math.PI * 2);
-                ctx.fill();
+                // Train Windshield
+                const winPad = size * 0.018;
+                const winH = th * 0.36;
+                ictx.beginPath();
+                ictx.roundRect(tx + winPad, ty + size * 0.032, tw - winPad * 2, winH, size * 0.012);
+                ictx.stroke();
+                ictx.beginPath();
+                ictx.moveTo(cx, ty + size * 0.032);
+                ictx.lineTo(cx, ty + size * 0.032 + winH);
+                ictx.stroke();
 
-                // Bottom classic label
-                ctx.fillStyle = '#4A3222';
-                ctx.font = `800 ${Math.round(size * 0.088)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('PP_R • KOREA ’26', size * 0.5, size * 0.88);
-            } else if (styleId === 'vintage_stamp') {
-                // Style 5: Vintage Sepia Postage & Film Frame
-                const grad = ctx.createLinearGradient(0, 0, size, size);
-                grad.addColorStop(0, '#3B2314');
-                grad.addColorStop(1, '#1C110A');
-                ctx.fillStyle = grad;
+                // Train Headlights
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.arc(tx + size * 0.032, ty + th - size * 0.035, size * 0.011, 0, Math.PI * 2);
+                ictx.arc(tx + tw - size * 0.032, ty + th - size * 0.035, size * 0.011, 0, Math.PI * 2);
+                ictx.fill();
+
+                // Train Tracks / Rails at bottom
+                ictx.beginPath();
+                ictx.moveTo(cx - tw * 0.35, ty + th);
+                ictx.lineTo(cx - tw * 0.52, ty + th + size * 0.032);
+                ictx.moveTo(cx + tw * 0.35, ty + th);
+                ictx.lineTo(cx + tw * 0.52, ty + th + size * 0.032);
+                ictx.stroke();
+
+                // Dotted Horizontal Divider Line below Train
+                ictx.save();
+                ictx.setLineDash([size * 0.011, size * 0.022]);
+                ictx.lineWidth = Math.max(2, size * 0.014);
+                ictx.beginPath();
+                ictx.moveTo(size * 0.27, size * 0.655);
+                ictx.lineTo(size * 0.73, size * 0.655);
+                ictx.stroke();
+                ictx.restore();
+
+                // Bottom Centered "[Camera Icon] PP_R" Lockup in Crimson Ink
+                const rowY = size * 0.755;
+                const camW = size * 0.105;
+                const camH = size * 0.075;
+                const gap = size * 0.028;
+                ictx.font = `800 ${Math.round(size * 0.145)}px "Plus Jakarta Sans", sans-serif`;
+                const textW = ictx.measureText('PP_R').width;
+                const totalW = camW + gap + textW;
+                const startX = (size - totalW) / 2;
+
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.roundRect(startX, rowY - camH / 2, camW, camH, size * 0.018);
+                ictx.fill();
+                ictx.beginPath();
+                ictx.roundRect(startX + camW * 0.26, rowY - camH / 2 - size * 0.015, camW * 0.48, size * 0.02, size * 0.007);
+                ictx.fill();
+
+                // Mini Lens Cutout
+                ictx.save();
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.beginPath();
+                ictx.arc(startX + camW * 0.5, rowY, camH * 0.26, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.restore();
+
+                // "PP_R" Text
+                ictx.fillStyle = ink;
+                ictx.textAlign = 'left';
+                ictx.textBaseline = 'middle';
+                ictx.fillText('PP_R', startX + camW + gap, rowY + size * 0.004);
+
+                applyRubberStampTexture(ictx, 20261206, 1.0);
+
+                // Composite distressed stamp ink onto warm cream paper
+                ctx.save();
+                ctx.globalAlpha = 0.93;
+                ctx.drawImage(inkCanvas, 0, 0);
+                ctx.restore();
+            } else if (styleId === 'polaroid_air') {
+                // Style 3: Minimal Polaroid Frame + Airplane Flight Arc + Inner Top-Right "KR" Stamp (with Distressed Stamp Ink)
+                const ink = '#8C5843'; // Warm Scrapbook Sepia Brown
+                const paper = '#F6EFE6';
+                ctx.fillStyle = paper;
                 ctx.fillRect(0, 0, size, size);
 
-                // Warm gold double border frame
-                const pad = Math.round(size * 0.09);
-                ctx.strokeStyle = '#D97706';
-                ctx.lineWidth = Math.max(2, size * 0.016);
-                ctx.beginPath();
-                ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, size * 0.14);
-                ctx.stroke();
-
-                const innerPad = Math.round(size * 0.135);
-                ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
-                ctx.lineWidth = Math.max(1.5, size * 0.008);
-                ctx.setLineDash([size * 0.025, size * 0.02]);
-                ctx.beginPath();
-                ctx.roundRect(innerPad, innerPad, size - innerPad * 2, size - innerPad * 2, size * 0.1);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                // Top vintage year badge
-                ctx.fillStyle = '#FBBF24';
-                ctx.font = `700 ${Math.round(size * 0.085)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('✦ EST. 2026 ✦', size * 0.5, size * 0.27);
-
-                // Main Classic Serif-like Title
-                ctx.fillStyle = '#FEF3C7';
-                ctx.font = `800 ${Math.round(size * 0.24)}px Georgia, serif`;
-                ctx.fillText('PP_R', size * 0.5, size * 0.50);
-
-                // Subtitle
-                ctx.fillStyle = '#F59E0B';
-                ctx.font = `800 ${Math.round(size * 0.10)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('SEOUL • BUSAN', size * 0.5, size * 0.72);
-            } else if (styleId === 'kodak_sunset') {
-                // Style 6: Warm Kodak Sunset Camera Outline (Modern Vintage IG Mood)
-                const grad = ctx.createLinearGradient(0, size, size, 0);
-                grad.addColorStop(0, '#F59E0B');
-                grad.addColorStop(0.45, '#E11D48');
-                grad.addColorStop(1, '#7E22CE');
-                ctx.fillStyle = grad;
+                // Subtle aged paper vignette
+                const paperGrad = ctx.createRadialGradient(size * 0.5, size * 0.5, size * 0.1, size * 0.5, size * 0.5, size * 0.72);
+                paperGrad.addColorStop(0, 'rgba(255, 253, 249, 0.45)');
+                paperGrad.addColorStop(1, 'rgba(222, 208, 190, 0.35)');
+                ctx.fillStyle = paperGrad;
                 ctx.fillRect(0, 0, size, size);
 
-                // Soft warm vignette
-                const radGrad = ctx.createRadialGradient(size * 0.25, size * 0.85, size * 0.05, size * 0.5, size * 0.5, size * 0.8);
-                radGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
-                radGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = radGrad;
-                ctx.fillRect(0, 0, size, size);
+                // Offscreen ink layer for authentic rubber-stamp texture
+                const inkCanvas = document.createElement('canvas');
+                inkCanvas.width = size;
+                inkCanvas.height = size;
+                const ictx = inkCanvas.getContext('2d');
 
-                // Rounded camera outline frame (IG classic silhouette)
-                const boxPad = size * 0.17;
-                const boxSize = size - boxPad * 2;
-                ctx.strokeStyle = '#FFFFFF';
-                ctx.lineWidth = Math.max(3, size * 0.042);
-                ctx.beginPath();
-                ctx.roundRect(boxPad, boxPad, boxSize, boxSize, size * 0.19);
-                ctx.stroke();
+                // Outer Polaroid Card Border
+                const px = size * 0.14;
+                const py = size * 0.10;
+                const pw = size * 0.72;
+                const ph = size * 0.80;
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(3, size * 0.02);
+                ictx.beginPath();
+                ictx.roundRect(px, py, pw, ph, size * 0.045);
+                ictx.stroke();
 
-                // Top-right flash dot
-                ctx.fillStyle = '#FFFFFF';
-                ctx.beginPath();
-                ctx.arc(size * 0.71, size * 0.29, size * 0.032, 0, Math.PI * 2);
-                ctx.fill();
+                // Inner Photo Window
+                const ix = px + size * 0.065;
+                const iy = py + size * 0.075;
+                const iw = pw - size * 0.13;
+                const ih = ph * 0.62;
+                ictx.lineWidth = Math.max(2, size * 0.013);
+                ictx.strokeRect(ix, iy, iw, ih);
 
-                // Center lens ring
-                ctx.strokeStyle = '#FFFFFF';
-                ctx.lineWidth = Math.max(3, size * 0.038);
-                ctx.beginPath();
-                ctx.arc(size * 0.5, size * 0.5, size * 0.165, 0, Math.PI * 2);
-                ctx.stroke();
+                // Clip inside photo window for clean World Map Globe + Flight Path
+                ictx.save();
+                ictx.beginPath();
+                ictx.rect(ix, iy, iw, ih);
+                ictx.clip();
 
-                // PP_R monogram inside lens
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = `800 ${Math.round(size * 0.105)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('PP_R', size * 0.5, size * 0.505);
+                // Full-Frame Watermark World Map Globe (Faint Latitude & Longitude Grid filling the photo box)
+                const gx = ix + iw * 0.50;
+                const gy = iy + ih * 0.50;
+                const gr = Math.max(iw, ih) * 0.56;
+
+                ictx.strokeStyle = 'rgba(140, 88, 67, 0.22)';
+                ictx.lineWidth = Math.max(1.5, size * 0.0085);
+
+                // Outer Globe Circle
+                ictx.beginPath();
+                ictx.arc(gx, gy, gr, 0, Math.PI * 2);
+                ictx.stroke();
+
+                // Longitude Meridians
+                ictx.beginPath();
+                ictx.moveTo(gx, gy - gr);
+                ictx.lineTo(gx, gy + gr);
+                ictx.stroke();
+
+                ictx.beginPath();
+                ictx.ellipse(gx, gy, gr * 0.42, gr, 0, 0, Math.PI * 2);
+                ictx.stroke();
+
+                ictx.beginPath();
+                ictx.ellipse(gx, gy, gr * 0.78, gr, 0, 0, Math.PI * 2);
+                ictx.stroke();
+
+                // Latitude Parallels
+                ictx.beginPath();
+                ictx.moveTo(gx - gr, gy);
+                ictx.lineTo(gx + gr, gy);
+                ictx.stroke();
+
+                const latY1 = gy - gr * 0.44;
+                const latW1 = Math.sqrt(Math.max(0, gr * gr - (gr * 0.44) * (gr * 0.44)));
+                ictx.beginPath();
+                ictx.moveTo(gx - latW1, latY1);
+                ictx.quadraticCurveTo(gx, latY1 + gr * 0.14, gx + latW1, latY1);
+                ictx.stroke();
+
+                const latY2 = gy + gr * 0.44;
+                ictx.beginPath();
+                ictx.moveTo(gx - latW1, latY2);
+                ictx.quadraticCurveTo(gx, latY2 - gr * 0.14, gx + latW1, latY2);
+                ictx.stroke();
+
+                // Balanced Dashed Flight Path Arc
+                const p0x = ix + iw * 0.14, p0y = iy + ih * 0.80;
+                const p1x = ix + iw * 0.34, p1y = iy + ih * 0.58;
+                const p2x = ix + iw * 0.56, p2y = iy + ih * 0.56;
+
+                ictx.save();
+                ictx.strokeStyle = ink;
+                ictx.setLineDash([size * 0.011, size * 0.014]);
+                ictx.lineWidth = Math.max(2, size * 0.011);
+                ictx.lineCap = 'round';
+                ictx.beginPath();
+                ictx.moveTo(p0x, p0y);
+                ictx.quadraticCurveTo(p1x, p1y, p2x, p2y);
+                ictx.stroke();
+                ictx.restore();
+
+                // Origin Pin Dot
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.arc(p0x, p0y, size * 0.011, 0, Math.PI * 2);
+                ictx.fill();
+
+                // Minimalist Airplane Icon
+                ictx.save();
+                ictx.translate(p2x + size * 0.032, p2y - size * 0.002);
+                ictx.rotate(Math.PI * 0.46);
+                ictx.fillStyle = ink;
+                const s = size * 0.046;
+                ictx.beginPath();
+                ictx.ellipse(0, 0, s * 0.22, s * 1.18, 0, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.beginPath();
+                ictx.moveTo(-s * 1.12, s * 0.16);
+                ictx.lineTo(0, -s * 0.34);
+                ictx.lineTo(s * 1.12, s * 0.16);
+                ictx.lineTo(0, -s * 0.02);
+                ictx.closePath();
+                ictx.fill();
+                ictx.beginPath();
+                ictx.moveTo(-s * 0.46, s * 0.96);
+                ictx.lineTo(0, s * 0.66);
+                ictx.lineTo(s * 0.46, s * 0.96);
+                ictx.closePath();
+                ictx.fill();
+                ictx.restore();
+
+                ictx.restore(); // End photo window clip
+
+                // Circular "KR" Stamp Seal tucked inside Top-Right Corner
+                const sr = size * 0.088;
+                const sx = ix + iw - sr - size * 0.026;
+                const sy = iy + sr + size * 0.026;
+                ictx.save();
+                ictx.translate(sx, sy);
+                ictx.rotate(-0.14);
+
+                // Clear globe lines beneath the stamp seal
+                ictx.save();
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.beginPath();
+                ictx.arc(0, 0, sr, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.restore();
+
+                // Double Ring Stamp Border
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(2, size * 0.011);
+                ictx.beginPath();
+                ictx.arc(0, 0, sr, 0, Math.PI * 2);
+                ictx.stroke();
+                ictx.lineWidth = Math.max(1.2, size * 0.0055);
+                ictx.beginPath();
+                ictx.arc(0, 0, sr - size * 0.016, 0, Math.PI * 2);
+                ictx.stroke();
+
+                // "KR" & "'26" inside Stamp Circle
+                ictx.fillStyle = ink;
+                ictx.textAlign = 'center';
+                ictx.textBaseline = 'middle';
+                ictx.font = `800 ${Math.round(size * 0.045)}px "Plus Jakarta Sans", sans-serif`;
+                ictx.fillText('KR', 0, -size * 0.014);
+                ictx.font = `700 ${Math.round(size * 0.028)}px "Plus Jakarta Sans", sans-serif`;
+                ictx.fillText("'26", 0, size * 0.024);
+                ictx.restore();
+
+                // Bottom Polaroid Chin: "[Camera] PP_R"
+                const rowY = py + ph * 0.845;
+                const camW = size * 0.095;
+                const camH = size * 0.068;
+                const gap = size * 0.024;
+                ictx.font = `800 ${Math.round(size * 0.135)}px "Plus Jakarta Sans", sans-serif`;
+                const textW = ictx.measureText('PP_R').width;
+                const startX = (size - (camW + gap + textW)) / 2;
+
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.roundRect(startX, rowY - camH / 2, camW, camH, size * 0.015);
+                ictx.fill();
+                ictx.beginPath();
+                ictx.roundRect(startX + camW * 0.26, rowY - camH / 2 - size * 0.014, camW * 0.48, size * 0.018, size * 0.005);
+                ictx.fill();
+
+                // Camera Lens Cutout
+                ictx.save();
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.beginPath();
+                ictx.arc(startX + camW * 0.5, rowY, camH * 0.26, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.restore();
+
+                ictx.fillStyle = ink;
+                ictx.textAlign = 'left';
+                ictx.textBaseline = 'middle';
+                ictx.fillText('PP_R', startX + camW + gap, rowY + size * 0.004);
+
+                applyRubberStampTexture(ictx, 20261212, 0.96);
+
+                ctx.save();
+                ctx.globalAlpha = 0.94;
+                ctx.drawImage(inkCanvas, 0, 0);
+                ctx.restore();
             } else {
-                // Style 1: Midnight Winter (Default)
-                const grad = ctx.createLinearGradient(0, 0, size, size);
-                grad.addColorStop(0, '#0B1120');
-                grad.addColorStop(0.55, '#131C33');
-                grad.addColorStop(1, '#1D4ED8');
-                ctx.fillStyle = grad;
+                // Style 1: Circular Postmark Stamp with N Seoul Tower, Curved "KR ' 2026" & Curved "[Camera] PP_R" (with Distressed Stamp Ink)
+                const ink = '#786F66'; // Warm Vintage Taupe / Charcoal Ink
+                const paper = '#F3ECE1'; // Warm Vintage Cream Paper
+
+                ctx.fillStyle = paper;
                 ctx.fillRect(0, 0, size, size);
 
-                const glow = ctx.createRadialGradient(size * 0.78, size * 0.22, size * 0.02, size * 0.78, size * 0.22, size * 0.45);
-                glow.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
-                glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
-                ctx.fillStyle = glow;
+                // Subtle aged paper vignette
+                const paperGrad = ctx.createRadialGradient(size * 0.5, size * 0.5, size * 0.1, size * 0.5, size * 0.5, size * 0.72);
+                paperGrad.addColorStop(0, 'rgba(255, 253, 249, 0.45)');
+                paperGrad.addColorStop(1, 'rgba(218, 206, 189, 0.35)');
+                ctx.fillStyle = paperGrad;
                 ctx.fillRect(0, 0, size, size);
 
-                const pad = Math.round(size * 0.07);
-                const rad = Math.round(size * 0.18);
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-                ctx.lineWidth = Math.max(2, Math.round(size * 0.014));
-                ctx.beginPath();
-                ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, rad);
-                ctx.stroke();
+                // Offscreen ink layer for authentic rubber-stamp texture
+                const inkCanvas = document.createElement('canvas');
+                inkCanvas.width = size;
+                inkCanvas.height = size;
+                const ictx = inkCanvas.getContext('2d');
 
-                ctx.fillStyle = '#38BDF8';
-                ctx.font = `700 ${Math.round(size * 0.12)}px sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('❄', size * 0.5, size * 0.24);
+                const cx = size * 0.52;
+                const cy = size * 0.5;
+                const outerR = size * 0.38;
+                const innerR = size * 0.215;
 
-                ctx.fillStyle = '#FFFFFF';
-                ctx.font = `800 ${Math.round(size * 0.24)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('PP_R', size * 0.5, size * 0.48);
+                // Helper to draw curved text along circle
+                const drawCurvedText = (str, radius, startAngle, endAngle, isBottom) => {
+                    ictx.save();
+                    ictx.fillStyle = ink;
+                    ictx.font = `800 ${Math.round(size * 0.068)}px "Plus Jakarta Sans", sans-serif`;
+                    ictx.textAlign = 'center';
+                    ictx.textBaseline = 'middle';
+                    const chars = str.split('');
+                    const step = chars.length > 1 ? (endAngle - startAngle) / (chars.length - 1) : 0;
+                    chars.forEach((ch, idx) => {
+                        const angle = startAngle + idx * step;
+                        ictx.save();
+                        ictx.translate(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+                        ictx.rotate(isBottom ? angle - Math.PI / 2 : angle + Math.PI / 2);
+                        ictx.fillText(ch, 0, 0);
+                        ictx.restore();
+                    });
+                    ictx.restore();
+                };
 
-                ctx.fillStyle = '#7DD3FC';
-                ctx.font = `800 ${Math.round(size * 0.115)}px "Plus Jakarta Sans", sans-serif`;
-                ctx.fillText('KOREA 2026', size * 0.5, size * 0.71);
+                // Outer Stamp Ring (double line)
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(3, size * 0.022);
+                ictx.beginPath();
+                ictx.arc(cx, cy, outerR, 0, Math.PI * 2);
+                ictx.stroke();
 
-                ctx.fillStyle = '#FBBF24';
-                ctx.beginPath();
-                ctx.roundRect(size * 0.34, size * 0.81, size * 0.32, Math.max(3, size * 0.022), 99);
-                ctx.fill();
+                ictx.lineWidth = Math.max(1.5, size * 0.008);
+                ictx.beginPath();
+                ictx.arc(cx, cy, outerR - size * 0.022, 0, Math.PI * 2);
+                ictx.stroke();
+
+                // Center Filled Ink Disc
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.arc(cx, cy, innerR, 0, Math.PI * 2);
+                ictx.fill();
+
+                // Punch out N Seoul Tower, Namsan Hill & Crescent Moon so paper texture shows through
+                ictx.save();
+                ictx.beginPath();
+                ictx.arc(cx, cy, innerR - size * 0.005, 0, Math.PI * 2);
+                ictx.clip();
+
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.strokeStyle = '#000';
+                ictx.fillStyle = '#000';
+                ictx.lineWidth = Math.max(2.5, size * 0.015);
+                ictx.lineCap = 'round';
+                ictx.lineJoin = 'round';
+
+                // Tower Spire
+                ictx.beginPath();
+                ictx.moveTo(cx, cy - innerR * 0.82);
+                ictx.lineTo(cx, cy - innerR * 0.35);
+                ictx.stroke();
+
+                // Observation Pod
+                ictx.beginPath();
+                ictx.roundRect(cx - innerR * 0.34, cy - innerR * 0.35, innerR * 0.68, innerR * 0.21, size * 0.012);
+                ictx.fill();
+                ictx.beginPath();
+                ictx.roundRect(cx - innerR * 0.24, cy - innerR * 0.14, innerR * 0.48, innerR * 0.11, size * 0.008);
+                ictx.fill();
+
+                // Tower Shaft
+                ictx.fillRect(cx - innerR * 0.08, cy - innerR * 0.04, innerR * 0.16, innerR * 0.56);
+
+                // Namsan Hill Base Curve
+                ictx.beginPath();
+                ictx.arc(cx, cy + innerR * 1.15, innerR * 0.88, Math.PI * 1.15, Math.PI * 1.85, false);
+                ictx.lineTo(cx + innerR, cy + innerR);
+                ictx.lineTo(cx - innerR, cy + innerR);
+                ictx.closePath();
+                ictx.fill();
+
+                // Tiny crescent moon inside disc top-right
+                ictx.beginPath();
+                ictx.arc(cx + innerR * 0.46, cy - innerR * 0.48, innerR * 0.11, 0, Math.PI * 2);
+                ictx.fill();
+
+                // Restore inner crescent cutout in ink
+                ictx.globalCompositeOperation = 'source-over';
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.arc(cx + innerR * 0.51, cy - innerR * 0.52, innerR * 0.095, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.restore();
+
+                // Left Wavy Cancellation Lines (5 softer, lighter postmark waves)
+                ictx.save();
+                ictx.strokeStyle = 'rgba(120, 111, 102, 0.46)';
+                ictx.lineWidth = Math.max(1.8, size * 0.010);
+                ictx.lineCap = 'round';
+                for (let row = 0; row < 5; row++) {
+                    const yBase = cy - size * 0.145 + row * (size * 0.062);
+                    const xStart = size * 0.055;
+                    const waveLen = size * 0.31;
+                    ictx.beginPath();
+                    ictx.moveTo(xStart, yBase);
+                    ictx.bezierCurveTo(
+                        xStart + waveLen * 0.33, yBase - size * 0.016,
+                        xStart + waveLen * 0.66, yBase + size * 0.016,
+                        xStart + waveLen, yBase
+                    );
+                    ictx.stroke();
+                }
+                ictx.restore();
+
+                // Top Curved Text: "KR ' 2026"
+                const textRingR = (outerR + innerR) * 0.49;
+                drawCurvedText("KR ' 2026", textRingR, -Math.PI * 0.72, -Math.PI * 0.25, false);
+
+                // Left & Right Mini Airplane Emblems
+                const drawMiniPlane = (angle) => {
+                    ictx.save();
+                    ictx.translate(cx + Math.cos(angle) * textRingR, cy + Math.sin(angle) * textRingR);
+                    ictx.rotate(angle + Math.PI / 2);
+                    ictx.fillStyle = ink;
+                    const s = size * 0.026;
+                    ictx.beginPath();
+                    ictx.ellipse(0, 0, s * 0.22, s * 1.15, 0, 0, Math.PI * 2);
+                    ictx.fill();
+                    ictx.beginPath();
+                    ictx.moveTo(-s * 1.05, s * 0.15);
+                    ictx.lineTo(0, -s * 0.35);
+                    ictx.lineTo(s * 1.05, s * 0.15);
+                    ictx.lineTo(0, 0);
+                    ictx.closePath();
+                    ictx.fill();
+                    ictx.beginPath();
+                    ictx.moveTo(-s * 0.45, s * 0.95);
+                    ictx.lineTo(0, s * 0.65);
+                    ictx.lineTo(s * 0.45, s * 0.95);
+                    ictx.closePath();
+                    ictx.fill();
+                    ictx.restore();
+                };
+                drawMiniPlane(Math.PI * 0.97);
+                drawMiniPlane(Math.PI * 0.03);
+
+                // Bottom Curved Lockup: "[Camera Icon] PP_R"
+                const camAngle = Math.PI * 0.67;
+                ictx.save();
+                ictx.translate(cx + Math.cos(camAngle) * textRingR, cy + Math.sin(camAngle) * textRingR);
+                ictx.rotate(camAngle - Math.PI / 2);
+                const cw = size * 0.068;
+                const ch = size * 0.048;
+                ictx.fillStyle = ink;
+                ictx.beginPath();
+                ictx.roundRect(-cw / 2, -ch / 2, cw, ch, size * 0.01);
+                ictx.fill();
+                ictx.beginPath();
+                ictx.roundRect(-cw * 0.24, -ch / 2 - size * 0.01, cw * 0.48, size * 0.013, size * 0.004);
+                ictx.fill();
+
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.beginPath();
+                ictx.arc(0, 0, ch * 0.26, 0, Math.PI * 2);
+                ictx.fill();
+                ictx.restore();
+
+                // Curved "PP_R"
+                drawCurvedText("PP_R", textRingR, Math.PI * 0.56, Math.PI * 0.34, true);
+
+                applyRubberStampTexture(ictx, 20261130, 0.96);
+
+                ctx.save();
+                ctx.globalAlpha = 0.94;
+                ctx.drawImage(inkCanvas, 0, 0);
+                ctx.restore();
             }
 
             return canvas.toDataURL('image/png');
@@ -1041,7 +1395,7 @@
                     <!-- Mode Switcher: Immigration Itinerary vs Scrapbook Memories -->
                     <div class="inline-flex rounded-xl bg-slate-200/80 p-1 gap-1">
                         <button id="sb-tab-itinerary" onclick="switchScrapbookView('itinerary')" class="px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer bg-white text-slate-900 shadow-2xs">
-                            🛂 ตารางเดินทางยื่น ตม.
+                            🗓️ ตารางแพลนทริป
                         </button>
                         <button id="sb-tab-memories" onclick="switchScrapbookView('memories')" class="px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer text-slate-600 hover:text-slate-900">
                             📸 สมุดภาพ & เช็กอิน
@@ -1052,7 +1406,7 @@
                     <button onclick="downloadScrapbookHtml()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                         <i class="ph-bold ph-download-simple"></i> บันทึกไฟล์ (.html)
                     </button>
-                    <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-royal hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
+                    <button onclick="printScrapbookDocument()" class="px-3.5 py-1.5 rounded-xl bg-royal hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                         <i class="ph-bold ph-printer"></i> พิมพ์ / บันทึก PDF
                     </button>
                 </div>
@@ -1128,14 +1482,14 @@
                 </div>
             </div>
 
-            <!-- Section 2: 6 Home Screen App Icon Designs -->
+            <!-- Section 2: 3 Home Screen App Icon Designs -->
             <div class="space-y-3 text-xs border-t border-slate-200 pt-4">
                 <div class="flex items-center justify-between">
-                    <h4 class="font-extrabold text-slate-900 text-sm">🎨 เลือกแบบไอคอน Home Screen (6 ดีไซน์)</h4>
+                    <h4 class="font-extrabold text-slate-900 text-sm">🎨 เลือกแบบไอคอน Home Screen (3 ดีไซน์คุมโทนวินเทจ)</h4>
                     <span class="text-[11px] text-slate-400">แตะเพื่อเลือกดีไซน์ที่ชอบ</span>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="icon-style-grid">
+                <div class="grid grid-cols-3 gap-2.5" id="icon-style-grid">
                     <!-- Rendered by JS -->
                 </div>
 
@@ -1646,14 +2000,16 @@
         }
 
         function renderIconStyleChoices() {
-            const currentStyle = localStorage.getItem('ppr_icon_style') || 'midnight';
+            const validIds = ['midnight', 'sunset', 'polaroid_air'];
+            let currentStyle = localStorage.getItem('ppr_icon_style') || 'midnight';
+            if (!validIds.includes(currentStyle)) {
+                currentStyle = 'polaroid_air';
+                localStorage.setItem('ppr_icon_style', currentStyle);
+            }
             const designs = [
-                { id: 'midnight', name: '1. Midnight Winter', desc: 'น้ำเงินเข้ม • ฟ้าคริสตัล' },
-                { id: 'sunset', name: '2. Seoul Sunset', desc: 'ชมพู-ม่วง • หอคอยนัมซาน' },
-                { id: 'ticket', name: '3. Boarding Pass', desc: 'สไตล์ตั๋วเครื่องบินมินิมอล' },
-                { id: 'retro_cam', name: '4. Retro Polaroid', desc: 'กล้องโพลารอยด์ • แถบสีเรโทร' },
-                { id: 'vintage_stamp', name: '5. Vintage Sepia', desc: 'น้ำตาลเอสเพรสโซ่ • กรอบทอง' },
-                { id: 'kodak_sunset', name: '6. Sunset Film IG', desc: 'ไล่เฉดฟิล์ม • กรอบกล้องคลาสสิก' }
+                { id: 'midnight', name: '1. Seoul Postmark', desc: 'ตราประทับวงกลม • หอคอยนัมซาน' },
+                { id: 'sunset', name: '2. Crimson Stamp', desc: 'ตราสแตมป์แดง • รถไฟ KTX' },
+                { id: 'polaroid_air', name: '3. Polaroid Air Stamp', desc: 'กรอบโพลารอยด์ • เครื่องบิน & สแตมป์ KR' }
             ];
             const grid = document.getElementById('icon-style-grid');
             grid.innerHTML = designs.map(d => {
@@ -2722,6 +3078,8 @@
 
         function renderImmigrationItinerary() {
             const plans = getDailyPlanWithCustom();
+            const cafes = getMergedCategory('cafe', baseCafes).filter(i => i.isPlan !== false);
+            const highlights = getMergedCategory('zones', baseZones);
             const body = document.getElementById('scrapbook-body');
 
             const daysTableHtml = plans.map(day => {
@@ -2760,19 +3118,38 @@
                 `;
             }).join('');
 
+            const cafeSummaryHtml = cafes.map(c => `
+                <li class="flex items-start justify-between gap-2 py-1.5 border-b border-slate-100 last:border-b-0">
+                    <div>
+                        <span class="font-bold text-slate-900">${c.title}</span>
+                        ${c.krName ? `<span class="text-slate-400 text-[11px] ml-1">(${c.krName})</span>` : ''}
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-500 shrink-0">${c.area || ''}</span>
+                </li>
+            `).join('');
+
+            const highlightSummaryHtml = highlights.map(z => `
+                <li class="flex items-start justify-between gap-2 py-1.5 border-b border-slate-100 last:border-b-0">
+                    <div>
+                        <span class="font-bold text-slate-900">${z.title}</span>
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-500 shrink-0">${z.zone || ''}</span>
+                </li>
+            `).join('');
+
             body.innerHTML = `
-                <!-- Immigration Document Header -->
+                <!-- Trip Planning Header -->
                 <div class="border-2 border-slate-900 rounded-2xl p-5 sm:p-6 bg-white space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
                         <div>
-                            <div class="text-[11px] font-extrabold uppercase tracking-widest text-royal">TRAVEL ITINERARY FOR IMMIGRATION</div>
-                            <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-950">SOUTH KOREA TOURIST ITINERARY (6 – 12 DEC 2026)</h2>
-                            <p class="text-xs text-slate-600 mt-0.5">ตารางกำหนดการเดินทางท่องเที่ยวประเทศเกาหลีใต้ (ปูซาน 2 คืน • โซล 4 คืน)</p>
+                            <div class="text-[11px] font-extrabold uppercase tracking-widest text-royal">BUSAN & SEOUL TRIP</div>
+                            <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-950">KOREA 2026 PLANNING (DEC. 6 – DEC. 12, 2026)</h2>
+                            <p class="text-xs text-slate-600 mt-0.5">ตารางกำหนดการเดินทางท่องเที่ยวเกาหลีใต้ (ปูซาน 2 คืน • โซล 4 คืน)</p>
                         </div>
                         <div class="text-left sm:text-right text-xs">
                             <div class="font-extrabold text-slate-900">Travelers: PPWR & PPSR (2 Pax)</div>
                             <div class="text-slate-600">Duration: 7 Days 6 Nights</div>
-                            <div class="text-slate-600">Purpose: Sightseeing / Tourism</div>
+                            <div class="text-slate-600">Busan & Seoul, South Korea</div>
                         </div>
                     </div>
 
@@ -2783,10 +3160,10 @@
                                 <i class="ph-fill ph-buildings text-royal"></i> ACCOMMODATIONS (ที่พักตลอดทริป)
                             </div>
                             <div class="text-slate-700 leading-relaxed">
-                                <p><b>1. Busan (6 – 8 Dec 2026 • 2 Nights):</b><br>
+                                <p><b>1. Busan (Dec. 6 – Dec. 8, 2026 • 2 Nights):</b><br>
                                 Busan Yeongmu Parade Hotel Haeundae Beach<br>
                                 <span class="text-[11px] text-slate-500">25 Haeundaehaebyeon-ro 298beon-gil, Haeundae-gu, Busan</span></p>
-                                <p class="mt-1.5"><b>2. Seoul (8 – 12 Dec 2026 • 4 Nights):</b><br>
+                                <p class="mt-1.5"><b>2. Seoul (Dec. 8 – Dec. 12, 2026 • 4 Nights):</b><br>
                                 STAYMIN Gangdong<br>
                                 <span class="text-[11px] text-slate-500">Gangdong-gu, Seoul (Subway Line 5 Gangdong Station)</span></p>
                             </div>
@@ -2797,10 +3174,10 @@
                                 <i class="ph-fill ph-train text-emerald-600"></i> AIRPORT & KTX TRAIN RESERVATIONS
                             </div>
                             <div class="text-slate-700 leading-relaxed">
-                                <p><b>• Arrival (6 Dec 2026):</b> Incheon Int'l Airport (ICN T1) ~10:30 → AREX to Seoul Station</p>
-                                <p><b>• KTX Outbound (6 Dec 2026):</b> Train <b>KTX 047</b> (Seoul → Busan) <b>14:58 – 17:47</b> • Car 13, Seat 8A-8B</p>
-                                <p><b>• KTX Return (8 Dec 2026):</b> Train <b>KTX 047</b> (Busan → Seoul) <b>13:17 – 16:34</b> • Car 1, Seat 9A-9B</p>
-                                <p><b>• Departure (12 Dec 2026):</b> Incheon Int'l Airport (ICN T1) Flight 19:50 / 20:15</p>
+                                <p><b>• Arrival (Dec. 6, 2026):</b> Incheon Int'l Airport (ICN T1) ~10:30 → AREX to Seoul Station</p>
+                                <p><b>• KTX Outbound (Dec. 6, 2026):</b> Train <b>KTX 047</b> (Seoul → Busan) <b>14:58 – 17:47</b> • Car 13, Seat 8A-8B</p>
+                                <p><b>• KTX Return (Dec. 8, 2026):</b> Train <b>KTX 047</b> (Busan → Seoul) <b>13:17 – 16:34</b> • Car 1, Seat 9A-9B</p>
+                                <p><b>• Departure (Dec. 12, 2026):</b> Incheon Int'l Airport (ICN T1) Flight 19:50 / 20:15</p>
                             </div>
                         </div>
                     </div>
@@ -2809,6 +3186,27 @@
                 <!-- 7-Day Detailed Schedule -->
                 <div class="space-y-4">
                     ${daysTableHtml}
+                </div>
+
+                <!-- Optional Spots: Cafes, Restaurants & Photobooths -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="border border-slate-300 rounded-2xl p-4 bg-white break-inside-avoid">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-800 border-b border-slate-200 pb-2 mb-2 flex items-center gap-1.5">
+                            <i class="ph-fill ph-coffee text-amber-600"></i> CAFES, BAKERIES & EATERIES LIST
+                        </h3>
+                        <ul class="text-xs">
+                            ${cafeSummaryHtml}
+                        </ul>
+                    </div>
+
+                    <div class="border border-slate-300 rounded-2xl p-4 bg-white break-inside-avoid">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-indigo-800 border-b border-slate-200 pb-2 mb-2 flex items-center gap-1.5">
+                            <i class="ph-fill ph-camera text-indigo-600"></i> HIGHLIGHTS, PHOTOBOOTHS & SHOPPING
+                        </h3>
+                        <ul class="text-xs">
+                            ${highlightSummaryHtml}
+                        </ul>
+                    </div>
                 </div>
             `;
         }
@@ -2922,7 +3320,7 @@
                             <i class="ph-fill ph-camera"></i>
                         </div>
                         <h4 class="text-sm font-extrabold text-slate-800">ยังไม่มีรายการเช็กอินหรือโพสต์บันทึก</h4>
-                        <p class="text-xs text-slate-500 max-w-md mx-auto">เมื่อคุณกดเช็กอินสถานที่ หรือโพสต์รูปภาพความทรงจำในแต่ละจุด รายการทั้งหมดจะถูกรวบรวมมาจัดหน้าเป็นสมุดภาพสวยๆ ที่หน้านี้อัตโนมัติครับ (หากต้องการพิมพ์ตารางเดินทางยื่น ตม. ให้กดสลับไปที่ปุ่ม <b>"🛂 ตารางเดินทางยื่น ตม."</b> ด้านบนได้เลย)</p>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">เมื่อคุณกดเช็กอินสถานที่ หรือโพสต์รูปภาพความทรงจำในแต่ละจุด รายการทั้งหมดจะถูกรวบรวมมาจัดหน้าเป็นสมุดภาพสวยๆ ที่หน้านี้อัตโนมัติครับ (หากต้องการดูตารางแพลนทริป ให้กดสลับไปที่ปุ่ม <b>"🗓️ ตารางแพลนทริป"</b> ด้านบนได้เลย)</p>
                     </div>
                 `}
             `;
@@ -2933,11 +3331,73 @@
             document.getElementById('scrapbook-modal').classList.remove('flex');
         }
 
+        function printScrapbookDocument() {
+            const content = document.getElementById('scrapbook-body').innerHTML;
+            const isItin = currentScrapbookView === 'itinerary';
+            const docTitle = isItin ? 'KOREA 2026 PLANNING (DEC. 6 - DEC. 12, 2026)' : 'PP_R in KOREA 2026 — Travel Scrapbook';
+
+            const printHtml = `<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${docTitle}</title>
+<script src="https://cdn.tailwindcss.com"><\/script>
+<script src="https://unpkg.com/@phosphor-icons/web"><\/script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 12mm; }
+  body {
+    font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+    background: #FFFFFF;
+    color: #1E293B;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .stamp-badge { transform: rotate(-1.5deg); letter-spacing: 0.04em; }
+  @media print {
+    .no-print-bar { display: none !important; }
+    body { padding: 0 !important; }
+  }
+</style>
+</head>
+<body class="p-4 sm:p-6 max-w-4xl mx-auto space-y-5">
+  <div class="no-print-bar bg-slate-900 text-white px-4 py-3 rounded-2xl flex items-center justify-between gap-3 mb-4 shadow-md">
+    <span class="text-xs font-semibold">พร้อมพิมพ์ / บันทึก PDF (กด Share → Print หรือ Save as PDF ได้เลย)</span>
+    <div class="flex items-center gap-2">
+      <button onclick="window.print()" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold cursor-pointer">สั่งพิมพ์ / Save PDF</button>
+      <button onclick="window.close()" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold cursor-pointer">ปิดหน้าต่าง</button>
+    </div>
+  </div>
+  ${content}
+  <script>
+    window.onload = function() {
+      setTimeout(function() {
+        try { window.print(); } catch (e) {}
+      }, 650);
+    };
+  <\/script>
+</body>
+</html>`;
+
+            const printWin = window.open('', '_blank');
+            if (printWin) {
+                printWin.document.open();
+                printWin.document.write(printHtml);
+                printWin.document.close();
+                showToast('เปิดหน้าต่างเตรียมพิมพ์ / บันทึก PDF แล้ว');
+            } else {
+                // Fallback if popup is blocked (e.g., strict mobile webview)
+                document.body.classList.add('pb-0');
+                window.print();
+            }
+        }
+
         function downloadScrapbookHtml() {
             const content = document.getElementById('scrapbook-body').innerHTML;
             const isItin = currentScrapbookView === 'itinerary';
-            const docTitle = isItin ? 'PP_R in KOREA 2026 — Travel Itinerary (Immigration)' : 'PP_R in KOREA 2026 — Travel Scrapbook';
-            const fileName = isItin ? 'PP_R-in-KOREA-2026-Immigration-Itinerary.html' : 'PP_R-in-KOREA-2026-Scrapbook.html';
+            const docTitle = isItin ? 'KOREA 2026 PLANNING (DEC. 6 - DEC. 12, 2026)' : 'PP_R in KOREA 2026 — Travel Scrapbook';
+            const fileName = isItin ? 'KOREA-2026-PLANNING.html' : 'PP_R-in-KOREA-2026-Scrapbook.html';
             const fullHtml = `<!DOCTYPE html>
 <html lang="th">
 <head>
@@ -3016,7 +3476,7 @@ ${content}
             openAddModal, openEditPlaceModal, closeAddModal, handleSavePlace,
             openTravelerModal, closeTravelerModal, submitVaultPin, lockTravelerVault,
             promptChangeVaultPin, saveNewVaultPin, saveTravelerVaultData,
-            openScrapbookModal, switchScrapbookView, closeScrapbookModal, downloadScrapbookHtml,
+            openScrapbookModal, switchScrapbookView, closeScrapbookModal, printScrapbookDocument, downloadScrapbookHtml,
             openImageViewer, closeImageViewer, setCafeFilter, renderCafe, setZoneFilter, renderZones, renderAllDirectory,
             openResetConfirmModal, closeResetConfirmModal, executeResetChecked
         });
