@@ -79,12 +79,14 @@
                 inkCanvas.height = size;
                 const ictx = inkCanvas.getContext('2d');
 
-                // Outer Wavy Postage Stamp Border (Straight)
+                // Outer Wavy Postage Stamp Border with Smooth Rounded Corners
                 const m = size * 0.095;
                 const w = size - m * 2;
-                const waves = 11;
-                const step = w / waves;
-                const amp = size * 0.016;
+                const cornerR = size * 0.075;
+                const straightLen = w - cornerR * 2;
+                const waves = 9;
+                const step = straightLen / waves;
+                const amp = size * 0.015;
 
                 ictx.strokeStyle = ink;
                 ictx.lineWidth = Math.max(3, size * 0.023);
@@ -92,41 +94,55 @@
                 ictx.lineJoin = 'round';
                 ictx.beginPath();
 
-                // Top edge
-                ictx.moveTo(m, m);
+                // Top edge (left to right)
+                ictx.moveTo(m + cornerR, m);
                 for (let i = 0; i < waves; i++) {
-                    const x0 = m + i * step;
+                    const x0 = m + cornerR + i * step;
                     ictx.quadraticCurveTo(x0 + step * 0.25, m - amp, x0 + step * 0.5, m);
                     ictx.quadraticCurveTo(x0 + step * 0.75, m + amp, x0 + step, m);
                 }
-                // Right edge
+                // Top-Right rounded corner
+                ictx.arc(m + w - cornerR, m + cornerR, cornerR, -Math.PI / 2, 0, false);
+
+                // Right edge (top to bottom)
                 for (let i = 0; i < waves; i++) {
-                    const y0 = m + i * step;
+                    const y0 = m + cornerR + i * step;
                     ictx.quadraticCurveTo(m + w + amp, y0 + step * 0.25, m + w, y0 + step * 0.5);
                     ictx.quadraticCurveTo(m + w - amp, y0 + step * 0.75, m + w, y0 + step);
                 }
-                // Bottom edge
+                // Bottom-Right rounded corner
+                ictx.arc(m + w - cornerR, m + w - cornerR, cornerR, 0, Math.PI / 2, false);
+
+                // Bottom edge (right to left)
                 for (let i = waves; i > 0; i--) {
-                    const x0 = m + i * step;
+                    const x0 = m + cornerR + i * step;
                     ictx.quadraticCurveTo(x0 - step * 0.25, m + w + amp, x0 - step * 0.5, m + w);
                     ictx.quadraticCurveTo(x0 - step * 0.75, m + w - amp, x0 - step, m + w);
                 }
-                // Left edge
+                // Bottom-Left rounded corner
+                ictx.arc(m + cornerR, m + w - cornerR, cornerR, Math.PI / 2, Math.PI, false);
+
+                // Left edge (bottom to top)
                 for (let i = waves; i > 0; i--) {
-                    const y0 = m + i * step;
+                    const y0 = m + cornerR + i * step;
                     ictx.quadraticCurveTo(m - amp, y0 - step * 0.25, m, y0 - step * 0.5);
                     ictx.quadraticCurveTo(m + amp, y0 - step * 0.75, m, y0 - step);
                 }
+                // Top-Left rounded corner
+                ictx.arc(m + cornerR, m + cornerR, cornerR, Math.PI, Math.PI * 1.5, false);
+
                 ictx.closePath();
                 ictx.stroke();
 
-                // Inner Dotted Perforation Frame
+                // Inner Dotted Perforation Frame (matching rounded corners)
                 const dPad = size * 0.145;
                 ictx.save();
                 ictx.strokeStyle = ink;
                 ictx.lineWidth = Math.max(2, size * 0.013);
                 ictx.setLineDash([size * 0.012, size * 0.024]);
-                ictx.strokeRect(dPad, dPad, size - dPad * 2, size - dPad * 2);
+                ictx.beginPath();
+                ictx.roundRect(dPad, dPad, size - dPad * 2, size - dPad * 2, size * 0.05);
+                ictx.stroke();
                 ictx.restore();
 
                 // Top-Left "KR '26"
@@ -134,69 +150,69 @@
                 ictx.font = `800 ${Math.round(size * 0.088)}px "Plus Jakarta Sans", sans-serif`;
                 ictx.textAlign = 'left';
                 ictx.textBaseline = 'middle';
-                ictx.fillText("KR '26", size * 0.195, size * 0.22);
+                ictx.fillText("KR '26", size * 0.215, size * 0.235);
 
-                // Center Minimalist Train Inside Open Circle
+                // Center Open Circle + Train Emblem (KTX / Blueline Train)
                 const cx = size * 0.5;
-                const cy = size * 0.43;
-                const arcR = size * 0.165;
-
+                const cy = size * 0.455;
+                const arcR = size * 0.175;
                 ictx.strokeStyle = ink;
-                ictx.lineWidth = Math.max(2.5, size * 0.018);
+                ictx.lineWidth = Math.max(3, size * 0.018);
                 ictx.lineCap = 'round';
                 ictx.beginPath();
                 ictx.arc(cx, cy, arcR, Math.PI * 0.72, Math.PI * 2.28, false);
                 ictx.stroke();
 
-                // Train Body Outline (clear interior so paper grain shows cleanly)
-                const tw = size * 0.155;
-                const th = size * 0.205;
+                // Minimalist Front-View Train Body inside Circle
+                const tw = size * 0.145;
+                const th = size * 0.185;
                 const tx = cx - tw / 2;
                 const ty = cy - th * 0.48;
-                ictx.save();
-                ictx.globalCompositeOperation = 'destination-out';
+                ictx.lineWidth = Math.max(3, size * 0.018);
                 ictx.beginPath();
-                ictx.roundRect(tx, ty, tw, th, [size * 0.045, size * 0.045, size * 0.032, size * 0.032]);
-                ictx.fill();
-                ictx.restore();
-
-                ictx.beginPath();
-                ictx.roundRect(tx, ty, tw, th, [size * 0.045, size * 0.045, size * 0.032, size * 0.032]);
+                ictx.roundRect(tx, ty, tw, th, [size * 0.042, size * 0.042, size * 0.028, size * 0.028]);
                 ictx.stroke();
 
                 // Train Windshield
                 const winPad = size * 0.018;
                 const winH = th * 0.36;
+                ictx.fillStyle = ink;
                 ictx.beginPath();
-                ictx.roundRect(tx + winPad, ty + size * 0.032, tw - winPad * 2, winH, size * 0.012);
-                ictx.stroke();
-                ictx.beginPath();
-                ictx.moveTo(cx, ty + size * 0.032);
-                ictx.lineTo(cx, ty + size * 0.032 + winH);
-                ictx.stroke();
+                ictx.roundRect(tx + winPad, ty + winPad * 1.1, tw - winPad * 2, winH, [size * 0.022, size * 0.022, size * 0.008, size * 0.008]);
+                ictx.fill();
+
+                // Center Window Divider (punched out to show paper)
+                ictx.save();
+                ictx.globalCompositeOperation = 'destination-out';
+                ictx.fillRect(cx - size * 0.005, ty + winPad, size * 0.01, winH + winPad);
+                ictx.restore();
 
                 // Train Headlights
                 ictx.fillStyle = ink;
                 ictx.beginPath();
-                ictx.arc(tx + size * 0.032, ty + th - size * 0.035, size * 0.011, 0, Math.PI * 2);
-                ictx.arc(tx + tw - size * 0.032, ty + th - size * 0.035, size * 0.011, 0, Math.PI * 2);
+                ictx.arc(tx + tw * 0.27, ty + th * 0.77, size * 0.011, 0, Math.PI * 2);
+                ictx.arc(tx + tw * 0.73, ty + th * 0.77, size * 0.011, 0, Math.PI * 2);
                 ictx.fill();
 
-                // Train Tracks / Rails at bottom
+                // Train Rail Legs
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(2.5, size * 0.016);
                 ictx.beginPath();
-                ictx.moveTo(cx - tw * 0.35, ty + th);
-                ictx.lineTo(cx - tw * 0.52, ty + th + size * 0.032);
-                ictx.moveTo(cx + tw * 0.35, ty + th);
-                ictx.lineTo(cx + tw * 0.52, ty + th + size * 0.032);
+                ictx.moveTo(tx + tw * 0.24, ty + th);
+                ictx.lineTo(tx + tw * 0.08, ty + th + size * 0.036);
+                ictx.moveTo(tx + tw * 0.76, ty + th);
+                ictx.lineTo(tx + tw * 0.92, ty + th + size * 0.036);
                 ictx.stroke();
 
-                // Dotted Horizontal Divider Line below Train
+                // Dotted Divider Line above Text
                 ictx.save();
-                ictx.setLineDash([size * 0.011, size * 0.022]);
-                ictx.lineWidth = Math.max(2, size * 0.014);
+                ictx.strokeStyle = ink;
+                ictx.lineWidth = Math.max(2.5, size * 0.015);
+                ictx.lineCap = 'round';
+                ictx.setLineDash([size * 0.005, size * 0.024]);
                 ictx.beginPath();
-                ictx.moveTo(size * 0.27, size * 0.655);
-                ictx.lineTo(size * 0.73, size * 0.655);
+                ictx.moveTo(size * 0.28, size * 0.655);
+                ictx.lineTo(size * 0.72, size * 0.655);
                 ictx.stroke();
                 ictx.restore();
 
