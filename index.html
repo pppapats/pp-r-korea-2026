@@ -707,7 +707,7 @@
     <!-- Google Fonts: Plus Jakarta Sans & Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Prompt:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
@@ -732,6 +732,17 @@
             background-color: #F4F7FB;
             color: #1E293B;
             -webkit-tap-highlight-color: transparent;
+        }
+        .font-typewriter {
+            font-family: 'Special Elite', 'IBM Plex Sans Thai Looped', monospace;
+            letter-spacing: 0.015em;
+        }
+        @keyframes caretBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .typewriter-caret {
+            animation: caretBlink 1s infinite;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -776,7 +787,7 @@
                     </button>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2">
+                <div id="header-top-actions" class="flex flex-wrap items-center gap-2">
                     <button onclick="openScrapbookModal('itinerary')" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white flex items-center gap-1.5 transition cursor-pointer">
                         <i class="ph-bold ph-book-open-text text-sky-300"></i> Export Scrapbook
                     </button>
@@ -794,8 +805,8 @@
             </div>
 
             <!-- Title & Progress Bar -->
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="shrink-0">
                     <h1 class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
                         PP_R in KOREA <span class="text-sky-400">2026</span>
                     </h1>
@@ -804,16 +815,24 @@
                     </p>
                 </div>
 
-                <!-- Overall Progress Card -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 sm:px-5 min-w-[250px] sm:min-w-[290px]">
-                    <div class="flex items-center justify-between text-xs mb-1.5">
-                        <span class="text-slate-200 font-medium flex items-center gap-1.5">
-                            <i class="ph-fill ph-seal-check text-emerald-400 text-sm"></i> สะสมจุดเช็กอินทริปนี้
-                        </span>
-                        <span id="progress-label" class="font-display font-bold text-emerald-300">0/0 จุด (0%)</span>
+                <!-- Right Group on Desktop (Aligned cleanly with top action buttons) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-stretch gap-2.5 w-full lg:w-[505px] shrink-0">
+                    <!-- Mini Sticky Note Pill/Card -->
+                    <div id="header-sticky-slot" class="w-full lg:w-[250px] shrink-0">
+                        <!-- Rendered dynamically by renderHeaderStickyWidget() -->
                     </div>
-                    <div class="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+
+                    <!-- Overall Progress Card -->
+                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:px-3.5 w-full lg:w-[245px] shrink-0 flex flex-col justify-center">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-slate-200 font-medium flex items-center gap-1.5">
+                                <i class="ph-fill ph-seal-check text-emerald-400 text-sm"></i> สะสมจุดเช็กอินทริปนี้
+                            </span>
+                            <span id="progress-label" class="font-display font-bold text-emerald-300">0/0 จุด (0%)</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1524,6 +1543,109 @@
         </div>
     </div>
 
+    <!-- Sticky Note Board & Composer Modal (z-[78]) -->
+    <div id="sticky-board-modal" class="fixed inset-0 z-[78] bg-slate-950/70 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-5 no-print" onclick="if(event.target===this) closeStickyBoardModal()">
+        <div class="bg-[#F6F1E9] w-full max-w-3xl max-h-[92vh] rounded-3xl shadow-2xl border border-[#DFD3C3] flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-4 sm:px-6 py-3.5 bg-[#EFE8DC] border-b border-[#DFD3C3] flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-[#786F66] text-[#FBF6EE] flex items-center justify-center text-base shadow-2xs">
+                        <i class="ph-fill ph-note-blank"></i>
+                    </span>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-[#3E3731]">Note & Stamp Board (PPWR ↔ PPSR)</h3>
+                        <p class="text-[11px] text-[#786F66]">พิมพ์ข้อความบนกระดาษโน้ต & แปะสแตมป์ 1:1 สูงสุด 3 รูป</p>
+                    </div>
+                </div>
+                <button onclick="closeStickyBoardModal()" class="w-8 h-8 rounded-full bg-[#FBF6EE] hover:bg-white border border-[#DFD3C3] flex items-center justify-center text-[#5C534A] cursor-pointer">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Scrollable Content: Typewriter Live Note Composer + Cork/Linen Board -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+                <!-- Interactive Typewriter Sticky Note Composer (Live Preview while typing!) -->
+                <div class="bg-[#EFE8DC]/75 border border-[#DFD3C3] rounded-3xl p-4 sm:p-5 space-y-3.5">
+                    <!-- Controls Top Bar: Author + Paper Tone -->
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-bold text-[#5C534A]">ผู้เขียน:</span>
+                            <button type="button" onclick="setStickyAuthor('PPWR')" id="sticky-author-PPWR" class="px-3 py-1 rounded-full text-xs font-bold bg-[#5B4B6A] text-[#FBF6EE] cursor-pointer transition">PPWR</button>
+                            <button type="button" onclick="setStickyAuthor('PPSR')" id="sticky-author-PPSR" class="px-3 py-1 rounded-full text-xs font-bold bg-[#FBF6EE] text-[#5C534A] cursor-pointer transition">PPSR</button>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-semibold text-[#786F66]">กระดาษ:</span>
+                            <button type="button" onclick="setStickyColor('cream')" id="sticky-col-cream" class="w-5 h-5 rounded-full bg-[#FBF6EE] border-2 border-[#3E3731] cursor-pointer transition" title="ครีมนวล (Warm Cream)"></button>
+                            <button type="button" onclick="setStickyColor('kraft')" id="sticky-col-kraft" class="w-5 h-5 rounded-full bg-[#F2E8D5] border border-[#C8B89E] cursor-pointer transition" title="กระดาษคราฟท์ (Vintage Kraft)"></button>
+                            <button type="button" onclick="setStickyColor('linen')" id="sticky-col-linen" class="w-5 h-5 rounded-full bg-[#F7F5F0] border border-[#D4CFC7] cursor-pointer transition" title="ขาวลินิน (Off-White Linen)"></button>
+                        </div>
+                    </div>
+
+                    <!-- THE LIVE TYPEWRITER PAPER SHEET (Preview = What you type!) -->
+                    <div id="sticky-live-paper" class="relative max-w-md mx-auto bg-[#FBF6EE] border border-[#DFD3C3] text-[#2C2621] rounded-2xl p-4 sm:p-5 shadow-md transition-colors duration-200">
+                        <!-- Top Washi Tape -->
+                        <div id="sticky-live-tape" class="w-14 h-2.5 bg-[#D6C7B2]/75 rounded-full mx-auto -mt-6 mb-2.5 shadow-2xs"></div>
+
+                        <!-- Live Header Meta -->
+                        <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-dashed border-[#D6C7B2]">
+                            <div class="flex items-center gap-1.5">
+                                <span id="sticky-live-author-badge" class="px-2 py-0.5 rounded-sm bg-[#5B4B6A] text-[#FBF6EE] text-[10px] font-extrabold tracking-wide">PPWR</span>
+                                <span class="font-typewriter text-[11px] text-[#786F66]">TYPEWRITER DRAFT</span>
+                            </div>
+                            <span id="sticky-char-count" class="font-typewriter text-[10px] text-[#8C8073]">0/220</span>
+                        </div>
+
+                        <!-- Typewriter Paper Textarea (Ruled-paper feel) -->
+                        <textarea id="sticky-text-input" rows="3" maxlength="220" oninput="updateStickyComposerPreview()" placeholder="type here ..." class="w-full bg-transparent border-0 p-0 font-typewriter text-sm sm:text-[15px] text-[#2C2621] placeholder:text-[#A3978A] leading-7 focus:outline-none resize-none" style="background-image: repeating-linear-gradient(transparent, transparent 27px, rgba(181, 165, 147, 0.25) 28px);"></textarea>
+
+                        <!-- Live 1:1 Stamp Photos Grid (Up to 3 square stamps) -->
+                        <div id="sticky-photo-preview-wrap" class="hidden pt-2.5">
+                            <div id="sticky-photo-preview-grid" class="grid grid-cols-3 gap-2"></div>
+                        </div>
+
+                        <!-- Live Location Footer on Paper -->
+                        <div class="mt-3 pt-2 border-t border-[#DFD3C3]/80 flex items-center gap-1.5 text-[11px] font-bold text-[#6E6359]">
+                            <i class="ph-fill ph-map-pin text-[#B9382C] shrink-0"></i>
+                            <input type="text" id="sticky-location-input" oninput="updateStickyComposerPreview()" placeholder="เพิ่มพิกัดย่าน/เมือง (เช่น Haeundae, Busan)" class="w-full bg-transparent border-0 p-0 text-[11px] font-bold text-[#4A4139] placeholder:text-[#9E9387] focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Composer Bottom Action Toolbar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 max-w-md mx-auto pt-0.5">
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="detectStickyLocalLocation()" id="sticky-gps-btn" title="ดึงพิกัดปัจจุบันอัตโนมัติ" class="px-3 py-1.5 rounded-xl bg-[#FBF6EE] hover:bg-white border border-[#DFD3C3] text-[#4A4139] text-[11px] font-bold flex items-center gap-1 transition cursor-pointer shadow-2xs">
+                                <i class="ph-bold ph-crosshair text-[#B9382C]"></i> พิกัดฉัน
+                            </button>
+                            <input type="file" id="sticky-photo-input" accept="image/*" multiple class="sr-only" onchange="handleStickyPhotoSelect(event)">
+                            <button type="button" onclick="triggerStickyPhotoPicker()" id="sticky-photo-add-btn" class="px-3 py-1.5 rounded-xl bg-[#FBF6EE] hover:bg-white border border-[#DFD3C3] text-[#4A4139] text-[11px] font-bold flex items-center gap-1 cursor-pointer transition shadow-2xs">
+                                <i class="ph-bold ph-stamp text-[#8C5843]"></i>
+                                <span id="sticky-photo-btn-label">แปะรูป 1:1 (0/3)</span>
+                            </button>
+                        </div>
+
+                        <button type="button" onclick="submitStickyNote()" class="px-4 py-2 rounded-xl bg-[#3E3731] hover:bg-[#2A2521] text-[#FBF6EE] text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
+                            <i class="ph-bold ph-push-pin text-[#FAF2D6]"></i> แปะโน้ตขึ้นบอร์ด
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sticky Notes Board Wall -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between px-1">
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#6E6359] flex items-center gap-1.5">
+                            <i class="ph-fill ph-push-pin text-[#B9382C]"></i> กระดานข้อความที่ส่งถึงกัน (Post-it Wall)
+                        </h4>
+                        <span id="sticky-wall-count" class="text-[11px] font-bold text-[#8C8073]">0 โน้ต</span>
+                    </div>
+                    <div id="sticky-wall-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Rendered by renderStickyWall() -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase & Application Logic -->
     <script type="module">
         // =========================================================
@@ -1824,6 +1946,10 @@
         let scheduleOverrides = {};
         let itemOverrides = {};
         let customPlaces = [];
+        let stickyNotes = [];
+        let pendingStickyPhotos = [];
+        let selectedStickyColor = 'cream';
+        const SEEN_STICKY_KEY = 'ppr_last_seen_sticky_id';
         let travelerVault = {
             pin: '070910',
             ppwrName: '', ppwrPassport: '', ppwrFlight: '', ppwrIns: '',
@@ -1872,6 +1998,7 @@
                     scheduleOverrides,
                     itemOverrides,
                     customPlaces,
+                    stickyNotes,
                     travelerVault,
                     updatedAt: lastKnownUpdatedAt || Date.now()
                 }));
@@ -1889,6 +2016,9 @@
                 scheduleOverrides = data.scheduleOverrides || {};
                 itemOverrides = data.itemOverrides || {};
                 customPlaces = data.customPlaces || [];
+                if (Array.isArray(data.stickyNotes)) {
+                    stickyNotes = data.stickyNotes.filter(n => n.id !== 'sn-welcome-1');
+                }
                 lastKnownUpdatedAt = data.updatedAt || 0;
                 if (data.travelerVault) {
                     travelerVault = { ...travelerVault, ...data.travelerVault };
@@ -1922,6 +2052,11 @@
             scheduleOverrides = data.scheduleOverrides || {};
             itemOverrides = data.itemOverrides || {};
             customPlaces = Array.isArray(data.customPlaces) ? data.customPlaces : (data.customPlaces ? Object.values(data.customPlaces) : []);
+            if (Array.isArray(data.stickyNotes)) {
+                stickyNotes = data.stickyNotes.filter(n => n.id !== 'sn-welcome-1');
+            } else if (data.stickyNotes && typeof data.stickyNotes === 'object') {
+                stickyNotes = Object.values(data.stickyNotes).filter(n => n.id !== 'sn-welcome-1');
+            }
             if (data.travelerVault) {
                 travelerVault = { ...travelerVault, ...data.travelerVault };
             }
@@ -1930,6 +2065,9 @@
             }
             saveLocalBackup();
             renderAll();
+            if (!document.getElementById('sticky-board-modal').classList.contains('hidden')) {
+                renderStickyWall();
+            }
             if (isVaultUnlocked) populateTravelerVaultFields();
             if (activeDetailItem) {
                 const refreshed = findItemById(activeDetailItem.id);
@@ -2080,6 +2218,7 @@
                     scheduleOverrides,
                     itemOverrides,
                     customPlaces,
+                    stickyNotes,
                     travelerVault,
                     updatedAt: lastKnownUpdatedAt
                 };
@@ -2103,20 +2242,207 @@
         }
 
         // =========================================================
-        // 4. DATA AGGREGATION HELPERS
+        // 4B. STICKY NOTE BOARD (TYPEWRITER PAPER & 1:1 STAMP PHOTOS)
         // =========================================================
+        const stickyColorThemes = {
+            cream: { card: 'bg-[#FBF6EE] border-[#DFD3C3] text-[#2C2621]', tape: 'bg-[#D6C7B2]/75' },
+            kraft: { card: 'bg-[#F3E9D8] border-[#D5C3A8] text-[#2C2621]', tape: 'bg-[#C4B092]/70' },
+            linen: { card: 'bg-[#F8F6F2] border-[#DCD7CE] text-[#2C2621]', tape: 'bg-[#CFC9BE]/75' }
+        };
+
+        function getNotePhotos(note) {
+            if (!note) return [];
+            if (Array.isArray(note.photos) && note.photos.length) return note.photos.slice(0, 3);
+            if (note.photo) return [note.photo];
+            return [];
+        }
+
+        function buildStampPhotoHtml(photoSrc, sizeClass = 'w-10 h-10', clickable = false) {
+            const clickAttr = clickable ? `onclick="openImageViewer('${photoSrc}')"` : '';
+            const cursorClass = clickable ? 'cursor-zoom-in hover:scale-[1.02] transition-transform' : '';
+            return `
+                <div ${clickAttr} class="relative p-1 bg-white border border-dashed border-[#B5A593] rounded-xs shadow-xs shrink-0 aspect-square overflow-hidden ${cursorClass}" style="box-shadow: 0 1px 3px rgba(62,55,49,0.16);">
+                    <img src="${photoSrc}" alt="Stamp 1:1" class="${sizeClass} aspect-square object-cover block">
+                </div>
+            `;
+        }
+
+        function renderHeaderStickyWidget() {
+            const slot = document.getElementById('header-sticky-slot');
+            if (!slot) return;
+            const latest = stickyNotes[0];
+            const total = stickyNotes.length;
+            let lastSeenId = '';
+            try { lastSeenId = localStorage.getItem(SEEN_STICKY_KEY) || ''; } catch (e) {}
+
+            if (!latest) {
+                slot.innerHTML = `
+                    <div onclick="openStickyBoardModal(true)" class="h-full bg-[#FAF2D6] hover:bg-[#F7ECC4] text-[#3B331E] rounded-2xl px-3.5 py-2.5 border border-[#E5D399] shadow-md cursor-pointer transition flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-[#D4A72C] shrink-0"></span>
+                            <span class="font-display text-xs font-extrabold tracking-tight truncate">PPWR ↔ PPSR noted:</span>
+                        </div>
+                        <button type="button" onclick="event.stopPropagation(); openStickyBoardModal(true)" title="เขียนโน้ตใหม่" class="w-8 h-8 rounded-xl bg-[#EEDB9C] hover:bg-[#E5CC7A] border border-[#D8BE6B] text-[#3B331E] flex items-center justify-center shrink-0 transition cursor-pointer relative">
+                            <i class="ph-bold ph-note-blank text-base"></i>
+                            <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#3B331E] text-[#FAF2D6] text-[9px] font-black flex items-center justify-center">+</span>
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const isUnread = latest.id !== lastSeenId;
+            const isPpwr = latest.author === 'PPWR';
+            const senderLabel = isPpwr ? 'PPWR' : 'PPSR';
+            const authorBadge = isPpwr
+                ? '<span class="px-1.5 py-0.5 rounded-sm bg-[#5B4B6A] text-[#FBF6EE] text-[9px] font-extrabold tracking-wide">PPWR</span>'
+                : '<span class="px-1.5 py-0.5 rounded-sm bg-[#3B5978] text-[#FBF6EE] text-[9px] font-extrabold tracking-wide">PPSR</span>';
+
+            const newAlertBadge = isUnread
+                ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#B9382C] text-white text-[9px] font-extrabold tracking-tight shadow-2xs animate-pulse shrink-0">${senderLabel}'s [new]</span>`
+                : '';
+
+            const photos = getNotePhotos(latest);
+            const firstPhoto = photos[0];
+
+            slot.innerHTML = `
+                <div onclick="openStickyBoardModal(false)" class="h-full bg-[#FAF2D6] hover:bg-[#F7ECC4] text-[#3B331E] border ${isUnread ? 'border-[#B9382C]/60 ring-2 ring-[#B9382C]/20' : 'border-[#E5D399]'} rounded-2xl px-3 py-2.5 shadow-md cursor-pointer transition flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 min-w-0 flex-1">
+                        ${firstPhoto ? buildStampPhotoHtml(firstPhoto, 'w-9 h-9', false) : ''}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1 mb-0.5 flex-wrap">
+                                ${isUnread ? newAlertBadge : `<span class="font-display text-[10px] font-extrabold text-[#6E5922] truncate">noted:</span> ${authorBadge}`}
+                                ${total > 1 ? `<span class="text-[9px] font-bold px-1.5 rounded-full bg-[#EEDB9C] text-[#4A3F22]">+${total - 1}</span>` : ''}
+                            </div>
+                            <p class="font-typewriter text-[11px] font-bold text-[#2C2618] leading-snug truncate">${latest.text || `แนบรูปสแตมป์ (${photos.length} รูป)`}</p>
+                            ${latest.location ? `
+                                <div class="text-[9px] font-semibold text-[#7A6630] flex items-center gap-0.5 truncate">
+                                    <i class="ph-fill ph-map-pin text-[#B9382C] shrink-0"></i>
+                                    <span class="truncate">${latest.location}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="event.stopPropagation(); openStickyBoardModal(true)" title="เขียนโน้ตใหม่" class="w-8 h-8 rounded-xl bg-[#EEDB9C] hover:bg-[#E5CC7A] border border-[#D8BE6B] text-[#3B331E] flex items-center justify-center shrink-0 transition cursor-pointer relative">
+                        <i class="ph-bold ph-note-blank text-base"></i>
+                        <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#3B331E] text-[#FAF2D6] text-[9px] font-black flex items-center justify-center">+</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function markLatestStickyAsSeen() {
+            const latest = stickyNotes[0];
+            if (!latest) return;
+            try {
+                localStorage.setItem(SEEN_STICKY_KEY, latest.id);
+            } catch (e) {}
+            renderHeaderStickyWidget();
+        }
+
+        function openStickyBoardModal(focusInput = false) {
+            markLatestStickyAsSeen();
+            setStickyAuthor(activeAuthor === 'BOTH' ? 'PPWR' : activeAuthor);
+            setStickyColor(selectedStickyColor);
+            updateStickyComposerPreview();
+            renderStickyWall();
+            const modal = document.getElementById('sticky-board-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (focusInput) {
+                setTimeout(() => document.getElementById('sticky-text-input')?.focus(), 100);
+            }
+        }
+
+        function closeStickyBoardModal() {
+            markLatestStickyAsSeen();
+            const modal = document.getElementById('sticky-board-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function setStickyAuthor(who) {
+            const valid = who === 'PPSR' ? 'PPSR' : 'PPWR';
+            activeAuthor = valid;
+            document.getElementById('current-author-label').textContent = valid;
+            document.getElementById('sticky-author-PPWR').className = `px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition ${valid === 'PPWR' ? 'bg-[#5B4B6A] text-[#FBF6EE]' : 'bg-[#FBF6EE] text-[#5C534A]'}`;
+            document.getElementById('sticky-author-PPSR').className = `px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition ${valid === 'PPSR' ? 'bg-[#3B5978] text-[#FBF6EE]' : 'bg-[#FBF6EE] text-[#5C534A]'}`;
+            updateStickyComposerPreview();
+        }
+
+        function setStickyColor(col) {
+            selectedStickyColor = stickyColorThemes[col] ? col : 'cream';
+            ['cream', 'kraft', 'linen'].forEach(c => {
+                const btn = document.getElementById(`sticky-col-${c}`);
+                if (!btn) return;
+                btn.classList.toggle('border-2', c === selectedStickyColor);
+                btn.classList.toggle('border-[#3E3731]', c === selectedStickyColor);
+                btn.classList.toggle('scale-110', c === selectedStickyColor);
+            });
+            updateStickyComposerPreview();
+        }
+
+        function updateStickyComposerPreview() {
+            const paper = document.getElementById('sticky-live-paper');
+            const tape = document.getElementById('sticky-live-tape');
+            const authorBadge = document.getElementById('sticky-live-author-badge');
+            const charCount = document.getElementById('sticky-char-count');
+            const textInput = document.getElementById('sticky-text-input');
+            const photoWrap = document.getElementById('sticky-photo-preview-wrap');
+            const photoGrid = document.getElementById('sticky-photo-preview-grid');
+            const btnLabel = document.getElementById('sticky-photo-btn-label');
+
+            const theme = stickyColorThemes[selectedStickyColor] || stickyColorThemes.cream;
+            if (paper) {
+                paper.className = `relative max-w-md mx-auto ${theme.card} border rounded-2xl p-4 sm:p-5 shadow-md transition-colors duration-200`;
+            }
+            if (tape) {
+                tape.className = `w-14 h-2.5 ${theme.tape} rounded-full mx-auto -mt-6 mb-2.5 shadow-2xs`;
+            }
+            if (authorBadge) {
+                const isPpwr = activeAuthor !== 'PPSR';
+                authorBadge.textContent = isPpwr ? 'PPWR' : 'PPSR';
+                authorBadge.className = `px-2 py-0.5 rounded-sm ${isPpwr ? 'bg-[#5B4B6A]' : 'bg-[#3B5978]'} text-[#FBF6EE] text-[10px] font-extrabold tracking-wide`;
+            }
+            if (charCount && textInput) {
+                charCount.textContent = `${textInput.value.length}/220`;
+            }
+            if (btnLabel) {
+                btnLabel.textContent = `แปะรูป 1:1 (${pendingStickyPhotos.length}/3)`;
+            }
+            if (photoWrap && photoGrid) {
+                if (!pendingStickyPhotos.length) {
+                    photoWrap.classList.add('hidden');
+                    photoGrid.innerHTML = '';
+                } else {
+                    photoWrap.classList.remove('hidden');
+                    photoGrid.innerHTML = pendingStickyPhotos.map((src, idx) => `
+                        <div class="relative p-1.5 bg-white border-2 border-dashed border-[#B5A593] rounded-xs shadow-xs aspect-square">
+                            <img src="${src}" alt="Stamp ${idx + 1}" class="w-full h-full aspect-square object-cover block">
+                            <button type="button" onclick="removeStickyPhotoAt(${idx})" class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#B9382C] text-white flex items-center justify-center text-[10px] shadow cursor-pointer">
+                                <i class="ph-bold ph-x"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
         function applyItemOverride(item) {
             const ov = itemOverrides[item.id] || {};
+            const sched = scheduleOverrides[item.id];
             return {
                 ...item,
                 ...ov,
-                time: scheduleOverrides[item.id] || ov.time || item.time
+                time: sched || ov.time || item.time
             };
         }
 
         function getMergedSolo() {
-            const extra = customPlaces.filter(p => p.category === 'solo');
-            return [...soloEvents, ...extra].map(item => applyItemOverride({
+            const extraSolo = customPlaces.filter(p => p.category === 'solo');
+            const list = extraSolo.length ? extraSolo : soloEvents;
+            return list.map(item => applyItemOverride({
                 ...item,
                 category: 'solo'
             }));
@@ -2124,14 +2450,18 @@
 
         function getDailyPlanWithCustom() {
             return baseDailyPlan.map(dayObj => {
-                const extra = customPlaces.filter(p => p.category === `day-${dayObj.day}`);
-                const mergedEvents = [...dayObj.events, ...extra].map(ev => applyItemOverride({
+                const dayKey = `day-${dayObj.day}`;
+                const extraEvents = customPlaces.filter(p => p.category === dayKey);
+                const mergedEvents = [...dayObj.events, ...extraEvents].map(ev => applyItemOverride({
                     ...ev,
                     category: 'daily',
                     dayNum: dayObj.day,
                     city: dayObj.city
                 }));
-                return { ...dayObj, events: mergedEvents };
+                return {
+                    ...dayObj,
+                    events: mergedEvents
+                };
             });
         }
 
@@ -2271,75 +2601,233 @@
         }
 
         function renderAll() {
+            renderHeaderStickyWidget();
             renderNavDock();
             updateOverallProgress();
             renderActiveTab();
         }
 
+        function triggerStickyPhotoPicker() {
+            if (pendingStickyPhotos.length >= 3) {
+                showToast('แปะรูปได้สูงสุด 3 รูปต่อ 1 โน้ตครับ');
+                return;
+            }
+            const inp = document.getElementById('sticky-photo-input');
+            if (inp) {
+                inp.value = '';
+                inp.click();
+            }
+        }
+
+        function handleStickyPhotoSelect(e) {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+            const remaining = 3 - pendingStickyPhotos.length;
+            if (remaining <= 0) {
+                showToast('แปะรูปได้สูงสุด 3 รูปต่อ 1 โน้ตครับ');
+                e.target.value = '';
+                return;
+            }
+            const toProcess = files.slice(0, remaining);
+            if (files.length > remaining) {
+                showToast(`เลือกเพิ่มได้อีก ${remaining} รูป (สูงสุด 3 รูปต่อโน้ต)`);
+            }
+            toProcess.forEach(file => {
+                compressSquareImageFile(file, (base64) => {
+                    if (pendingStickyPhotos.length < 3) {
+                        pendingStickyPhotos.push(base64);
+                        updateStickyComposerPreview();
+                    }
+                });
+            });
+            e.target.value = '';
+        }
+
+        function removeStickyPhotoAt(idx) {
+            pendingStickyPhotos.splice(idx, 1);
+            updateStickyComposerPreview();
+        }
+
+        function clearStickyPhoto() {
+            pendingStickyPhotos = [];
+            const inp = document.getElementById('sticky-photo-input');
+            if (inp) inp.value = '';
+            updateStickyComposerPreview();
+        }
+
+        function compressSquareImageFile(file, callback) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const size = 480;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    const minSide = Math.min(img.width, img.height);
+                    const sx = (img.width - minSide) / 2;
+                    const sy = (img.height - minSide) / 2;
+                    ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+                    callback(canvas.toDataURL('image/jpeg', 0.72));
+                };
+                img.onerror = () => {
+                    showToast('ไม่สามารถอ่านไฟล์รูปนี้ได้ กรุณาลองเลือกรูป JPG หรือ PNG');
+                };
+                img.src = ev.target.result;
+            };
+            reader.onerror = () => {
+                showToast('เกิดข้อผิดพลาดในการโหลดไฟล์รูป');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function detectStickyLocalLocation() {
+            const btn = document.getElementById('sticky-gps-btn');
+            const input = document.getElementById('sticky-location-input');
+            if (!navigator.geolocation) {
+                showToast('เบราว์เซอร์ไม่รองรับการดึงพิกัด GPS');
+                return;
+            }
+            btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> กำลังหา...';
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&accept-language=en`);
+                        const data = await res.json();
+                        const addr = data.address || {};
+                        const place = addr.suburb || addr.neighbourhood || addr.quarter || addr.borough || addr.city_district || addr.town || '';
+                        const city = addr.city || addr.state || '';
+                        const formatted = [place, city].filter(Boolean).join(', ') || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                        input.value = formatted;
+                        showToast(`ดึงพิกัด "${formatted}" เรียบร้อย`);
+                    } catch (err) {
+                        input.value = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                        showToast('ดึงพิกัด GPS เรียบร้อย');
+                    } finally {
+                        btn.innerHTML = '<i class="ph-bold ph-crosshair"></i> พิกัดฉัน';
+                    }
+                },
+                () => {
+                    btn.innerHTML = '<i class="ph-bold ph-crosshair"></i> พิกัดฉัน';
+                    showToast('กรุณาอนุญาตการเข้าถึงตำแหน่ง (Location) หรือพิมพ์ชื่อย่านเองได้เลย');
+                },
+                { timeout: 8000 }
+            );
+        }
+
+        function submitStickyNote() {
+            const text = document.getElementById('sticky-text-input').value.trim();
+            const location = document.getElementById('sticky-location-input').value.trim();
+            if (!text && !pendingStickyPhotos.length) {
+                showToast('กรุณาพิมพ์ข้อความหรือแปะรูปสแตมป์ก่อนส่ง');
+                return;
+            }
+            const newId = `sn-${Date.now()}`;
+            const newNote = {
+                id: newId,
+                author: activeAuthor === 'PPSR' ? 'PPSR' : 'PPWR',
+                color: selectedStickyColor,
+                text,
+                location,
+                time: getCheckinTimestamp(),
+                photos: [...pendingStickyPhotos]
+            };
+            stickyNotes.unshift(newNote);
+            try { localStorage.setItem(SEEN_STICKY_KEY, newId); } catch (e) {}
+            document.getElementById('sticky-text-input').value = '';
+            clearStickyPhoto();
+            updateStickyComposerPreview();
+            renderStickyWall();
+            saveState();
+            showToast('แปะโพสอิทขึ้นกระดานข้อความเรียบร้อย!');
+        }
+
+        function deleteStickyNote(id) {
+            stickyNotes = stickyNotes.filter(n => n.id !== id);
+            renderStickyWall();
+            saveState();
+            showToast('ลบโน้ตแล้ว');
+        }
+
+        function renderStickyWall() {
+            const grid = document.getElementById('sticky-wall-grid');
+            const countEl = document.getElementById('sticky-wall-count');
+            if (!grid) return;
+            if (countEl) countEl.textContent = `${stickyNotes.length} โน้ต`;
+            if (!stickyNotes.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-xs text-[#8C8073] bg-[#FBF6EE] rounded-2xl border border-dashed border-[#D6C7B2]">ยังไม่มีกระดาษโพสอิทบนกระดาน พิมพ์ข้อความด้านบนแล้วกด "แปะโน้ตขึ้นบอร์ด" ได้เลย</div>`;
+                return;
+            }
+            grid.innerHTML = stickyNotes.map((n, idx) => {
+                const theme = stickyColorThemes[n.color] || stickyColorThemes.cream;
+                const isPpwr = n.author === 'PPWR';
+                const badge = isPpwr
+                    ? '<span class="px-2 py-0.5 rounded-sm bg-[#5B4B6A] text-[#FBF6EE] text-[10px] font-extrabold tracking-wide">PPWR</span>'
+                    : '<span class="px-2 py-0.5 rounded-sm bg-[#3B5978] text-[#FBF6EE] text-[10px] font-extrabold tracking-wide">PPSR</span>';
+                const tiltClass = idx % 2 === 0 ? '-rotate-[0.6deg]' : 'rotate-[0.6deg]';
+                const photos = getNotePhotos(n);
+
+                return `
+                    <div class="relative ${theme.card} ${tiltClass} hover:rotate-0 transition-transform border rounded-2xl p-4 shadow-md flex flex-col justify-between space-y-2.5">
+                        <!-- Top Minimal Tape -->
+                        <div class="w-12 h-2 ${theme.tape} rounded-full mx-auto -mt-5 mb-0.5 shadow-2xs"></div>
+
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-dashed border-[#D6C7B2]/80">
+                                <div class="flex items-center gap-1.5">
+                                    ${badge}
+                                    <span class="font-typewriter text-[11px] text-[#786F66]">${n.time || ''}</span>
+                                </div>
+                                <button type="button" onclick="deleteStickyNote('${n.id}')" title="ลบโน้ต" class="text-[#9E9387] hover:text-[#B9382C] text-xs cursor-pointer">
+                                    <i class="ph-bold ph-trash"></i>
+                                </button>
+                            </div>
+
+                            ${n.text ? `<p class="font-typewriter text-xs sm:text-sm font-medium leading-relaxed whitespace-pre-line">${n.text}</p>` : ''}
+
+                            ${photos.length ? `
+                                <div class="pt-1 grid ${photos.length === 1 ? 'grid-cols-2' : 'grid-cols-3'} gap-2">
+                                    ${photos.map(src => `
+                                        <div onclick="openImageViewer('${src}')" class="p-1.5 bg-white border-2 border-dashed border-[#B5A593] rounded-xs cursor-zoom-in transition hover:scale-[1.02] aspect-square" style="box-shadow: 0 2px 5px rgba(62,55,49,0.14);">
+                                            <img src="${src}" alt="Stamp 1:1" class="w-full h-full aspect-square object-cover block">
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        ${n.location ? `
+                            <div class="pt-2 border-t border-[#DFD3C3]/80 flex items-center gap-1 text-[11px] font-bold text-[#6E6359]">
+                                <i class="ph-fill ph-map-pin text-[#B9382C] shrink-0"></i>
+                                <span class="truncate">${n.location}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // =========================================================
+        // 7. TAB VIEWS & DETAIL MODAL RENDERERS
+        // =========================================================
         function updateOverallProgress() {
             const all = getAllPlacesFlat();
             const checkedCount = all.filter(i => completedIds[i.id]).length;
-            const pct = all.length ? Math.round((checkedCount / all.length) * 100) : 0;
-            document.getElementById('progress-label').textContent = `${checkedCount}/${all.length} จุด (${pct}%)`;
-            document.getElementById('progress-bar').style.width = `${pct}%`;
+            const total = all.length;
+            const pct = total ? Math.round((checkedCount / total) * 100) : 0;
+            const label = document.getElementById('progress-label');
+            const bar = document.getElementById('progress-bar');
+            if (label) label.textContent = `${checkedCount}/${total} จุด (${pct}%)`;
+            if (bar) bar.style.width = `${pct}%`;
         }
 
         function renderSolo() {
-            const list = getMergedSolo();
-            document.getElementById('solo-timeline').innerHTML = list.map(item => buildCompactTopicCard(item)).join('');
-        }
-
-        function renderDaily() {
-            const plans = getDailyPlanWithCustom();
-            // Render 7-Day Rainbow Selector
-            document.getElementById('day-selector').innerHTML = plans.map(p => {
-                const theme = dayColorThemes[p.day] || dayColorThemes[1];
-                const isSelected = p.day === currentDay;
-                const isDayPassed = Boolean(completedDays[p.day]);
-                return `
-                    <button onclick="selectDay(${p.day})" class="p-2 rounded-2xl border text-center transition cursor-pointer ${isSelected ? theme.btnActive : theme.btnIdle}">
-                        <div class="font-display text-xs sm:text-sm font-extrabold flex items-center justify-center gap-1">
-                            <span>Day ${p.day}</span>
-                            ${isDayPassed ? '<i class="ph-fill ph-seal-check text-xs"></i>' : ''}
-                        </div>
-                        <div class="text-[10px] opacity-85 font-medium truncate">${p.date} • ${p.city.split(' ')[0]}</div>
-                    </button>
-                `;
-            }).join('');
-
-            const dayData = plans.find(p => p.day === currentDay) || plans[0];
-            const dayTheme = dayColorThemes[dayData.day] || dayColorThemes[1];
-            const dayCheckedCount = dayData.events.filter(e => completedIds[e.id]).length;
-            const isDayPassed = Boolean(completedDays[dayData.day]);
-            const dayPassedTs = completedDays[dayData.day];
-
-            document.getElementById('day-header-card').innerHTML = `
-                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${dayData.badgeColor}">${dayData.city}</span>
-                        <span class="text-xs text-slate-500 font-semibold">${dayData.date} 2569</span>
-                        <span class="text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">แวะแล้ว ${dayCheckedCount}/${dayData.events.length} จุด</span>
-                        ${isDayPassed ? `<span class="stamp-badge px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${dayTheme.stampBadge} inline-flex items-center gap-1"><i class="ph-fill ph-seal-check"></i> DAY ${dayData.day} PASSED • ${dayPassedTs}</span>` : ''}
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1.5">
-                        <button onclick="toggleCompleteWholeDay(${dayData.day})" class="text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-xs transition cursor-pointer ${isDayPassed ? dayTheme.btnActive : 'bg-emerald-600 hover:bg-emerald-700 text-white'}">
-                            <i class="${isDayPassed ? 'ph-fill ph-seal-check' : 'ph-bold ph-check-circle'}"></i>
-                            <span>${isDayPassed ? `ผ่าน Day ${dayData.day} แล้ว` : `เช็กอินผ่าน Day ${dayData.day}`}</span>
-                        </button>
-                        <button onclick="openAddModal('day-${dayData.day}')" class="text-xs bg-royal hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-                            <i class="ph-bold ph-plus"></i> เพิ่มจุดแวะ Day ${dayData.day}
-                        </button>
-                    </div>
-                </div>
-                <h2 class="text-base sm:text-lg font-extrabold text-slate-900 mb-1.5 leading-snug">Day ${dayData.day}: ${dayData.title}</h2>
-                <div class="bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs px-3 py-2 rounded-2xl leading-relaxed">
-                    ${dayData.highlightNote}
-                </div>
-            `;
-
-            document.getElementById('daily-timeline').innerHTML = dayData.events
-                .map(ev => buildCompactTopicCard(ev, { dayTheme }))
-                .join('');
+            const items = getMergedSolo();
+            const container = document.getElementById('solo-timeline');
+            if (!container) return;
+            container.innerHTML = items.map(item => buildCompactTopicCard(item)).join('');
         }
 
         function selectDay(dayNum) {
@@ -2347,123 +2835,180 @@
             renderDaily();
         }
 
-        function setCafeFilter(filterId) {
-            currentCafeFilter = filterId;
+        function renderDaily() {
+            const plans = getDailyPlanWithCustom();
+            const selector = document.getElementById('day-selector');
+            const headerCard = document.getElementById('day-header-card');
+            const timeline = document.getElementById('daily-timeline');
+            if (!selector || !headerCard || !timeline) return;
+
+            selector.innerHTML = plans.map(d => {
+                const isSelected = d.day === currentDay;
+                const isDayDone = Boolean(completedDays[d.day]);
+                const theme = dayColorThemes[d.day] || dayColorThemes[1];
+                return `
+                    <button type="button" onclick="selectDay(${d.day})" class="p-2 sm:p-2.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${isSelected ? theme.btnActive : `${theme.btnIdle} hover:brightness-97`}">
+                        <div class="flex items-center justify-between gap-1 w-full">
+                            <span class="font-display text-xs sm:text-sm font-extrabold">Day ${d.day}</span>
+                            ${isDayDone ? '<i class="ph-fill ph-check-circle text-emerald-400 text-sm"></i>' : ''}
+                        </div>
+                        <div class="text-[10px] sm:text-[11px] font-bold opacity-90 truncate w-full mt-0.5">${d.date}</div>
+                        <div class="text-[9px] sm:text-[10px] opacity-80 truncate w-full">${d.city}</div>
+                    </button>
+                `;
+            }).join('');
+
+            const activePlan = plans.find(d => d.day === currentDay) || plans[0];
+            const dayTheme = dayColorThemes[activePlan.day] || dayColorThemes[1];
+            const isWholeDayPassed = Boolean(completedDays[activePlan.day]);
+
+            headerCard.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold ${activePlan.badgeColor}">DAY ${activePlan.day} • ${activePlan.date}</span>
+                            <span class="text-xs font-bold text-slate-500">${activePlan.city} (${activePlan.enCity})</span>
+                        </div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">${activePlan.title}</h2>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="toggleCompleteWholeDay(${activePlan.day})" class="px-3.5 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${isWholeDayPassed ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border-slate-200'}">
+                            <i class="${isWholeDayPassed ? 'ph-fill ph-seal-check' : 'ph ph-check-circle'} text-base"></i>
+                            <span>${isWholeDayPassed ? `ผ่าน Day ${activePlan.day} แล้ว` : `เช็กอินผ่าน Day ${activePlan.day}`}</span>
+                        </button>
+                        <button type="button" onclick="openAddModal('day-${activePlan.day}')" class="px-3 py-2 rounded-xl bg-royal hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1 shadow-xs transition cursor-pointer">
+                            <i class="ph-bold ph-plus"></i> เพิ่มจุดแวะ
+                        </button>
+                    </div>
+                </div>
+                ${activePlan.highlightNote ? `
+                    <div class="mt-3 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-950 font-medium leading-relaxed">
+                        ${activePlan.highlightNote}
+                    </div>
+                ` : ''}
+            `;
+
+            timeline.innerHTML = activePlan.events.map(ev => buildCompactTopicCard(ev, { dayTheme })).join('');
+        }
+
+        function setCafeFilter(filterKey) {
+            currentCafeFilter = filterKey;
             renderCafe();
         }
 
         function renderCafe() {
+            const filterBar = document.getElementById('cafe-filter-bar');
+            const grid = document.getElementById('cafe-grid');
+            if (!filterBar || !grid) return;
+
             const filters = [
                 { id: 'all', label: 'ทั้งหมด' },
                 { id: 'plan', label: '📌 ลิสต์หลักที่แพลนไว้' },
-                { id: 'extra', label: '✨ แนะนำเพิ่มเติม' },
-                { id: 'cafe', label: '☕ คาเฟ่ & ขนมหวาน' },
-                { id: 'food', label: '🍜 ร้านอาหารเด็ด' },
-                { id: 'Busan', label: '🌊 ปูซาน' },
-                { id: 'Seoul', label: '🏙️ โซล' }
+                { id: 'busan', label: '🌊 ปูซาน' },
+                { id: 'seoul', label: '🏙️ โซล' },
+                { id: 'cafe', label: '☕ คาเฟ่ & ขนม' },
+                { id: 'food', label: '🍜 ร้านอาหาร' },
+                { id: 'extra', label: '✨ แนะนำเพิ่มเติม' }
             ];
-            document.getElementById('cafe-filter-bar').innerHTML = filters.map(f => `
-                <button onclick="setCafeFilter('${f.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${currentCafeFilter === f.id ? 'bg-amber-600 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-amber-50'}">
-                    ${f.label}
-                </button>
-            `).join('');
+
+            filterBar.innerHTML = filters.map(f => {
+                const active = currentCafeFilter === f.id;
+                return `<button type="button" onclick="setCafeFilter('${f.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${active ? 'bg-amber-500 text-white border-amber-500 shadow-2xs' : 'bg-white hover:bg-amber-50 text-slate-700 border-slate-200'}">${f.label}</button>`;
+            }).join('');
 
             let list = getMergedCategory('cafe', baseCafes);
-            if (currentCafeFilter === 'plan') {
-                list = list.filter(i => i.isPlan !== false);
-            } else if (currentCafeFilter === 'extra') {
-                list = list.filter(i => i.isPlan === false);
-            } else if (currentCafeFilter === 'cafe' || currentCafeFilter === 'food') {
-                list = list.filter(i => i.type === currentCafeFilter);
-            } else if (currentCafeFilter === 'Busan') {
-                list = list.filter(i => (i.area || '').includes('ปูซาน') || (i.area || '').includes('Busan'));
-            } else if (currentCafeFilter === 'Seoul') {
-                list = list.filter(i => (i.area || '').includes('โซล') || (i.area || '').includes('Seoul'));
-            }
-            document.getElementById('cafe-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            if (currentCafeFilter === 'plan') list = list.filter(i => i.isPlan !== false);
+            else if (currentCafeFilter === 'extra') list = list.filter(i => i.isPlan === false);
+            else if (currentCafeFilter === 'busan') list = list.filter(i => (i.area || '').includes('ปูซาน') || (i.area || '').toLowerCase().includes('busan'));
+            else if (currentCafeFilter === 'seoul') list = list.filter(i => (i.area || '').includes('โซล') || (i.area || '').toLowerCase().includes('seoul'));
+            else if (currentCafeFilter === 'cafe') list = list.filter(i => i.type === 'cafe');
+            else if (currentCafeFilter === 'food') list = list.filter(i => i.type === 'food');
+
+            grid.innerHTML = list.map(item => buildCompactTopicCard(item)).join('');
         }
 
         function renderLibrary() {
-            const list = getMergedCategory('library', baseLibraries);
-            document.getElementById('library-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            const grid = document.getElementById('library-grid');
+            if (!grid) return;
+            grid.innerHTML = getMergedCategory('library', baseLibraries).map(item => buildCompactTopicCard(item)).join('');
         }
 
         function renderSeries() {
-            const list = getMergedCategory('series', baseSeries);
-            document.getElementById('series-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            const grid = document.getElementById('series-grid');
+            if (!grid) return;
+            grid.innerHTML = getMergedCategory('series', baseSeries).map(item => buildCompactTopicCard(item)).join('');
         }
 
-        function setZoneFilter(filterId) {
-            currentZoneFilter = filterId;
+        function setZoneFilter(filterKey) {
+            currentZoneFilter = filterKey;
             renderZones();
         }
 
         function renderZones() {
+            const filterBar = document.getElementById('zone-filter-bar');
+            const grid = document.getElementById('zones-grid');
+            if (!filterBar || !grid) return;
+
             const filters = [
                 { id: 'all', label: 'ทั้งหมด' },
-                { id: 'route', label: '🗺️ Route เดินลงเนิน' },
-                { id: 'christmas', label: '🎄 เทศกาลไฟ & คริสต์มาส' },
-                { id: 'photobooth', label: '📸 ตู้ Photobooth' },
-                { id: 'shopping', label: '🛍️ ช้อปปิ้ง & ห้าง' },
-                { id: 'gallery', label: '🖼️ แกลเลอรีศิลปะฟรี' },
-                { id: 'viewpoint', label: '🌅 จุดชมวิว & สถาปัตยกรรม' }
+                { id: 'route', label: '🗺️ Route แฮบังชน' },
+                { id: 'christmas', label: '🎄 ไฟคริสต์มาส' },
+                { id: 'photobooth', label: '📸 Photobooth' },
+                { id: 'shopping', label: '🛍️ ช้อปปิ้ง' },
+                { id: 'gallery', label: '🎨 แกลเลอรีฟรี' },
+                { id: 'viewpoint', label: '🌅 จุดชมวิว' }
             ];
-            document.getElementById('zone-filter-bar').innerHTML = filters.map(f => `
-                <button onclick="setZoneFilter('${f.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${currentZoneFilter === f.id ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50'}">
-                    ${f.label}
-                </button>
-            `).join('');
+
+            filterBar.innerHTML = filters.map(f => {
+                const active = currentZoneFilter === f.id;
+                return `<button type="button" onclick="setZoneFilter('${f.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${active ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs' : 'bg-white hover:bg-indigo-50 text-slate-700 border-slate-200'}">${f.label}</button>`;
+            }).join('');
 
             let list = getMergedCategory('zones', baseZones);
             if (currentZoneFilter !== 'all') {
-                list = list.filter(i => {
-                    if (i.subTab) return i.subTab === currentZoneFilter;
-                    const z = (i.zone || '').toLowerCase();
-                    if (currentZoneFilter === 'christmas') return z.includes('christmas');
-                    if (currentZoneFilter === 'photobooth') return z.includes('photobooth');
-                    if (currentZoneFilter === 'shopping') return z.includes('shopping');
-                    if (currentZoneFilter === 'gallery') return z.includes('galler');
-                    if (currentZoneFilter === 'route') return z.includes('route');
-                    return true;
-                });
+                list = list.filter(i => i.subTab === currentZoneFilter);
             }
-            document.getElementById('zones-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            grid.innerHTML = list.map(item => buildCompactTopicCard(item)).join('');
         }
 
         function renderStamps() {
-            const list = getMergedCategory('stamps', baseStamps);
-            document.getElementById('stamps-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            const grid = document.getElementById('stamps-grid');
+            if (!grid) return;
+            grid.innerHTML = getMergedCategory('stamps', baseStamps).map(item => buildCompactTopicCard(item)).join('');
         }
 
         function renderGacha() {
-            const list = getMergedCategory('gacha', baseGacha);
-            document.getElementById('gacha-grid').innerHTML = list.map(i => buildCompactTopicCard(i)).join('');
+            const grid = document.getElementById('gacha-grid');
+            if (!grid) return;
+            grid.innerHTML = getMergedCategory('gacha', baseGacha).map(item => buildCompactTopicCard(item)).join('');
         }
 
         function renderAllDirectory() {
-            const q = (document.getElementById('all-search-input').value || '').toLowerCase().trim();
-            const status = document.getElementById('all-status-filter').value;
-            let list = getAllPlacesFlat();
+            const listEl = document.getElementById('all-directory-list');
+            if (!listEl) return;
+            const query = (document.getElementById('all-search-input')?.value || '').trim().toLowerCase();
+            const status = document.getElementById('all-status-filter')?.value || 'all';
 
-            if (q) {
-                list = list.filter(i =>
-                    (i.title || '').toLowerCase().includes(q) ||
-                    (i.krName || '').toLowerCase().includes(q) ||
-                    (i.transit || '').toLowerCase().includes(q) ||
-                    (i.desc || '').toLowerCase().includes(q)
+            let items = getAllPlacesFlat();
+            if (status === 'checked') items = items.filter(i => Boolean(completedIds[i.id]));
+            else if (status === 'unchecked') items = items.filter(i => !completedIds[i.id]);
+
+            if (query) {
+                items = items.filter(i =>
+                    (i.title || '').toLowerCase().includes(query) ||
+                    (i.krName || '').toLowerCase().includes(query) ||
+                    (i.area || '').toLowerCase().includes(query) ||
+                    (i.zone || '').toLowerCase().includes(query) ||
+                    (i.transit || '').toLowerCase().includes(query) ||
+                    (i.drama || '').toLowerCase().includes(query)
                 );
             }
-            if (status === 'checked') list = list.filter(i => completedIds[i.id]);
-            else if (status === 'unchecked') list = list.filter(i => !completedIds[i.id]);
 
-            document.getElementById('all-directory-list').innerHTML = list.length
-                ? list.map(i => buildCompactTopicCard(i, { showCategoryBadge: true })).join('')
-                : `<div class="text-center py-10 text-xs text-slate-400 bg-white rounded-2xl border border-slate-200">ไม่พบสถานที่ที่ค้นหา</div>`;
+            listEl.innerHTML = items.length
+                ? items.map(item => buildCompactTopicCard(item, { showCategoryBadge: true })).join('')
+                : `<div class="text-center py-10 text-xs text-slate-400 bg-white rounded-2xl border border-slate-200">ไม่พบสถานที่ที่ตรงกับคำค้นหา</div>`;
         }
 
-        // =========================================================
-        // 7. SPLIT-VIEW PLACE DETAIL MODAL LOGIC
-        // =========================================================
         function openDetailModal(itemId) {
             const item = findItemById(itemId);
             if (!item) return;
@@ -2471,56 +3016,48 @@
 
             const cat = item.category || 'daily';
             const catMeta = categoryCardThemes[cat] || categoryCardThemes.daily;
-            const theme = item.dayNum ? (dayColorThemes[item.dayNum] || catMeta) : catMeta;
             const isChecked = Boolean(completedIds[item.id]);
             const timestamp = completedIds[item.id];
 
-            // Header Pills
             const catPill = document.getElementById('detail-category-pill');
+            catPill.textContent = item.dayNum ? `Day ${item.dayNum} • ${item.city}` : catMeta.label;
             catPill.className = `px-2.5 py-0.5 rounded-full text-[11px] font-bold shrink-0 ${catMeta.pill}`;
-            catPill.textContent = item.dayNum ? `Day ${item.dayNum} (${item.city})` : catMeta.label;
 
             const stampPill = document.getElementById('detail-stamp-pill');
             if (isChecked) {
-                stampPill.className = `stamp-badge px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border inline-flex items-center gap-1 ${theme.stampBadge}`;
-                stampPill.innerHTML = `<i class="ph-fill ph-seal-check"></i> ${catMeta.verbUpper} • ${timestamp}`;
+                stampPill.textContent = `${catMeta.verbUpper} • ${timestamp}`;
+                stampPill.className = `stamp-badge px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border ${catMeta.stampBadge}`;
+                stampPill.classList.remove('hidden');
             } else {
-                stampPill.className = 'hidden';
+                stampPill.classList.add('hidden');
             }
 
-            // Left Column Info
             document.getElementById('detail-title').textContent = item.title;
-            document.getElementById('detail-subtitle').textContent = item.drama ? `ซีรีส์: ${item.drama}` : (item.area || item.zone || '');
+            document.getElementById('detail-subtitle').textContent = item.drama || item.area || item.zone || (item.dayNum ? `แพลนวันที่ ${item.dayNum} (${item.city})` : '');
             document.getElementById('detail-time-text').textContent = item.time || 'ไม่ระบุเวลา';
             document.getElementById('detail-time-btn').onclick = () => openScheduleModal(item.id);
 
             const transitBox = document.getElementById('detail-transit-box');
             if (item.transit) {
-                transitBox.classList.remove('hidden');
                 document.getElementById('detail-transit-text').textContent = item.transit;
+                transitBox.classList.remove('hidden');
             } else {
                 transitBox.classList.add('hidden');
             }
 
-            // Recommendations / Menu Heading
-            document.getElementById('detail-rec-heading').textContent =
-                cat === 'cafe' ? 'บรรยากาศ & เมนูแนะนำห้ามพลาด' :
-                cat === 'series' ? 'รายละเอียดซีนซีรีส์ & มุมถ่ายรูป' :
-                'รายละเอียด & คำแนะนำน่าสนใจ';
             document.getElementById('detail-desc-text').textContent = item.desc || 'ไม่มีรายละเอียดเพิ่มเติม';
-
             const tipsBox = document.getElementById('detail-tips-box');
             if (item.tips) {
+                tipsBox.innerHTML = `<span class="font-bold text-amber-800">💡 Tip / แนะนำ:</span> ${item.tips}`;
                 tipsBox.classList.remove('hidden');
-                tipsBox.innerHTML = `<span class="font-bold text-slate-800">💡 Tip:</span> ${item.tips}`;
             } else {
                 tipsBox.classList.add('hidden');
             }
 
-            // Check-in Button
             const checkinBtn = document.getElementById('detail-checkin-btn');
-            checkinBtn.className = `px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer ${isChecked ? theme.btnDone : catMeta.btnIdle}`;
-            checkinBtn.innerHTML = `<i class="${isChecked ? 'ph-fill ph-check-circle' : 'ph ph-circle'} text-base"></i> <span>${isChecked ? catMeta.verbPast : 'เช็กอิน'}</span>`;
+            const checkinLabel = document.getElementById('detail-checkin-label');
+            checkinBtn.className = `px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer ${isChecked ? catMeta.btnDone : catMeta.btnIdle}`;
+            checkinLabel.textContent = isChecked ? `${catMeta.verbPast} แล้ว (ยกเลิก)` : `เช็กอิน (${catMeta.verbUpper})`;
             checkinBtn.onclick = () => {
                 toggleCheck(item.id);
                 openDetailModal(item.id);
@@ -2529,19 +3066,17 @@
             document.getElementById('detail-post-btn').onclick = () => openNoteModal(item.id);
             document.getElementById('detail-edit-btn').onclick = () => openEditPlaceModal(item.id);
 
-            // Bubble Thread Notes
-            renderDetailNotes(item.id);
+            const searchKeyword = item.krName || item.title;
+            document.getElementById('detail-kr-name').textContent = searchKeyword;
+            document.getElementById('detail-area-tag').textContent = (item.area || item.zone || item.city || 'KOREA').toUpperCase();
+            document.getElementById('detail-copy-btn').onclick = () => copyKoreanName(searchKeyword);
 
-            // Right Column: Naver Map & Copy
-            const searchQuery = item.krName || item.title;
-            document.getElementById('detail-kr-name').textContent = searchQuery;
-            document.getElementById('detail-area-tag').textContent = item.city || item.area || 'KOREA';
-            document.getElementById('detail-copy-btn').onclick = () => copyKoreanName(searchQuery);
-            document.getElementById('detail-naver-link').href = item.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(searchQuery)}`;
-            document.getElementById('detail-google-link').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery + ' Korea')}`;
-            document.getElementById('detail-map-hint').textContent = item.transit
-                ? `เดินทางด้วย ${item.transit} จากนั้นกดเปิด Naver Map เพื่อดูทางเดินเท้าไปยังหมุดร้าน`
-                : `กดคัดลอกชื่อ "${searchQuery}" หรือกดเปิดใน Naver Map เพื่อนำทางทันที`;
+            const naverUrl = item.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(searchKeyword)}`;
+            const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchKeyword + ' South Korea')}`;
+            document.getElementById('detail-naver-link').href = naverUrl;
+            document.getElementById('detail-google-link').href = googleUrl;
+
+            renderDetailNotes(item.id);
 
             const modal = document.getElementById('detail-modal');
             modal.classList.remove('hidden');
@@ -2557,33 +3092,31 @@
 
         function renderDetailNotes(itemId) {
             const notes = userNotes[itemId] || [];
-            document.getElementById('detail-notes-count').textContent = `${notes.length} โพสต์`;
-            const container = document.getElementById('detail-notes-list');
+            const countEl = document.getElementById('detail-notes-count');
+            const listEl = document.getElementById('detail-notes-list');
+            if (!countEl || !listEl) return;
 
+            countEl.textContent = `${notes.length} โพสต์`;
             if (!notes.length) {
-                container.innerHTML = `<div class="text-xs text-slate-400 bg-slate-50 rounded-2xl p-4 text-center border border-dashed border-slate-200">ยังไม่มีบันทึกที่จุดนี้ กด "+ โพสต์ความทรงจำ" เพื่อแปะรูปหรือโน้ตได้เลย!</div>`;
+                listEl.innerHTML = `<div class="text-center py-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-xs text-slate-400">ยังไม่มีบันทึกหรือรูปถ่ายที่จุดนี้ กด "+ โพสต์ความทรงจำ" ด้านบนได้เลย</div>`;
                 return;
             }
 
-            container.innerHTML = notes.map((n, idx) => {
+            listEl.innerHTML = notes.map((n, idx) => {
                 const isPpwr = n.author === 'PPWR' || n.author === 'P';
                 const isPpsr = n.author === 'PPSR' || n.author === 'R';
-                const authorLabel = isPpwr ? '💜 PPWR' : isPpsr ? '💙 PPSR' : '👫 ด้วยกัน';
-                const cardBg = isPpwr ? 'bg-purple-50/70 border-purple-200' : isPpsr ? 'bg-sky-50/70 border-sky-200' : 'bg-amber-50/70 border-amber-200';
-                const avatarBg = isPpwr ? 'bg-purple-600 text-white' : isPpsr ? 'bg-royal text-white' : 'bg-amber-500 text-slate-950';
-                const avatarChar = isPpwr ? 'W' : isPpsr ? 'S' : '👫';
+                const badge = isPpwr ? '💜 PPWR' : isPpsr ? '💙 PPSR' : '👫 ด้วยกัน';
                 return `
-                    <div class="p-3 rounded-2xl border ${cardBg}">
-                        <div class="flex items-center justify-between mb-1.5">
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full ${avatarBg} text-xs font-extrabold flex items-center justify-center">${avatarChar}</span>
-                                <span class="text-[11px] font-bold text-slate-700">${authorLabel}</span>
-                                <span class="text-[10px] text-slate-400">${n.time || ''}</span>
+                                <span class="text-xs font-extrabold text-slate-800">${badge}</span>
+                                <span class="text-[11px] text-slate-400">${n.time || ''}</span>
                             </div>
-                            <button onclick="deleteNote('${itemId}', ${idx})" class="text-slate-400 hover:text-rose-600 text-xs cursor-pointer" title="ลบโพสต์"><i class="ph ph-trash"></i></button>
+                            <button type="button" onclick="deleteNote('${itemId}', ${idx})" class="text-slate-400 hover:text-rose-600 text-xs cursor-pointer"><i class="ph-bold ph-trash"></i></button>
                         </div>
-                        ${n.text ? `<p class="text-xs text-slate-800 leading-relaxed whitespace-pre-line">${n.text}</p>` : ''}
-                        ${n.photo ? `<img src="${n.photo}" onclick="openImageViewer('${n.photo}')" class="mt-2 max-h-48 rounded-xl border border-white shadow-xs object-cover cursor-zoom-in">` : ''}
+                        ${n.text ? `<p class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">${n.text}</p>` : ''}
+                        ${n.photo ? `<img src="${n.photo}" onclick="openImageViewer('${n.photo}')" class="w-full max-h-64 rounded-xl object-cover border border-slate-200 cursor-zoom-in">` : ''}
                     </div>
                 `;
             }).join('');
@@ -3486,6 +4019,9 @@ ${content}
             toggleActiveAuthor, openDetailModal, closeDetailModal, forceManualSync,
             openCloudSetupModal, closeCloudSetupModal, saveCustomRtdbUrl,
             selectAppIconDesign, downloadSelectedAppIcon,
+            openStickyBoardModal, closeStickyBoardModal, setStickyAuthor, setStickyColor,
+            updateStickyComposerPreview, triggerStickyPhotoPicker, handleStickyPhotoSelect, removeStickyPhotoAt, clearStickyPhoto,
+            detectStickyLocalLocation, submitStickyNote, deleteStickyNote,
             openNoteModal, closeNoteModal, setNoteAuthor, handleNotePhotoSelect, clearNotePhoto, submitNotePost, deleteNote,
             openScheduleModal, closeScheduleModal, saveScheduleOverride,
             setPlaceAuthor, updateAddModalSubfields, handlePlacePhotoSelect, clearPlacePhoto,
