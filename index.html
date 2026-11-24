@@ -1084,6 +1084,10 @@
                     <button onclick="openScrapbookModal('itinerary')" title="Export Scrapbook & ตารางแพลนทริป" aria-label="Export Scrapbook" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-sm text-sky-200 flex items-center justify-center transition cursor-pointer shrink-0">
                         <i class="ph-fill ph-book-open-text text-sky-300 text-base"></i>
                     </button>
+                    <button onclick="openChecklistModal()" title="Pre-Travel Checklist (เตรียมตัวก่อนเดินทาง)" aria-label="Pre-Travel Checklist" class="relative w-8 h-8 rounded-full bg-emerald-400/20 hover:bg-emerald-400/30 border border-emerald-300/35 text-sm text-emerald-200 flex items-center justify-center transition cursor-pointer shrink-0">
+                        <i class="ph-fill ph-check-square-offset text-emerald-300 text-base"></i>
+                        <span id="header-checklist-dot" class="hidden absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0B1120]"></span>
+                    </button>
                     <button onclick="openTravelerModal()" class="px-3.5 py-1.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer">
                         <i class="ph-fill ph-identification-card"></i> ข้อมูลผู้เดินทาง
                     </button>
@@ -1091,13 +1095,45 @@
                         <i class="ph-bold ph-arrows-left-right text-amber-300"></i>
                         <span id="current-author-label">PPWR</span>
                     </button>
-                    <button onclick="toggleThemeMode()" id="theme-toggle-btn" title="สลับโหมดกลางวัน / กลางคืน (Day / Night Mode)" aria-label="Toggle Day and Night Mode" class="relative inline-flex items-center h-8 w-[62px] rounded-full p-1 bg-sky-500/25 hover:bg-sky-500/35 border border-white/20 transition-colors duration-300 cursor-pointer shrink-0">
-                        <span class="flex items-center justify-between w-full px-1 text-[11px] pointer-events-none">
-                            <i class="ph-fill ph-sun text-amber-300"></i>
-                            <i class="ph-fill ph-moon-stars text-indigo-200"></i>
+                    <button onclick="toggleThemeMode()" id="theme-toggle-btn" title="สลับโหมดกลางวัน / กลางคืน (Day / Night Mode)" aria-label="Toggle Day and Night Mode" class="relative inline-flex items-center h-8 w-[68px] rounded-full overflow-hidden border-[1.5px] border-white/35 transition-all duration-500 cursor-pointer shrink-0 select-none" style="background-color: #359AE8; box-shadow: inset 0 3px 6px rgba(0,0,0,0.34), 0 2px 6px rgba(0,0,0,0.2);">
+                        <!-- Day Scene: Concentric Sky Halos + Fluffy Layered Clouds -->
+                        <span id="theme-day-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-100">
+                            <span class="absolute -left-3 -top-4 w-16 h-16 rounded-full bg-white/15"></span>
+                            <span class="absolute -left-1 -top-2 w-12 h-12 rounded-full bg-white/15"></span>
+                            <!-- Back Light-Blue Cloud Layer -->
+                            <span class="absolute -bottom-2.5 right-4 w-6 h-6 rounded-full bg-[#B8E2FC]"></span>
+                            <span class="absolute -bottom-2 right-1 w-7 h-7 rounded-full bg-[#B8E2FC]"></span>
+                            <span class="absolute bottom-0.5 -right-2 w-7 h-7 rounded-full bg-[#B8E2FC]"></span>
+                            <!-- Front Pure-White Cloud Layer -->
+                            <span class="absolute -bottom-3 left-5 w-5 h-5 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-2.5 right-5 w-6 h-6 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-0.5 -right-2.5 w-7 h-7 rounded-full bg-white"></span>
                         </span>
-                        <span id="theme-toggle-knob" class="absolute left-1 top-1 w-6 h-6 rounded-full bg-amber-300 text-slate-950 shadow-md flex items-center justify-center transition-all duration-300 transform translate-x-0">
-                            <i id="theme-toggle-icon" class="ph-fill ph-sun text-xs"></i>
+
+                        <!-- Night Scene: Dark Sky Concentric Halos + Twinkling 4-Point Stars & Dots -->
+                        <span id="theme-night-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0">
+                            <span class="absolute -right-3 -top-4 w-16 h-16 rounded-full bg-white/[0.08]"></span>
+                            <span class="absolute -right-1 -top-2 w-12 h-12 rounded-full bg-white/[0.08]"></span>
+                            <!-- 4-Point Sparkle Stars -->
+                            <svg class="absolute left-2.5 top-1.5 w-2 h-2 text-white" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
+                            <svg class="absolute left-7 top-2 w-1.5 h-1.5 text-white/90" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
+                            <svg class="absolute left-5 bottom-1.5 w-2 h-2 text-white" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
+                            <!-- Round Star Dots -->
+                            <span class="absolute left-1.5 top-4 w-[2px] h-[2px] rounded-full bg-white/90"></span>
+                            <span class="absolute left-2.5 bottom-1.5 w-1 h-1 rounded-full bg-white"></span>
+                            <span class="absolute left-5 top-1.5 w-[2px] h-[2px] rounded-full bg-white/80"></span>
+                            <span class="absolute left-6 top-3.5 w-[3px] h-[3px] rounded-full bg-white"></span>
+                        </span>
+
+                        <!-- Sliding Celestial Knob (Yellow Sun ↔ Cratered Moon) -->
+                        <span id="theme-toggle-knob" class="relative z-10 ml-1 w-6 h-6 rounded-full transition-all duration-500 transform translate-x-0 overflow-hidden" style="background: radial-gradient(circle at 35% 35%, #FFE033, #F5B800); box-shadow: 0 2px 4px rgba(0,0,0,0.32), inset 0 1.5px 2px rgba(255,255,255,0.65), inset 0 -1.5px 2px rgba(180,115,0,0.45);">
+                            <!-- Moon Craters (Visible in Night Mode) -->
+                            <span id="theme-moon-craters" class="absolute inset-0 transition-opacity duration-300 opacity-0">
+                                <span class="absolute left-1 top-2.5 w-2 h-2 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1.5px rgba(0,0,0,0.32);"></span>
+                                <span class="absolute right-1.5 top-1 w-1.5 h-1.5 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1px rgba(0,0,0,0.28);"></span>
+                                <span class="absolute right-1.5 bottom-1 w-1.5 h-1.5 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1px rgba(0,0,0,0.28);"></span>
+                            </span>
                         </span>
                     </button>
                     <button onclick="openAddModal()" class="px-3.5 py-1.5 rounded-full bg-royal hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer">
@@ -1583,6 +1619,61 @@
                     <button type="button" onclick="closeAddModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold cursor-pointer">ยกเลิก</button>
                     <button type="submit" class="px-5 py-2 rounded-xl bg-royal hover:bg-blue-700 text-white text-xs font-bold shadow-sm cursor-pointer">บันทึกข้อมูล</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pre-Travel Checklist Modal (z-[76]) -->
+    <div id="checklist-modal" class="fixed inset-0 z-[76] bg-slate-950/65 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-5 no-print" onclick="if(event.target===this) closeChecklistModal()">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-4 sm:px-6 py-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 border-b border-slate-200/80 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-9 h-9 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-xs shrink-0">
+                        <i class="ph-bold ph-check-square-offset"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 truncate">Pre-Travel Checklist • เตรียมตัวก่อนบิน</h3>
+                        <p id="checklist-progress-subtitle" class="text-[11px] font-semibold text-emerald-700">เตรียมพร้อมแล้ว 23 / 27 รายการ (85%)</p>
+                    </div>
+                </div>
+                <button onclick="closeChecklistModal()" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 cursor-pointer shrink-0">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Progress Bar & Quick Filter -->
+            <div class="px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200/70 space-y-2.5">
+                <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div id="checklist-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300" style="width: 85%"></div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex flex-wrap items-center gap-1.5" id="checklist-filter-bar">
+                        <button type="button" onclick="setChecklistFilter('all')" id="chk-filter-all" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-white cursor-pointer">ทั้งหมด</button>
+                        <button type="button" onclick="setChecklistFilter('pending')" id="chk-filter-pending" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer">ยังไม่เสร็จ</button>
+                        <button type="button" onclick="setChecklistFilter('done')" id="chk-filter-done" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer">เสร็จแล้ว ✓</button>
+                    </div>
+                    <span class="text-[11px] text-slate-400 font-medium">ซิงก์สถานะ 2 เครื่องอัตโนมัติ</span>
+                </div>
+            </div>
+
+            <!-- Checklist Items Body -->
+            <div id="checklist-modal-body" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+                <!-- Rendered by renderChecklistModal() -->
+            </div>
+
+            <!-- Add New Checklist Item Footer -->
+            <form onsubmit="handleAddChecklistItem(event)" class="px-4 sm:px-6 py-3 bg-slate-50 border-t border-slate-200/80 flex flex-wrap sm:flex-nowrap items-center gap-2">
+                <select id="new-chk-group" class="px-2.5 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 shrink-0">
+                    <option value="เอกสาร & การเงิน">🛂 เอกสาร/การเงิน</option>
+                    <option value="ตั๋ว & การจอง">🎫 ตั๋ว/การจอง</option>
+                    <option value="แอปพลิเคชัน">📱 แอปพลิเคชัน</option>
+                    <option value="จัดกระเป๋า">🧳 จัดกระเป๋า</option>
+                </select>
+                <input type="text" id="new-chk-text" placeholder="เพิ่มรายการที่ต้องเตรียมเพิ่มเติม..." class="flex-1 min-w-[160px] px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:border-emerald-500">
+                <button type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1 shadow-2xs transition cursor-pointer shrink-0">
+                    <i class="ph-bold ph-plus"></i> เพิ่ม
+                </button>
             </form>
         </div>
     </div>
@@ -2193,6 +2284,33 @@
             { id: 'fb_7', area: '🎁 คูปองส่วนลด', time: 'ตลอดทริป', title: 'WOWPASS / T-money Welcome Coupon', krName: '서울역', transit: 'แอปพลิเคชัน WOWPASS', desc: 'กดรับคูปองส่วนลดร้านค้าและคาเฟ่ฟรีในแอป WOWPASS', tips: 'เช็กคูปองในแอปก่อนชำระเงิน' }
         ];
 
+        // Pre-Travel Checklist Default Dataset (Core essentials; add more anytime via composer)
+        const baseChecklistItems = [
+            // เอกสาร & การเงิน
+            { id: 'chk_1', group: 'เอกสาร & การเงิน', text: 'Passport (เช็กอายุคงเหลือเกิน 6 เดือน)', checked: true },
+            { id: 'chk_2', group: 'เอกสาร & การเงิน', text: 'K-ETA (ตรวจสถานะอนุมัติและปริ้นท์สำรอง)', checked: true },
+            { id: 'chk_3', group: 'เอกสาร & การเงิน', text: 'e-Arrival Card (ลงทะเบียนออนไลน์ภายใน 72 ชม. ก่อนบิน)', checked: false },
+            { id: 'chk_4', group: 'เอกสาร & การเงิน', text: 'แลกเงินสดวอน (KRW) + บัตร Travel Card', checked: true },
+            { id: 'chk_5', group: 'เอกสาร & การเงิน', text: 'eSIM / SIM Card เกาหลี & เปิด Roaming รับ OTP', checked: true },
+            { id: 'chk_6', group: 'เอกสาร & การเงิน', text: 'ประกันเดินทางต่างประเทศ (Travel Insurance)', checked: true },
+
+            // ตั๋ว & การจอง
+            { id: 'chk_7', group: 'ตั๋ว & การจอง', text: 'ตั๋วเครื่องบินไป-กลับ BKK ↔ ICN', checked: true },
+            { id: 'chk_8', group: 'ตั๋ว & การจอง', text: 'ตั๋ว KTX ขาไป Seoul → Busan (6 ธ.ค. 14:58–17:47 น. Car 13 / 8A-8B)', checked: true },
+            { id: 'chk_9', group: 'ตั๋ว & การจอง', text: 'ตั๋ว KTX ขากลับ Busan → Seoul (8 ธ.ค. 13:17–16:34 น. Car 1 / 9A-9B)', checked: true },
+            { id: 'chk_10', group: 'ตั๋ว & การจอง', text: 'ที่พักปูซาน: Busan Yeongmu Parade Hotel (6–8 ธ.ค. 2 คืน)', checked: true },
+            { id: 'chk_11', group: 'ตั๋ว & การจอง', text: 'ที่พักโซล: STAYMIN Gangdong (8–12 ธ.ค. 4 คืน)', checked: true },
+
+            // แอปพลิเคชัน
+            { id: 'chk_12', group: 'แอปพลิเคชัน', text: 'Naver Map & Subway Korea / KakaoMetro', checked: true },
+            { id: 'chk_13', group: 'แอปพลิเคชัน', text: 'Papago / Kakao T / WOWPASS / Catch Table', checked: true },
+
+            // จัดกระเป๋า
+            { id: 'chk_14', group: 'จัดกระเป๋า', text: 'เสื้อโค้ท / ฮีทเทค / ถุงมือ ผ้าพันคอ & Hot Pack', checked: true },
+            { id: 'chk_15', group: 'จัดกระเป๋า', text: 'หัวปลั๊กแปลงขาไฟเกาหลี (Type C / F) & Power Bank (Carry-on)', checked: true },
+            { id: 'chk_16', group: 'จัดกระเป๋า', text: 'ยาประจำตัว & สกินแคร์ให้ความชุ่มชื้น / ลิปมัน', checked: true }
+        ];
+
         // =========================================================
         // 2. THEME & NAVIGATION CONFIG (Consistent Pastel -> Vivid)
         // =========================================================
@@ -2251,8 +2369,11 @@
         let itemOverrides = {};
         let customPlaces = [];
         let stickyNotes = [];
+        let preTravelChecklist = JSON.parse(JSON.stringify(baseChecklistItems));
+        let checklistFilter = 'all';
         let pendingStickyPhotos = [];
         let selectedStickyColor = 'cream';
+        let editingChecklistId = null;
         const SEEN_STICKY_KEY = 'ppr_last_seen_sticky_id';
         let travelerVault = {
             pin: '070910',
@@ -2303,6 +2424,7 @@
                     itemOverrides,
                     customPlaces,
                     stickyNotes,
+                    preTravelChecklist,
                     travelerVault,
                     updatedAt: lastKnownUpdatedAt || Date.now()
                 }));
@@ -2322,6 +2444,9 @@
                 customPlaces = data.customPlaces || [];
                 if (Array.isArray(data.stickyNotes)) {
                     stickyNotes = data.stickyNotes.filter(n => n.id !== 'sn-welcome-1');
+                }
+                if (Array.isArray(data.preTravelChecklist) && data.preTravelChecklist.length) {
+                    preTravelChecklist = data.preTravelChecklist;
                 }
                 lastKnownUpdatedAt = data.updatedAt || 0;
                 if (data.travelerVault) {
@@ -2361,6 +2486,9 @@
             } else if (data.stickyNotes && typeof data.stickyNotes === 'object') {
                 stickyNotes = Object.values(data.stickyNotes).filter(n => n.id !== 'sn-welcome-1');
             }
+            if (Array.isArray(data.preTravelChecklist) && data.preTravelChecklist.length) {
+                preTravelChecklist = data.preTravelChecklist;
+            }
             if (data.travelerVault) {
                 travelerVault = { ...travelerVault, ...data.travelerVault };
             }
@@ -2371,6 +2499,9 @@
             renderAll();
             if (!document.getElementById('sticky-board-modal').classList.contains('hidden')) {
                 renderStickyWall();
+            }
+            if (!document.getElementById('checklist-modal').classList.contains('hidden')) {
+                renderChecklistModal();
             }
             if (isVaultUnlocked) populateTravelerVaultFields();
             if (activeDetailItem) {
@@ -2520,6 +2651,7 @@
                     itemOverrides,
                     customPlaces,
                     stickyNotes,
+                    preTravelChecklist,
                     travelerVault,
                     updatedAt: lastKnownUpdatedAt
                 };
@@ -2540,6 +2672,204 @@
                     saveState();
                 }
             }
+        }
+
+        // =========================================================
+        // 4A. PRE-TRAVEL CHECKLIST MODAL & SYNC LOGIC
+        // =========================================================
+        function updateHeaderChecklistBadge() {
+            const dot = document.getElementById('header-checklist-dot');
+            if (!dot) return;
+            const pendingCount = preTravelChecklist.filter(i => !i.checked).length;
+            if (pendingCount > 0) dot.classList.remove('hidden');
+            else dot.classList.add('hidden');
+        }
+
+        function openChecklistModal() {
+            renderChecklistModal();
+            const modal = document.getElementById('checklist-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeChecklistModal() {
+            const modal = document.getElementById('checklist-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function setChecklistFilter(filter) {
+            checklistFilter = filter;
+            ['all', 'pending', 'done'].forEach(f => {
+                const btn = document.getElementById(`chk-filter-${f}`);
+                if (!btn) return;
+                btn.className = f === filter
+                    ? 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900 text-white cursor-pointer'
+                    : 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer';
+            });
+            renderChecklistModal();
+        }
+
+        function renderChecklistModal() {
+            const total = preTravelChecklist.length;
+            const done = preTravelChecklist.filter(i => i.checked).length;
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+            const sub = document.getElementById('checklist-progress-subtitle');
+            const bar = document.getElementById('checklist-progress-bar');
+            if (sub) sub.textContent = `เตรียมพร้อมแล้ว ${done} / ${total} รายการ (${pct}%)`;
+            if (bar) bar.style.width = `${pct}%`;
+            updateHeaderChecklistBadge();
+
+            let items = preTravelChecklist;
+            if (checklistFilter === 'pending') items = items.filter(i => !i.checked);
+            else if (checklistFilter === 'done') items = items.filter(i => i.checked);
+
+            const body = document.getElementById('checklist-modal-body');
+            if (!body) return;
+
+            if (!items.length) {
+                body.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">ไม่มีรายการในหมวดตัวกรองนี้</div>`;
+                return;
+            }
+
+            const groupOrder = ['เอกสาร & การเงิน', 'ตั๋ว & การจอง', 'แอปพลิเคชัน', 'จัดกระเป๋า'];
+            const groupIcons = {
+                'เอกสาร & การเงิน': '🛂',
+                'ตั๋ว & การจอง': '🎫',
+                'แอปพลิเคชัน': '📱',
+                'จัดกระเป๋า': '🧳'
+            };
+            const groups = [...new Set([...groupOrder, ...items.map(i => i.group)])];
+
+            body.innerHTML = groups.map(grp => {
+                const grpItems = items.filter(i => i.group === grp);
+                if (!grpItems.length) return '';
+                const grpAll = preTravelChecklist.filter(i => i.group === grp);
+                const grpDone = grpAll.filter(i => i.checked).length;
+                return `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between px-1">
+                            <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                                <span>${groupIcons[grp] || '📌'}</span>
+                                <span>${grp}</span>
+                            </h4>
+                            <span class="text-[11px] font-bold text-slate-400">${grpDone}/${grpAll.length}</span>
+                        </div>
+                        <div class="space-y-1.5">
+                            ${grpItems.map(item => {
+                                const isEditing = editingChecklistId === item.id;
+                                if (isEditing) {
+                                    return `
+                                        <div class="p-2.5 sm:p-3 rounded-2xl border-2 border-emerald-400 bg-emerald-50/40 space-y-2">
+                                            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                                                <select id="edit-chk-group-${item.id}" class="px-2 py-1.5 rounded-xl border border-slate-200 bg-white text-[11px] font-bold text-slate-700 shrink-0">
+                                                    ${groupOrder.map(g => `<option value="${g}" ${item.group === g ? 'selected' : ''}>${g}</option>`).join('')}
+                                                </select>
+                                                <input type="text" id="edit-chk-input-${item.id}" value="${item.text.replace(/"/g, '&quot;')}" onkeydown="if(event.key==='Enter'){ event.preventDefault(); saveEditChecklistItem('${item.id}'); } else if(event.key==='Escape'){ cancelEditChecklistItem(); }" class="flex-1 min-w-[150px] px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:outline-none focus:border-emerald-500">
+                                            </div>
+                                            <div class="flex items-center justify-end gap-1.5">
+                                                <button type="button" onclick="cancelEditChecklistItem()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 text-[11px] font-bold cursor-pointer">ยกเลิก</button>
+                                                <button type="button" onclick="saveEditChecklistItem('${item.id}')" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold cursor-pointer">บันทึก</button>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                                return `
+                                    <div onclick="toggleChecklistItem('${item.id}')" class="group flex items-center justify-between gap-2 p-2.5 sm:p-3 rounded-2xl border transition cursor-pointer ${item.checked ? 'bg-emerald-50/60 border-emerald-200/80' : 'bg-white border-slate-200/90 hover:border-emerald-300'}">
+                                        <div class="flex items-start gap-2.5 min-w-0 flex-1">
+                                            <span class="mt-0.5 w-5 h-5 rounded-lg flex items-center justify-center shrink-0 transition ${item.checked ? 'bg-emerald-600 text-white' : 'border-2 border-slate-300 bg-white group-hover:border-emerald-500'}">
+                                                ${item.checked ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
+                                            </span>
+                                            <span class="text-xs sm:text-[13px] leading-snug ${item.checked ? 'line-through text-slate-400 font-medium' : 'text-slate-800 font-semibold'}">${item.text}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1 shrink-0" onclick="event.stopPropagation()">
+                                            <button type="button" onclick="startEditChecklistItem('${item.id}')" title="แก้ไขรายการนี้" class="w-7 h-7 rounded-full hover:bg-sky-100 text-slate-400 hover:text-royal flex items-center justify-center transition cursor-pointer">
+                                                <i class="ph-bold ph-pencil-simple text-xs"></i>
+                                            </button>
+                                            <button type="button" onclick="deleteChecklistItem('${item.id}')" title="ลบรายการนี้" class="w-7 h-7 rounded-full hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center transition cursor-pointer">
+                                                <i class="ph-bold ph-trash text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function toggleChecklistItem(itemId) {
+            if (editingChecklistId === itemId) return;
+            const target = preTravelChecklist.find(i => i.id === itemId);
+            if (!target) return;
+            target.checked = !target.checked;
+            renderChecklistModal();
+            await saveState();
+        }
+
+        function startEditChecklistItem(itemId) {
+            editingChecklistId = itemId;
+            renderChecklistModal();
+            setTimeout(() => {
+                const inp = document.getElementById(`edit-chk-input-${itemId}`);
+                if (inp) {
+                    inp.focus();
+                    inp.setSelectionRange(inp.value.length, inp.value.length);
+                }
+            }, 30);
+        }
+
+        function cancelEditChecklistItem() {
+            editingChecklistId = null;
+            renderChecklistModal();
+        }
+
+        async function saveEditChecklistItem(itemId) {
+            const target = preTravelChecklist.find(i => i.id === itemId);
+            if (!target) return;
+            const inp = document.getElementById(`edit-chk-input-${itemId}`);
+            const grpSel = document.getElementById(`edit-chk-group-${itemId}`);
+            const newText = (inp?.value || '').trim();
+            if (!newText) {
+                showToast('กรุณาระบุข้อความรายการ', 'ph-warning');
+                return;
+            }
+            target.text = newText;
+            if (grpSel?.value) target.group = grpSel.value;
+            editingChecklistId = null;
+            renderChecklistModal();
+            showToast('แก้ไขรายการเรียบร้อยแล้ว');
+            await saveState();
+        }
+
+        async function handleAddChecklistItem(e) {
+            e.preventDefault();
+            const grp = document.getElementById('new-chk-group').value;
+            const input = document.getElementById('new-chk-text');
+            const text = input.value.trim();
+            if (!text) return;
+
+            preTravelChecklist.push({
+                id: 'chk_custom_' + Date.now(),
+                group: grp,
+                text,
+                checked: false,
+                isCustom: true
+            });
+            input.value = '';
+            renderChecklistModal();
+            showToast('เพิ่มรายการใน Checklist แล้ว');
+            await saveState();
+        }
+
+        async function deleteChecklistItem(itemId) {
+            if (editingChecklistId === itemId) editingChecklistId = null;
+            preTravelChecklist = preTravelChecklist.filter(i => i.id !== itemId);
+            renderChecklistModal();
+            showToast('ลบรายการออกจาก Checklist แล้ว');
+            await saveState();
         }
 
         // =========================================================
@@ -2988,16 +3318,29 @@
 
             const btn = document.getElementById('theme-toggle-btn');
             const knob = document.getElementById('theme-toggle-knob');
-            const icon = document.getElementById('theme-toggle-icon');
-            if (btn && knob && icon) {
+            const dayScene = document.getElementById('theme-day-scene');
+            const nightScene = document.getElementById('theme-night-scene');
+            const craters = document.getElementById('theme-moon-craters');
+
+            if (btn && knob) {
                 if (isDark) {
-                    btn.className = 'relative inline-flex items-center h-8 w-[62px] rounded-full p-1 bg-indigo-950/90 hover:bg-indigo-900 border border-indigo-400/35 transition-colors duration-300 cursor-pointer shrink-0';
-                    knob.className = 'absolute left-1 top-1 w-6 h-6 rounded-full bg-indigo-500 text-amber-200 shadow-md flex items-center justify-center transition-all duration-300 transform translate-x-[30px]';
-                    icon.className = 'ph-fill ph-moon-stars text-xs';
+                    btn.style.backgroundColor = '#1D222D';
+                    btn.style.borderColor = 'rgba(203, 213, 225, 0.45)';
+                    if (dayScene) dayScene.style.opacity = '0';
+                    if (nightScene) nightScene.style.opacity = '1';
+                    if (craters) craters.style.opacity = '1';
+                    knob.style.transform = 'translateX(34px)';
+                    knob.style.background = 'radial-gradient(circle at 35% 35%, #E4E8F0, #BFC6D4)';
+                    knob.style.boxShadow = '0 2px 5px rgba(0,0,0,0.45), inset 0 1.5px 2px rgba(255,255,255,0.85), inset 0 -1.5px 2px rgba(100,116,139,0.5)';
                 } else {
-                    btn.className = 'relative inline-flex items-center h-8 w-[62px] rounded-full p-1 bg-sky-500/25 hover:bg-sky-500/35 border border-white/20 transition-colors duration-300 cursor-pointer shrink-0';
-                    knob.className = 'absolute left-1 top-1 w-6 h-6 rounded-full bg-amber-300 text-slate-950 shadow-md flex items-center justify-center transition-all duration-300 transform translate-x-0';
-                    icon.className = 'ph-fill ph-sun text-xs';
+                    btn.style.backgroundColor = '#359AE8';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                    if (dayScene) dayScene.style.opacity = '1';
+                    if (nightScene) nightScene.style.opacity = '0';
+                    if (craters) craters.style.opacity = '0';
+                    knob.style.transform = 'translateX(0px)';
+                    knob.style.background = 'radial-gradient(circle at 35% 35%, #FFE033, #F5B800)';
+                    knob.style.boxShadow = '0 2px 4px rgba(0,0,0,0.32), inset 0 1.5px 2px rgba(255,255,255,0.65), inset 0 -1.5px 2px rgba(180,115,0,0.45)';
                 }
             }
         }
@@ -3337,6 +3680,7 @@
 
         function renderAll() {
             updateProgress();
+            updateHeaderChecklistBadge();
             renderHeaderStickyWidget();
             renderNavigation();
             if (currentTab === 'solo') renderSoloTab();
@@ -4044,6 +4388,7 @@
             openCloudSetupModal, closeCloudSetupModal, saveCustomRtdbUrl, forceManualSync, selectAppIconDesign, downloadSelectedAppIcon,
             openStickyBoardModal, closeStickyBoardModal, setStickyAuthor, setStickyColor, updateStickyComposerPreview,
             triggerStickyPhotoPicker, handleStickyPhotoSelect, removePendingStickyPhoto, clearStickyPhotos, detectStickyLocalLocation, submitStickyNote, deleteStickyNote,
+            openChecklistModal, closeChecklistModal, setChecklistFilter, toggleChecklistItem, startEditChecklistItem, cancelEditChecklistItem, saveEditChecklistItem, handleAddChecklistItem, deleteChecklistItem,
             toggleActiveAuthor, toggleThemeMode, copyText, openImageViewer, closeImageViewer, openResetConfirmModal, closeResetConfirmModal, executeResetChecked
         });
 
