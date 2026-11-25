@@ -1001,9 +1001,39 @@
         html.dark-mode .text-pink-900 {
             color: #FBCFE8 !important;
         }
-        html.dark-mode .bg-indigo-50 {
-            background-color: rgba(99, 102, 241, 0.15) !important;
-            border-color: rgba(129, 140, 248, 0.3) !important;
+        /* Traveler Modal & Private Vault High-Contrast Styling (Day & Night Mode) */
+        html.dark-mode #traveler-modal .bg-purple-50\/70 {
+            background-color: rgba(147, 51, 234, 0.22) !important;
+            border-color: rgba(192, 132, 252, 0.45) !important;
+        }
+        html.dark-mode #traveler-modal .bg-sky-50\/70 {
+            background-color: rgba(2, 132, 199, 0.22) !important;
+            border-color: rgba(56, 189, 248, 0.45) !important;
+        }
+        html.dark-mode #traveler-modal .bg-amber-50\/70 {
+            background-color: rgba(217, 119, 6, 0.22) !important;
+            border-color: rgba(251, 191, 36, 0.45) !important;
+        }
+        html.dark-mode #traveler-modal .bg-amber-50 {
+            background-color: rgba(217, 119, 6, 0.20) !important;
+            border-color: rgba(251, 191, 36, 0.45) !important;
+        }
+        html.dark-mode #traveler-modal label {
+            color: #E2E8F0 !important;
+        }
+        html.dark-mode #traveler-modal input,
+        html.dark-mode #traveler-modal textarea {
+            background-color: #0B1120 !important;
+            border-color: #475569 !important;
+            color: #F8FAFC !important;
+        }
+        html.dark-mode #traveler-modal input::placeholder,
+        html.dark-mode #traveler-modal textarea::placeholder {
+            color: #94A3B8 !important;
+        }
+        html.dark-mode #traveler-modal .bg-indigo-50 {
+            background-color: rgba(99, 102, 241, 0.20) !important;
+            border-color: rgba(129, 140, 248, 0.40) !important;
         }
         html.dark-mode .text-indigo-950 {
             color: #C7D2FE !important;
@@ -1063,13 +1093,13 @@
             box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
         }
         html.dark-mode #reset-confirm-modal button.hover\:bg-rose-50:hover,
-        html.dark-mode footer button.hover\:bg-rose-50:hover {
+        html.dark-mode .hover\:bg-rose-50:hover {
             background-color: rgba(225, 29, 72, 0.18) !important;
             border-color: rgba(244, 63, 94, 0.4) !important;
             color: #FDA4AF !important;
         }
-        html.dark-mode input:not(#sticky-text-input):not(#sticky-location-input):not(#vault-pin-input),
-        html.dark-mode select,
+        html.dark-mode input:not(#sticky-text-input):not(#sticky-location-input):not(#vault-pin-input):not(#exp-title-input):not(#exp-amount-input):not(#exp-date-input):not(#exp-rate-input),
+        html.dark-mode select:not(#expense-box select),
         html.dark-mode textarea:not(#sticky-text-input) {
             background-color: #162036 !important;
             border-color: #334155 !important;
@@ -1110,28 +1140,206 @@
         html.dark-mode #sticky-board-modal p {
             color: #C7BBAE !important;
         }
+        /* Expense Tracker Warm Brown-Beige Palette (Day & Night Mode) */
+        #expense-box {
+            background-color: #FBF6EE !important;
+            border-color: #DFD3C3 !important;
+            color: #2C2621 !important;
+        }
+        #expense-header {
+            background: linear-gradient(135deg, #F3ECE1, #EAE0D0) !important;
+            border-color: #DFD3C3 !important;
+        }
+        #expense-header h3 { color: #3E332A !important; }
+        #expense-header p { color: #8C5843 !important; }
+        #expense-toolbar {
+            background-color: #F3ECE1 !important;
+            border-color: #DFD3C3 !important;
+        }
+        #expense-form-box {
+            background-color: #F5EFE6 !important;
+            border-color: #D6C7B2 !important;
+        }
+        #expense-box input,
+        #expense-box select {
+            background-color: #FFFDF9 !important;
+            border-color: #D6C7B2 !important;
+            color: #2C2621 !important;
+        }
+        #expense-box label { color: #5C4F44 !important; }
+        #exp-split-card {
+            background-color: #FFFDF9 !important;
+            border-color: #D6C7B2 !important;
+        }
+        #exp-split-preview-box {
+            background-color: #F3ECE1 !important;
+            border-color: #DFD3C3 !important;
+            color: #3E332A !important;
+        }
+        .expense-item-card {
+            background-color: #FFFDF9 !important;
+            border-color: #DFD3C3 !important;
+            color: #2C2621 !important;
+        }
+        .expense-item-card.is-cleared {
+            background-color: #F2EDE4 !important;
+            border-color: #C8B89E !important;
+        }
+        .expense-item-breakdown {
+            background-color: #F6F0E6 !important;
+            border-color: #DFD3C3 !important;
+            color: #3E332A !important;
+        }
+
+        /* Night Mode for Expense Tracker (Warm Espresso / Mocha Beige) */
+        html.dark-mode #expense-box {
+            background-color: #231E1A !important;
+            border-color: #3E352E !important;
+            color: #F3ECE1 !important;
+        }
+        html.dark-mode #expense-header {
+            background: linear-gradient(135deg, #2D2620, #231E1A) !important;
+            border-color: #3E352E !important;
+        }
+        html.dark-mode #expense-header h3 { color: #F7F1E7 !important; }
+        html.dark-mode #expense-header p { color: #E2C6A3 !important; }
+        html.dark-mode #expense-toolbar {
+            background-color: #2B241F !important;
+            border-color: #3E352E !important;
+        }
+        html.dark-mode #expense-form-box {
+            background-color: #2C2520 !important;
+            border-color: #4A3F37 !important;
+        }
+        html.dark-mode #expense-form-box #exp-form-title { color: #F7F1E7 !important; }
+        html.dark-mode #expense-box label { color: #D8CBB8 !important; }
+        html.dark-mode #expense-box input:not([type="checkbox"]),
+        html.dark-mode #expense-box select {
+            background-color: #1C1714 !important;
+            border-color: #54463C !important;
+            color: #F7F1E7 !important;
+            color-scheme: dark;
+        }
+        html.dark-mode #expense-box input::placeholder {
+            color: #9C8E7E !important;
+        }
+        html.dark-mode #exp-split-card {
+            background-color: #231E1A !important;
+            border-color: #4A3F37 !important;
+        }
+        html.dark-mode #exp-split-card span { color: #EFE6D8 !important; }
+        html.dark-mode #exp-split-preview-box {
+            background-color: #332B25 !important;
+            border-color: #52453B !important;
+            color: #F7F1E7 !important;
+        }
+        html.dark-mode .expense-item-card {
+            background-color: #2B241F !important;
+            border-color: #443A32 !important;
+            color: #F7F1E7 !important;
+        }
+        html.dark-mode .expense-item-card.is-cleared {
+            background-color: #24211D !important;
+            border-color: #564A3E !important;
+        }
+        html.dark-mode .expense-item-breakdown {
+            background-color: #1E1A16 !important;
+            border-color: #443A32 !important;
+            color: #EFE6D8 !important;
+        }
+        html.dark-mode .exp-idle-btn {
+            background-color: #1B1714 !important;
+            border-color: #4A3F37 !important;
+            color: #D8CBB8 !important;
+        }
+        html.dark-mode .exp-status-pending {
+            background-color: rgba(217, 119, 6, 0.16) !important;
+            border-color: rgba(251, 191, 36, 0.5) !important;
+            color: #FCD34D !important;
+        }
+        html.dark-mode .exp-status-cleared {
+            background-color: #15803D !important;
+            border-color: #4ADE80 !important;
+            color: #FFFFFF !important;
+        }
         /* Keep scrapbook & thermal receipt slip crisp white for reading & printing */
         html.dark-mode #scrapbook-box,
         html.dark-mode #scrapbook-body,
-        html.dark-mode #scrapbook-body .bg-white,
-        html.dark-mode #expense-receipt-box,
-        html.dark-mode #expense-receipt-body .bg-\[\#FFFDF9\] {
+        html.dark-mode #scrapbook-body .bg-white {
             background-color: #FFFFFF !important;
             color: #0F172A !important;
         }
         html.dark-mode #scrapbook-body .text-slate-900,
-        html.dark-mode #scrapbook-body .text-slate-800,
-        html.dark-mode #expense-receipt-body .text-slate-950,
-        html.dark-mode #expense-receipt-body .text-slate-900 {
+        html.dark-mode #scrapbook-body .text-slate-800 {
             color: #0F172A !important;
         }
-        html.dark-mode #scrapbook-body .text-slate-600,
-        html.dark-mode #expense-receipt-body .text-slate-600 {
+        html.dark-mode #scrapbook-body .text-slate-600 {
             color: #475569 !important;
+        }
+        /* Receipt Slip Modal: High-Contrast Crisp Paper in Both Day & Night Modes */
+        html.dark-mode #expense-receipt-box {
+            background-color: #231E1A !important;
+            border-color: #3E352E !important;
+        }
+        html.dark-mode #expense-receipt-toolbar {
+            background-color: #2D2620 !important;
+            border-color: #3E352E !important;
+        }
+        html.dark-mode #expense-receipt-body {
+            background-color: #181411 !important;
+        }
+        #expense-receipt-paper,
+        html.dark-mode #expense-receipt-paper {
+            background-color: #FFFDF9 !important;
+            color: #1E1915 !important;
+            border-color: #D6C7B2 !important;
+        }
+        #expense-receipt-paper *,
+        html.dark-mode #expense-receipt-paper * {
+            color: inherit;
+        }
+        #expense-receipt-paper .receipt-muted,
+        html.dark-mode #expense-receipt-paper .receipt-muted {
+            color: #5C4F44 !important;
+        }
+        #expense-receipt-paper .receipt-box-subtle,
+        html.dark-mode #expense-receipt-paper .receipt-box-subtle {
+            background-color: #F6F0E6 !important;
+            border-color: #D6C7B2 !important;
+            color: #1E1915 !important;
+        }
+        #expense-receipt-paper .receipt-box-highlight,
+        html.dark-mode #expense-receipt-paper .receipt-box-highlight {
+            background-color: #EFE5D6 !important;
+            border-color: #8C5843 !important;
+            color: #1E1915 !important;
+        }
+        #expense-receipt-paper .receipt-accent-brown,
+        html.dark-mode #expense-receipt-paper .receipt-accent-brown {
+            color: #8C5843 !important;
+        }
+        #expense-receipt-paper .receipt-accent-green,
+        html.dark-mode #expense-receipt-paper .receipt-accent-green {
+            color: #15803D !important;
+        }
+        #expense-receipt-paper .receipt-accent-red,
+        html.dark-mode #expense-receipt-paper .receipt-accent-red {
+            color: #B91C1C !important;
         }
         html.dark-mode .stamp-photo-frame {
             background-color: #FFFFFF !important;
             border-color: #B5A593 !important;
+        }
+        /* Stamp perforated border & crisp white paper rim for 1:1 note thumbnails (Day & Night) */
+        .stamp-thumb-box {
+            background-color: #FFFFFF !important;
+            border: 2px dotted #A89682 !important;
+            box-shadow: 0 0 0 2px #FFFFFF, 0 2px 5px rgba(44, 38, 33, 0.14) !important;
+        }
+        html.dark-mode .stamp-thumb-box {
+            background-color: #FFFFFF !important;
+            border: 2px dotted #A89682 !important;
+            box-shadow: 0 0 0 2px #FFFFFF, 0 2px 5px rgba(44, 38, 33, 0.14) !important;
         }
 
         .font-typewriter {
@@ -1206,65 +1414,73 @@
                         <i class="ph-bold ph-arrows-left-right text-amber-300"></i>
                         <span id="current-author-label">PPWR</span>
                     </button>
-                    <button onclick="toggleThemeMode()" id="theme-toggle-btn" title="สลับโหมดกลางวัน / กลางคืน (Day / Night Mode)" aria-label="Toggle Day and Night Mode" class="relative inline-flex items-center h-8 w-[68px] rounded-full overflow-hidden border-[1.5px] border-white/35 transition-all duration-500 cursor-pointer shrink-0 select-none" style="background-color: #359AE8; box-shadow: inset 0 3px 6px rgba(0,0,0,0.34), 0 2px 6px rgba(0,0,0,0.2);">
-                        <!-- Day Scene -->
-                        <span id="theme-day-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-100">
-                            <span class="absolute -left-3 -top-4 w-16 h-16 rounded-full bg-white/15"></span>
-                            <span class="absolute -left-1 -top-2 w-12 h-12 rounded-full bg-white/15"></span>
-                            <span class="absolute -bottom-2.5 right-4 w-6 h-6 rounded-full bg-[#B8E2FC]"></span>
-                            <span class="absolute -bottom-2 right-1 w-7 h-7 rounded-full bg-[#B8E2FC]"></span>
-                            <span class="absolute bottom-0.5 -right-2 w-7 h-7 rounded-full bg-[#B8E2FC]"></span>
-                            <span class="absolute -bottom-3 left-5 w-5 h-5 rounded-full bg-white"></span>
-                            <span class="absolute -bottom-2.5 right-5 w-6 h-6 rounded-full bg-white"></span>
-                            <span class="absolute -bottom-2 right-2 w-6 h-6 rounded-full bg-white"></span>
-                            <span class="absolute -bottom-0.5 -right-2.5 w-7 h-7 rounded-full bg-white"></span>
+                    <button onclick="toggleThemeMode()" id="theme-toggle-btn" title="สลับโหมดกลางวัน / กลางคืน (Day / Night Mode)" aria-label="Toggle Day and Night Mode" class="relative inline-flex items-center h-8 w-[68px] rounded-full overflow-hidden border-[1.5px] border-white/40 transition-all duration-500 cursor-pointer shrink-0 select-none" style="background-color: #1D2129; box-shadow: inset 0 3px 6px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);">
+                        <!-- Day Scene: Concentric Sun Halos + Layered Clouds -->
+                        <span id="theme-day-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0">
+                            <span class="absolute -left-5 -top-6 w-24 h-24 rounded-full bg-white/12"></span>
+                            <span class="absolute -left-3.5 -top-4 w-[74px] h-[74px] rounded-full bg-white/14"></span>
+                            <span class="absolute -left-2 -top-2.5 w-14 h-14 rounded-full bg-white/16"></span>
+                            <!-- Back Sky-Blue Cloud Layer -->
+                            <span class="absolute -bottom-3 left-5 w-6 h-6 rounded-full bg-[#A8DCFB]"></span>
+                            <span class="absolute -bottom-2.5 right-5 w-7 h-7 rounded-full bg-[#A8DCFB]"></span>
+                            <span class="absolute -bottom-2 right-1.5 w-8 h-8 rounded-full bg-[#A8DCFB]"></span>
+                            <span class="absolute top-1 -right-3.5 w-8 h-8 rounded-full bg-[#A8DCFB]"></span>
+                            <!-- Front White Cloud Layer -->
+                            <span class="absolute -bottom-3.5 left-4 w-6 h-6 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-3 left-8 w-5 h-5 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-3 right-5 w-7 h-7 rounded-full bg-white"></span>
+                            <span class="absolute -bottom-2 right-1.5 w-7 h-7 rounded-full bg-white"></span>
+                            <span class="absolute bottom-1 -right-3 w-7 h-7 rounded-full bg-white"></span>
                         </span>
-                        <!-- Night Scene -->
-                        <span id="theme-night-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0">
-                            <span class="absolute -right-3 -top-4 w-16 h-16 rounded-full bg-white/[0.08]"></span>
-                            <span class="absolute -right-1 -top-2 w-12 h-12 rounded-full bg-white/[0.08]"></span>
-                            <svg class="absolute left-2.5 top-1.5 w-2 h-2 text-white" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
-                            <svg class="absolute left-7 top-2 w-1.5 h-1.5 text-white/90" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
-                            <svg class="absolute left-5 bottom-1.5 w-2 h-2 text-white" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0 L7.4 4.6 L12 6 L7.4 7.4 L6 12 L4.6 7.4 L0 6 L4.6 4.6 Z"/></svg>
-                            <span class="absolute left-1.5 top-4 w-[2px] h-[2px] rounded-full bg-white/90"></span>
-                            <span class="absolute left-2.5 bottom-1.5 w-1 h-1 rounded-full bg-white"></span>
-                            <span class="absolute left-5 top-1.5 w-[2px] h-[2px] rounded-full bg-white/80"></span>
-                            <span class="absolute left-6 top-3.5 w-[3px] h-[3px] rounded-full bg-white"></span>
+                        <!-- Night Scene: Concentric Moon Halos + 4-Point Stars & Dots -->
+                        <span id="theme-night-scene" class="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-100">
+                            <span class="absolute -right-5 -top-6 w-24 h-24 rounded-full bg-white/[0.06]"></span>
+                            <span class="absolute -right-3.5 -top-4 w-[74px] h-[74px] rounded-full bg-white/[0.08]"></span>
+                            <span class="absolute -right-2 -top-2.5 w-14 h-14 rounded-full bg-white/[0.10]"></span>
+                            <!-- 4-Point Sparkle Stars & Round Dots -->
+                            <svg class="absolute left-3.5 top-1.5 w-2 h-2 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2Z"/></svg>
+                            <svg class="absolute left-7 bottom-1.5 w-1.5 h-1.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2Z"/></svg>
+                            <svg class="absolute left-9 top-2 w-2 h-2 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2Z"/></svg>
+                            <span class="absolute left-2 top-4 w-[2px] h-[2px] rounded-full bg-white"></span>
+                            <span class="absolute left-6 top-2.5 w-[2.5px] h-[2.5px] rounded-full bg-white"></span>
+                            <span class="absolute left-3.5 bottom-2 w-[3.5px] h-[3.5px] rounded-full bg-white"></span>
+                            <span class="absolute left-6 top-4 w-[2px] h-[2px] rounded-full bg-white"></span>
+                            <span class="absolute left-7.5 top-4 w-[3px] h-[3px] rounded-full bg-white"></span>
                         </span>
-                        <!-- Sliding Celestial Knob -->
-                        <span id="theme-toggle-knob" class="relative z-10 ml-1 w-6 h-6 rounded-full transition-all duration-500 transform translate-x-0 overflow-hidden" style="background: radial-gradient(circle at 35% 35%, #FFE033, #F5B800); box-shadow: 0 2px 4px rgba(0,0,0,0.32), inset 0 1.5px 2px rgba(255,255,255,0.65), inset 0 -1.5px 2px rgba(180,115,0,0.45);">
-                            <span id="theme-moon-craters" class="absolute inset-0 transition-opacity duration-300 opacity-0">
-                                <span class="absolute left-1 top-2.5 w-2 h-2 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1.5px rgba(0,0,0,0.32);"></span>
-                                <span class="absolute right-1.5 top-1 w-1.5 h-1.5 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1px rgba(0,0,0,0.28);"></span>
-                                <span class="absolute right-1.5 bottom-1 w-1.5 h-1.5 rounded-full bg-[#9AA3B2]" style="box-shadow: inset 0 1px 1px rgba(0,0,0,0.28);"></span>
+                        <!-- Sun / Moon Knob -->
+                        <span id="theme-toggle-knob" class="relative z-10 w-6 h-6 rounded-full ml-1 transition-all duration-500 flex items-center justify-center" style="transform: translateX(34px); background: radial-gradient(circle at 35% 35%, #E4E9F0, #C5CED9); box-shadow: inset 0 1.5px 2px rgba(255,255,255,0.85), inset 0 -1.5px 2px rgba(100,116,139,0.45), 0 2px 5px rgba(0,0,0,0.35);">
+                            <span id="theme-moon-craters" class="opacity-100 transition-opacity duration-300 relative w-full h-full block">
+                                <span class="absolute top-[6px] left-[4px] w-[7px] h-[7px] rounded-full bg-[#9AA5B4]" style="box-shadow: inset 0 1px 1.5px rgba(15,23,42,0.35);"></span>
+                                <span class="absolute top-[3px] left-[12px] w-[4px] h-[4px] rounded-full bg-[#9AA5B4]" style="box-shadow: inset 0 1px 1px rgba(15,23,42,0.35);"></span>
+                                <span class="absolute bottom-[4px] right-[4px] w-[5.5px] h-[5.5px] rounded-full bg-[#9AA5B4]" style="box-shadow: inset 0 1px 1.5px rgba(15,23,42,0.35);"></span>
                             </span>
                         </span>
-                    </button>
-                    <button onclick="openAddModal()" class="px-3.5 py-1.5 rounded-full bg-royal hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer">
-                        <i class="ph-bold ph-plus"></i> บันทึกจุดแวะใหม่
                     </button>
                 </div>
             </div>
 
-            <!-- Title & Progress Bar -->
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div class="shrink-0">
-                    <h1 class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-                        PP_R in KOREA <span class="text-sky-400">2026</span>
+            <!-- Main Header Hero Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div class="lg:col-span-7 space-y-1">
+                    <div class="flex items-center gap-2 text-xs font-bold text-sky-300 tracking-wider uppercase">
+                        <i class="ph-fill ph-airplane-tilt"></i> BUSAN & SEOUL WINTER SCRAPBOOK
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black font-display tracking-tight text-white">
+                        PP_R in KOREA 2026
                     </h1>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1">
-                        Travel Log & Check-in Scrapbook • คู่มือเที่ยว & บันทึกการเดินทาง (Realtime Sync 2 เครื่อง)
-                    </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-stretch gap-2.5 w-full lg:w-[505px] shrink-0">
-                    <div id="header-sticky-slot" class="w-full lg:w-[250px] shrink-0"></div>
-                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 sm:px-3.5 w-full lg:w-[245px] shrink-0 flex flex-col justify-center">
-                        <div class="flex items-center justify-between text-xs mb-1.5">
-                            <span class="text-slate-200 font-medium flex items-center gap-1.5">
-                                <i class="ph-fill ph-seal-check text-emerald-400 text-sm"></i> สะสมจุดเช็กอินทริปนี้
+                <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
+                    <!-- PPWR <-> PPSR Header Sticky Note Widget -->
+                    <div id="header-sticky-slot" class="min-h-[66px]"></div>
+
+                    <!-- Overall Trip Check-in Progress -->
+                    <div class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3 space-y-1.5">
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="text-sky-200 flex items-center gap-1.5">
+                                <i class="ph-fill ph-seal-check text-emerald-400"></i> ความคืบหน้าเช็กอินทริป
                             </span>
-                            <span id="progress-label" class="font-display font-bold text-emerald-300">0/0 จุด (0%)</span>
+                            <span id="progress-label" class="text-white font-extrabold">0/0 จุด (0%)</span>
                         </div>
                         <div class="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
                             <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -1275,24 +1491,21 @@
         </div>
     </header>
 
-    <!-- Main App Dock Navigation -->
-    <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs no-print">
-        <div class="max-w-6xl mx-auto px-2.5 sm:px-6 py-2">
-            <div id="main-nav-grid" class="grid grid-cols-3 md:grid-cols-9 gap-1.5 sm:gap-2"></div>
+    <!-- Navigation Dock (9 Categories) -->
+    <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-2xs no-print">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5">
+            <div id="main-nav-grid" class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-1.5 sm:gap-2"></div>
         </div>
     </nav>
 
     <!-- Main Content Container -->
-    <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-5 no-print">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-5 space-y-5">
 
-        <!-- TAB: SOLO LOG -->
+        <!-- TAB: SOLO LOG (PPWR 30 NOV - 5 DEC) -->
         <section id="tab-solo" class="tab-content hidden">
-            <div class="bg-gradient-to-r from-purple-50 to-fuchsia-50 border border-purple-200/80 rounded-2xl p-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="bg-gradient-to-r from-purple-50 to-white border border-purple-200/80 rounded-2xl p-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-0.5 rounded-full bg-purple-600 text-white text-[11px] font-bold">🤍 PPWR SOLO LOG</span>
-                        <span class="text-xs font-semibold text-purple-800">30 พ.ย. – 5 ธ.ค. 2569 (ช่วงเดินทางล่วงหน้าของ PPWR)</span>
-                    </div>
+                    <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[11px] font-extrabold">30 พ.ย. – 5 ธ.ค. 2569 • PPWR Solo Log</span>
                     <h2 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">สมุดบันทึกอิสระช่วงทำงาน & เที่ยวล่วงหน้าของ PPWR</h2>
                     <p class="text-xs text-slate-600">บันทึกได้ตามใจชอบเมื่อแวะร้านอาหารหรือคาเฟ่หลังเลิกงาน แตะรายการเพื่อเปิดแผนที่และโพสต์รูปภาพ</p>
                 </div>
@@ -1895,35 +2108,35 @@
 
     <!-- Expense Tracker Modal (z-[78]) -->
     <div id="expense-modal" class="fixed inset-0 z-[78] bg-slate-950/75 backdrop-blur-xs hidden items-center justify-center p-2.5 sm:p-5 no-print" onclick="if(event.target===this) closeExpenseModal()">
-        <div class="bg-white w-full max-w-2xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
+        <div id="expense-box" class="bg-[#FBF6EE] w-full max-w-2xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-[#DFD3C3]">
             <!-- Header -->
-            <div class="px-5 py-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100 flex items-center justify-between gap-2">
+            <div id="expense-header" class="px-5 py-4 border-b border-[#DFD3C3] flex items-center justify-between gap-2">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <div class="w-10 h-10 rounded-2xl bg-[#8C5843] text-[#FBF6EE] flex items-center justify-center shrink-0 shadow-xs">
                         <i class="ph-bold ph-receipt text-xl"></i>
                     </div>
                     <div class="min-w-0">
-                        <h3 class="text-base font-extrabold text-emerald-950 truncate">บันทึกข้อมูลค่าใช้จ่าย (PPWR & PPSR)</h3>
-                        <p id="expense-summary-subtitle" class="text-xs font-bold text-emerald-700 truncate">ทั้งหมด 0 รายการ • ✅ Clear แล้ว 0 • รอเคลียร์ 0</p>
+                        <h3 class="text-base font-extrabold truncate">บันทึกข้อมูลค่าใช้จ่าย (PPWR & PPSR)</h3>
+                        <p id="expense-summary-subtitle" class="text-xs font-bold truncate">ทั้งหมด 0 รายการ • ✅ Clear แล้ว 0 • รอเคลียร์ 0</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeExpenseModal()" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 shrink-0 cursor-pointer">
+                <button type="button" onclick="closeExpenseModal()" class="w-8 h-8 rounded-full bg-[#FFFDF9] hover:bg-white border border-[#D6C7B2] flex items-center justify-center text-[#5C4F44] shrink-0 cursor-pointer transition active:scale-90">
                     <i class="ph-bold ph-x"></i>
                 </button>
             </div>
 
             <!-- Filter & Action Toolbar -->
-            <div class="px-4 sm:px-5 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <div id="expense-toolbar" class="px-4 sm:px-5 py-3 border-b border-[#DFD3C3] flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="setExpenseFilter('all')" id="exp-filter-all" class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-slate-900 text-white cursor-pointer">ทั้งหมด</button>
-                    <button type="button" onclick="setExpenseFilter('pending')" id="exp-filter-pending" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer">รอเคลียร์</button>
-                    <button type="button" onclick="setExpenseFilter('cleared')" id="exp-filter-cleared" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer">✅ Clear แล้ว</button>
+                    <button type="button" onclick="setExpenseFilter('all')" id="exp-filter-all" class="px-3 py-1.5 rounded-full text-[11px] font-extrabold bg-[#4A3B32] text-[#FBF6EE] shadow-xs cursor-pointer transition-all duration-150 active:scale-95">ทั้งหมด</button>
+                    <button type="button" onclick="setExpenseFilter('pending')" id="exp-filter-pending" class="exp-idle-btn px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#FFFDF9] border border-[#D6C7B2] text-[#5C4F44] cursor-pointer transition-all duration-150 active:scale-95">⏳ Pending</button>
+                    <button type="button" onclick="setExpenseFilter('cleared')" id="exp-filter-cleared" class="exp-idle-btn px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#FFFDF9] border border-[#D6C7B2] text-[#5C4F44] cursor-pointer transition-all duration-150 active:scale-95">✅ Cleared</button>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="openExpenseReceiptModal()" title="Export สลิปสรุปยอด / Print PDF" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
-                        <i class="ph-bold ph-printer text-amber-300"></i> Export สลิป / PDF
+                    <button type="button" onclick="openExpenseReceiptModal()" title="Export สลิปสรุปยอด / Print PDF" class="px-3 py-1.5 rounded-xl bg-[#3E332A] hover:bg-[#2C241D] text-[#FBF6EE] text-xs font-extrabold flex items-center gap-1.5 shadow-2xs transition active:scale-95 cursor-pointer">
+                        <i class="ph-bold ph-printer text-[#E8C58E]"></i> Export สลิป / PDF
                     </button>
-                    <button type="button" onclick="toggleExpenseForm(true)" id="exp-open-form-btn" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-2xs transition cursor-pointer">
+                    <button type="button" onclick="toggleExpenseForm(true)" id="exp-open-form-btn" class="px-3.5 py-1.5 rounded-xl bg-[#8C5843] hover:bg-[#754836] text-[#FBF6EE] text-xs font-extrabold flex items-center gap-1.5 shadow-2xs transition active:scale-95 cursor-pointer">
                         <i class="ph-bold ph-plus"></i> เพิ่มรายการค่าใช้จ่าย
                     </button>
                 </div>
@@ -1932,45 +2145,86 @@
             <!-- Scrollable Expense Form + List -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
                 <!-- Inline Add/Edit Form -->
-                <div id="expense-form-box" class="hidden bg-emerald-50/50 border border-emerald-200 rounded-2xl p-4 space-y-3 text-xs">
+                <div id="expense-form-box" class="hidden border rounded-2xl p-4 space-y-3 text-xs">
                     <div class="flex items-center justify-between">
-                        <span id="exp-form-title" class="font-extrabold text-emerald-900 text-sm">เพิ่มรายการค่าใช้จ่ายใหม่</span>
-                        <span id="exp-form-number-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono text-[11px] font-bold">#1</span>
+                        <span id="exp-form-title" class="font-extrabold text-[#3E332A] text-sm">เพิ่มรายการค่าใช้จ่ายใหม่</span>
+                        <span id="exp-form-number-badge" class="px-2.5 py-0.5 rounded-full bg-[#8C5843] text-[#FBF6EE] font-mono text-[11px] font-bold">#1</span>
                     </div>
                     <input type="hidden" id="exp-edit-id">
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        <div class="sm:col-span-2">
-                            <label class="block font-bold text-slate-600 mb-1">รายการค่าใช้จ่าย *</label>
-                            <input type="text" id="exp-title-input" placeholder="เช่น ค่าตั๋วรถไฟ KTX, ค่าอาหารมื้อเย็น..." class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white">
+                    <!-- Row 1: Item Title + Amount & Currency Selector -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                        <div class="sm:col-span-6">
+                            <label class="block font-bold mb-1">รายการค่าใช้จ่าย *</label>
+                            <input type="text" id="exp-title-input" placeholder="เช่น ค่าตั๋วรถไฟ KTX, ค่าอาหารมื้อเย็น..." class="w-full px-3 py-2 rounded-xl border">
                         </div>
-                        <div>
-                            <label class="block font-bold text-slate-600 mb-1">ยอดเงิน / สกุลเงิน</label>
-                            <input type="text" id="exp-amount-input" placeholder="เช่น 59,800 KRW หรือ 1,500 บาท" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white">
+                        <div class="sm:col-span-6">
+                            <label class="block font-bold mb-1">ยอดเงิน & สกุลเงินที่จ่าย</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="number" step="any" inputmode="decimal" id="exp-amount-input" oninput="updateExpenseSplitPreview()" placeholder="0.00" class="flex-1 min-w-0 px-3 py-2 rounded-xl border font-bold">
+                                <div class="inline-flex rounded-xl p-0.5 bg-[#EAE0D0] border border-[#D6C7B2] shrink-0">
+                                    <button type="button" onclick="setExpenseCurrency('THB')" id="exp-cur-THB" class="px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#8C5843] text-[#FBF6EE] transition-all duration-150 active:scale-95 cursor-pointer">THB ฿</button>
+                                    <button type="button" onclick="setExpenseCurrency('KRW')" id="exp-cur-KRW" class="px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold text-[#5C4F44] transition-all duration-150 active:scale-95 cursor-pointer">KRW ₩</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Row 2: Payment Date & Payer -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
-                            <label class="block font-bold text-slate-600 mb-1">วันที่ตัดจ่าย</label>
-                            <input type="date" id="exp-date-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white">
+                            <label class="block font-bold mb-1">วันที่ตัดจ่าย (ดึงเรตอัตโนมัติ)</label>
+                            <input type="date" id="exp-date-input" onchange="handleExpenseDateChange()" class="w-full px-3 py-2 rounded-xl border font-semibold">
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-600 mb-1">ผู้จ่าย</label>
+                            <label class="block font-bold mb-1">ผู้สำรองจ่ายบิลนี้</label>
                             <div class="flex items-center gap-1.5">
-                                <button type="button" onclick="setExpensePayer('PPWR')" id="exp-payer-PPWR" class="flex-1 py-2 rounded-xl font-extrabold bg-purple-600 text-white cursor-pointer">🤍 PPWR</button>
-                                <button type="button" onclick="setExpensePayer('PPSR')" id="exp-payer-PPSR" class="flex-1 py-2 rounded-xl font-extrabold bg-white border border-slate-200 text-slate-700 cursor-pointer">🤍 PPSR</button>
-                                <button type="button" onclick="setExpensePayer('BOTH')" id="exp-payer-BOTH" class="flex-1 py-2 rounded-xl font-extrabold bg-white border border-slate-200 text-slate-700 cursor-pointer">👫 หาร/ด้วยกัน</button>
+                                <button type="button" onclick="setExpensePayer('PPWR')" id="exp-payer-PPWR" class="flex-1 py-2 rounded-xl font-extrabold bg-[#6D567D] text-[#FBF6EE] transition-all duration-150 active:scale-95 cursor-pointer">🤍 PPWR จ่าย</button>
+                                <button type="button" onclick="setExpensePayer('PPSR')" id="exp-payer-PPSR" class="exp-idle-btn flex-1 py-2 rounded-xl font-extrabold bg-[#FFFDF9] border border-[#D6C7B2] text-[#5C4F44] transition-all duration-150 active:scale-95 cursor-pointer">🤍 PPSR จ่าย</button>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- KRW to THB Exchange Rate Bar (Shown when KRW is selected) -->
+                    <div id="exp-rate-box" class="hidden p-2.5 rounded-xl bg-[#EFE6D8] border border-[#D6C7B2] flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                        <div class="flex items-center gap-1.5 font-bold text-[#4A3B32]">
+                            <i class="ph-bold ph-currency-krw text-[#8C5843] text-sm"></i>
+                            <span id="exp-rate-status-text">เรตวันที่ตัดจ่าย: 1,000 KRW ≈ 24.50 THB</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[#6E5E50] font-semibold">เรต 1 KRW =</span>
+                            <input type="number" step="0.0001" id="exp-rate-input" oninput="updateExpenseSplitPreview()" class="w-20 px-2 py-1 rounded-lg border text-right font-mono font-bold text-[11px]">
+                            <span class="text-[#6E5E50] font-semibold">THB</span>
+                        </div>
+                    </div>
+
+                    <!-- Split Calculation Control & Live Preview -->
+                    <div id="exp-split-card" class="p-3 rounded-2xl border space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="font-extrabold text-[#3E332A] flex items-center gap-1.5">
+                                <i class="ph-bold ph-calculator text-[#8C5843] text-base"></i> รูปแบบการคิดยอดบิลนี้
+                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="setExpenseSplitMode('split')" id="exp-split-mode-split" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-[#8C5843] text-[#FBF6EE] shadow-xs transition-all duration-200 transform active:scale-90 cursor-pointer">
+                                    ➗ หารค่าใช้จ่าย (50/50)
+                                </button>
+                                <button type="button" onclick="setExpenseSplitMode('personal')" id="exp-split-mode-personal" class="exp-idle-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F3ECE1] text-[#5C4F44] border border-[#D6C7B2] transition-all duration-200 transform active:scale-90 cursor-pointer">
+                                    👤 จ่ายส่วนตัว (ไม่หาร)
+                                </button>
+                            </div>
+                        </div>
+                        <div id="exp-split-preview-box" class="p-2.5 rounded-xl border text-[11px] transition-all duration-200">
+                            กรอกยอดเงินด้านบนเพื่อดูยอดหาร PPWR & PPSR อัตโนมัติ
                         </div>
                     </div>
 
                     <!-- Photo Slips (1-3 photos) -->
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <label class="font-bold text-slate-600">แนบรูปสลิป / ใบเสร็จ (สูงสุด 3 รูป)</label>
-                            <button type="button" onclick="triggerExpensePhotoPicker()" class="px-3 py-1 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-emerald-700 font-extrabold inline-flex items-center gap-1 cursor-pointer">
-                                <i class="ph-bold ph-image"></i> เลือกรูปสลิป (<span id="exp-photo-count">0</span>/3)
+                            <label class="font-bold">แนบรูปสลิป / ใบเสร็จ (สูงสุด 3 รูป)</label>
+                            <button type="button" onclick="triggerExpensePhotoPicker()" title="แนบรูปสลิป / ใบเสร็จ (สูงสุด 3 รูป)" class="exp-idle-btn px-3 py-1.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#D6C7B2] text-[#8C5843] font-extrabold inline-flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                                <i class="ph-bold ph-image text-base"></i>
+                                <span class="font-mono text-xs">(<span id="exp-photo-count">0</span>/3)</span>
                             </button>
                             <input type="file" id="exp-photo-input" accept="image/*" multiple onchange="handleExpensePhotoSelect(event)" class="hidden">
                         </div>
@@ -1979,13 +2233,13 @@
 
                     <!-- Clear Status Checkbox -->
                     <label class="flex items-center gap-2 pt-1 cursor-pointer select-none">
-                        <input type="checkbox" id="exp-cleared-checkbox" class="w-4 h-4 accent-emerald-600 rounded">
-                        <span class="font-bold text-slate-700">✅ Clear ยอดรายการนี้แล้ว</span>
+                        <input type="checkbox" id="exp-cleared-checkbox" class="w-4 h-4 accent-[#15803D] rounded">
+                        <span class="font-bold">✅ Cleared (เคลียร์ยอดรายการนี้แล้ว)</span>
                     </label>
 
                     <div class="flex items-center justify-end gap-2 pt-1">
-                        <button type="button" onclick="cancelExpenseForm()" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-600 font-bold cursor-pointer">ยกเลิก</button>
-                        <button type="button" onclick="handleSaveExpense()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold cursor-pointer">บันทึกรายการ</button>
+                        <button type="button" onclick="cancelExpenseForm()" class="exp-idle-btn px-3.5 py-2 rounded-xl border border-[#D6C7B2] bg-[#FFFDF9] text-[#5C4F44] font-bold transition active:scale-95 cursor-pointer">ยกเลิก</button>
+                        <button type="button" onclick="handleSaveExpense()" class="px-5 py-2 rounded-xl bg-[#8C5843] hover:bg-[#754836] text-[#FBF6EE] font-extrabold shadow-xs transition active:scale-95 cursor-pointer">บันทึกรายการ</button>
                     </div>
                 </div>
 
@@ -1997,21 +2251,21 @@
 
     <!-- Expense Receipt Slip Export / Print Modal (z-[82]) -->
     <div id="expense-receipt-modal" class="fixed inset-0 z-[82] bg-slate-950/75 backdrop-blur-xs hidden items-center justify-center p-2.5 sm:p-5" onclick="if(event.target===this) closeExpenseReceiptModal()">
-        <div id="expense-receipt-box" class="bg-white w-full max-w-lg max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-slate-200">
-            <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between gap-2 bg-slate-50 no-print">
-                <button type="button" onclick="closeExpenseReceiptModal()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer">
-                    <i class="ph-bold ph-arrow-left text-emerald-600"></i> กลับหน้ารายการ
+        <div id="expense-receipt-box" class="bg-[#FBF6EE] w-full max-w-lg max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-[#DFD3C3]">
+            <div id="expense-receipt-toolbar" class="px-4 py-3 border-b border-[#DFD3C3] flex items-center justify-between gap-2 bg-[#F3ECE1] no-print">
+                <button type="button" onclick="closeExpenseReceiptModal()" class="exp-idle-btn px-3 py-1.5 rounded-xl bg-[#FFFDF9] hover:bg-white border border-[#D6C7B2] text-[#3E332A] text-xs font-bold flex items-center gap-1.5 transition cursor-pointer">
+                    <i class="ph-bold ph-arrow-left text-[#8C5843]"></i> กลับหน้ารายการ
                 </button>
                 <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="downloadExpenseReceiptHtml()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
+                    <button type="button" onclick="downloadExpenseReceiptHtml()" class="px-3 py-1.5 rounded-xl bg-[#8C5843] hover:bg-[#754836] text-[#FBF6EE] text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
                         <i class="ph-bold ph-download-simple"></i> บันทึกสลิป (.html)
                     </button>
-                    <button type="button" onclick="printExpenseReceipt()" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
-                        <i class="ph-bold ph-printer text-amber-300"></i> Print / Save PDF
+                    <button type="button" onclick="printExpenseReceipt()" class="px-3.5 py-1.5 rounded-xl bg-[#3E332A] hover:bg-[#2C241D] text-[#FBF6EE] text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-2xs">
+                        <i class="ph-bold ph-printer text-[#E8C58E]"></i> Print / Save PDF
                     </button>
                 </div>
             </div>
-            <div id="expense-receipt-body" class="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-100/80 flex justify-center"></div>
+            <div id="expense-receipt-body" class="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#EAE0D0]/70 flex justify-center"></div>
         </div>
     </div>
 
@@ -2499,6 +2753,10 @@
         // Expense Tracker State
         let expenseFilter = 'all';
         let currentExpensePayer = currentAuthor;
+        let currentExpenseSplitMode = 'split';
+        let currentExpenseCurrency = 'THB';
+        let currentExpenseRate = 0.0245; // 1 KRW ≈ 0.0245 THB (1,000 KRW ≈ 24.50 THB)
+        const exchangeRateCache = {};
         let pendingExpensePhotos = [];
 
         // Sticky Board State
@@ -2844,18 +3102,20 @@
             const craters = document.getElementById('theme-moon-craters');
             if (!btn || !knob) return;
             if (isDark) {
-                btn.style.backgroundColor = '#1E293B';
+                btn.style.backgroundColor = '#1D2129';
                 if (dayScene) dayScene.style.opacity = '0';
                 if (nightScene) nightScene.style.opacity = '1';
                 knob.style.transform = 'translateX(34px)';
-                knob.style.background = 'radial-gradient(circle at 35% 35%, #E2E8F0, #CBD5E1)';
+                knob.style.background = 'radial-gradient(circle at 35% 35%, #E4E9F0, #C5CED9)';
+                knob.style.boxShadow = 'inset 0 1.5px 2px rgba(255,255,255,0.85), inset 0 -1.5px 2px rgba(100,116,139,0.45), 0 2px 5px rgba(0,0,0,0.35)';
                 if (craters) craters.style.opacity = '1';
             } else {
-                btn.style.backgroundColor = '#359AE8';
+                btn.style.backgroundColor = '#3BA0EE';
                 if (dayScene) dayScene.style.opacity = '1';
                 if (nightScene) nightScene.style.opacity = '0';
                 knob.style.transform = 'translateX(0px)';
-                knob.style.background = 'radial-gradient(circle at 35% 35%, #FFE033, #F5B800)';
+                knob.style.background = 'radial-gradient(circle at 35% 35%, #FFE23B, #F5B700)';
+                knob.style.boxShadow = 'inset 0 1.5px 2px rgba(255,255,255,0.8), inset 0 -1.5px 2px rgba(180,83,9,0.45), 0 2px 5px rgba(0,0,0,0.28)';
                 if (craters) craters.style.opacity = '0';
             }
         }
@@ -3788,22 +4048,254 @@
             ['all', 'pending', 'cleared'].forEach(k => {
                 const btn = document.getElementById(`exp-filter-${k}`);
                 if (!btn) return;
+                const activeBg = k === 'cleared' ? 'bg-[#15803D]' : (k === 'pending' ? 'bg-amber-600' : 'bg-[#4A3B32]');
                 btn.className = k === f
-                    ? 'px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-slate-900 text-white cursor-pointer'
-                    : 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-white border border-slate-200 text-slate-600 cursor-pointer';
+                    ? `px-3 py-1.5 rounded-full text-[11px] font-extrabold ${activeBg} text-white shadow-xs scale-[1.03] cursor-pointer transition-all duration-150 active:scale-95`
+                    : 'exp-idle-btn px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#FFFDF9] border border-[#D6C7B2] text-[#5C4F44] opacity-85 hover:opacity-100 cursor-pointer transition-all duration-150 active:scale-95';
             });
             renderExpenseList();
         }
 
         function setExpensePayer(payer) {
-            currentExpensePayer = payer;
-            ['PPWR', 'PPSR', 'BOTH'].forEach(p => {
+            currentExpensePayer = payer === 'PPSR' ? 'PPSR' : 'PPWR';
+            const activeBg = currentExpensePayer === 'PPSR' ? 'bg-[#A65E5E]' : 'bg-[#6D567D]';
+            ['PPWR', 'PPSR'].forEach(p => {
                 const btn = document.getElementById(`exp-payer-${p}`);
                 if (!btn) return;
-                btn.className = p === payer
-                    ? 'flex-1 py-2 rounded-xl font-extrabold bg-purple-600 text-white cursor-pointer'
-                    : 'flex-1 py-2 rounded-xl font-extrabold bg-white border border-slate-200 text-slate-700 cursor-pointer';
+                btn.className = p === currentExpensePayer
+                    ? `flex-1 py-2 rounded-xl font-extrabold ${activeBg} text-[#FBF6EE] shadow-xs transition-all duration-150 active:scale-95 cursor-pointer`
+                    : 'exp-idle-btn flex-1 py-2 rounded-xl font-extrabold bg-[#FFFDF9] border border-[#D6C7B2] text-[#5C4F44] transition-all duration-150 active:scale-95 cursor-pointer';
             });
+            updateExpenseSplitPreview();
+        }
+
+        function setExpenseCurrency(cur) {
+            currentExpenseCurrency = cur === 'KRW' ? 'KRW' : 'THB';
+            const thbBtn = document.getElementById('exp-cur-THB');
+            const krwBtn = document.getElementById('exp-cur-KRW');
+            const rateBox = document.getElementById('exp-rate-box');
+            if (thbBtn && krwBtn) {
+                thbBtn.className = currentExpenseCurrency === 'THB'
+                    ? 'px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#8C5843] text-[#FBF6EE] shadow-2xs transition-all duration-150 active:scale-95 cursor-pointer'
+                    : 'px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold text-[#5C4F44] transition-all duration-150 active:scale-95 cursor-pointer';
+                krwBtn.className = currentExpenseCurrency === 'KRW'
+                    ? 'px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold bg-[#8C5843] text-[#FBF6EE] shadow-2xs transition-all duration-150 active:scale-95 cursor-pointer'
+                    : 'px-2.5 py-1.5 rounded-lg text-[11px] font-extrabold text-[#5C4F44] transition-all duration-150 active:scale-95 cursor-pointer';
+            }
+            if (rateBox) {
+                if (currentExpenseCurrency === 'KRW') {
+                    rateBox.classList.remove('hidden');
+                    fetchKrwToThbRateForDate(document.getElementById('exp-date-input')?.value);
+                } else {
+                    rateBox.classList.add('hidden');
+                }
+            }
+            updateExpenseSplitPreview();
+        }
+
+        async function fetchKrwToThbRateForDate(dateStr) {
+            const statusEl = document.getElementById('exp-rate-status-text');
+            const rateInp = document.getElementById('exp-rate-input');
+            const targetDate = dateStr || new Date().toISOString().slice(0, 10);
+            const todayStr = new Date().toISOString().slice(0, 10);
+            const queryDate = targetDate > todayStr ? 'latest' : targetDate;
+
+            if (exchangeRateCache[queryDate]) {
+                currentExpenseRate = exchangeRateCache[queryDate];
+                if (rateInp) rateInp.value = currentExpenseRate.toFixed(4);
+                if (statusEl) statusEl.textContent = `เรตวันที่ ${targetDate}: 1,000 KRW ≈ ${(currentExpenseRate * 1000).toFixed(2)} THB`;
+                updateExpenseSplitPreview();
+                return;
+            }
+
+            if (statusEl) statusEl.textContent = `กำลังดึงเรต KRW → THB (${targetDate})...`;
+            try {
+                const res = await fetch(`https://api.frankfurter.app/${queryDate}?from=KRW&to=THB`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const rate = data?.rates?.THB;
+                    if (rate && rate > 0) {
+                        currentExpenseRate = rate;
+                        exchangeRateCache[queryDate] = rate;
+                        if (rateInp) rateInp.value = rate.toFixed(4);
+                        if (statusEl) statusEl.textContent = `เรตวันที่ ${data.date || targetDate}: 1,000 KRW ≈ ${(rate * 1000).toFixed(2)} THB`;
+                        updateExpenseSplitPreview();
+                        return;
+                    }
+                }
+            } catch (e) {}
+
+            // Fallback rate if offline or future date
+            if (rateInp && !rateInp.value) rateInp.value = currentExpenseRate.toFixed(4);
+            if (statusEl) statusEl.textContent = `เรตอ้างอิง (${targetDate}): 1,000 KRW ≈ ${(currentExpenseRate * 1000).toFixed(2)} THB`;
+            updateExpenseSplitPreview();
+        }
+
+        function handleExpenseDateChange() {
+            if (currentExpenseCurrency === 'KRW') {
+                fetchKrwToThbRateForDate(document.getElementById('exp-date-input')?.value);
+            }
+        }
+
+        function setExpenseSplitMode(mode) {
+            currentExpenseSplitMode = mode === 'personal' ? 'personal' : 'split';
+            const splitBtn = document.getElementById('exp-split-mode-split');
+            const persBtn = document.getElementById('exp-split-mode-personal');
+            const previewBox = document.getElementById('exp-split-preview-box');
+            if (splitBtn && persBtn) {
+                splitBtn.className = currentExpenseSplitMode === 'split'
+                    ? 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-[#8C5843] text-[#FBF6EE] shadow-sm ring-2 ring-[#8C5843]/30 scale-[1.03] transition-all duration-200 transform active:scale-90 cursor-pointer'
+                    : 'exp-idle-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F3ECE1] text-[#5C4F44] border border-[#D6C7B2] opacity-80 hover:opacity-100 transition-all duration-200 transform active:scale-90 cursor-pointer';
+                persBtn.className = currentExpenseSplitMode === 'personal'
+                    ? 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-[#4A3B32] text-[#FBF6EE] shadow-sm ring-2 ring-[#4A3B32]/30 scale-[1.03] transition-all duration-200 transform active:scale-90 cursor-pointer'
+                    : 'exp-idle-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-[#F3ECE1] text-[#5C4F44] border border-[#D6C7B2] opacity-80 hover:opacity-100 transition-all duration-200 transform active:scale-90 cursor-pointer';
+            }
+            if (previewBox) {
+                previewBox.classList.add('scale-[0.98]', 'opacity-75');
+                setTimeout(() => previewBox.classList.remove('scale-[0.98]', 'opacity-75'), 140);
+            }
+            updateExpenseSplitPreview();
+        }
+
+        function parseExpenseAmount(rawStr, explicitCurrency = null) {
+            const str = String(rawStr || '').trim();
+            if (!str) return { num: 0, currency: explicitCurrency || 'THB', hasValue: false };
+            const numMatch = str.replace(/,/g, '').match(/(\d+(?:\.\d+)?)/);
+            const num = numMatch ? parseFloat(numMatch[1]) : 0;
+            let currency = explicitCurrency || 'THB';
+            if (!explicitCurrency) {
+                const upper = str.toUpperCase();
+                if (upper.includes('KRW') || upper.includes('WON') || str.includes('วอน') || str.includes('₩')) {
+                    currency = 'KRW';
+                }
+            }
+            return { num, currency, hasValue: num > 0 };
+        }
+
+        function formatMoneyVal(val, currency) {
+            if (!val || Math.abs(val) < 0.005) return `0 ${currency}`;
+            const isInt = Number.isInteger(val) || currency === 'KRW';
+            const formatted = isInt
+                ? Math.round(val).toLocaleString('en-US')
+                : val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return `${formatted} ${currency}`;
+        }
+
+        function computeSingleExpenseBreakdown(item) {
+            const parsed = parseExpenseAmount(item.amount, item.currency || null);
+            const payer = item.payer === 'PPSR' ? 'PPSR' : (item.payer === 'BOTH' ? 'BOTH' : 'PPWR');
+            const isSplit = item.splitMode ? item.splitMode === 'split' : true;
+            const total = parsed.num;
+            const currency = parsed.currency;
+            const rate = currency === 'KRW' ? (parseFloat(item.exchangeRate) || currentExpenseRate || 0.0245) : 1;
+            const thbEquivalent = currency === 'KRW' ? total * rate : total;
+
+            let ppwrShare = 0;
+            let ppsrShare = 0;
+            let oweText = '';
+            let oweFrom = '';
+            let oweTo = '';
+            let oweAmount = 0;
+            let oweThbAmount = 0;
+
+            if (isSplit) {
+                ppwrShare = total / 2;
+                ppsrShare = total / 2;
+                if (payer === 'PPWR' && total > 0) {
+                    oweFrom = 'PPSR';
+                    oweTo = 'PPWR';
+                    oweAmount = ppsrShare;
+                    oweThbAmount = thbEquivalent / 2;
+                    oweText = currency === 'KRW'
+                        ? `PPSR โอนคืน PPWR ${formatMoneyVal(oweAmount, 'KRW')} (≈ ${formatMoneyVal(oweThbAmount, 'THB')})`
+                        : `PPSR โอนคืน PPWR ${formatMoneyVal(oweAmount, 'THB')}`;
+                } else if (payer === 'PPSR' && total > 0) {
+                    oweFrom = 'PPWR';
+                    oweTo = 'PPSR';
+                    oweAmount = ppwrShare;
+                    oweThbAmount = thbEquivalent / 2;
+                    oweText = currency === 'KRW'
+                        ? `PPWR โอนคืน PPSR ${formatMoneyVal(oweAmount, 'KRW')} (≈ ${formatMoneyVal(oweThbAmount, 'THB')})`
+                        : `PPWR โอนคืน PPSR ${formatMoneyVal(oweAmount, 'THB')}`;
+                }
+            } else {
+                if (payer === 'PPWR') {
+                    ppwrShare = total;
+                } else if (payer === 'PPSR') {
+                    ppsrShare = total;
+                } else {
+                    ppwrShare = total / 2;
+                    ppsrShare = total / 2;
+                }
+                oweText = 'บิลส่วนตัว (ไม่ต้องโอนคืน)';
+            }
+
+            return {
+                total,
+                currency,
+                rate,
+                thbEquivalent,
+                hasValue: parsed.hasValue,
+                payer,
+                isSplit,
+                ppwrShare,
+                ppsrShare,
+                oweFrom,
+                oweTo,
+                oweAmount,
+                oweThbAmount,
+                oweText
+            };
+        }
+
+        function updateExpenseSplitPreview() {
+            const box = document.getElementById('exp-split-preview-box');
+            if (!box) return;
+            const rawAmt = document.getElementById('exp-amount-input')?.value || '';
+            const rateVal = parseFloat(document.getElementById('exp-rate-input')?.value) || currentExpenseRate;
+            if (currentExpenseCurrency === 'KRW') {
+                const statusEl = document.getElementById('exp-rate-status-text');
+                const dateStr = document.getElementById('exp-date-input')?.value || 'วันนี้';
+                if (statusEl) statusEl.textContent = `เรตวันที่ ${dateStr}: 1,000 KRW ≈ ${(rateVal * 1000).toFixed(2)} THB`;
+            }
+
+            const calc = computeSingleExpenseBreakdown({
+                amount: rawAmt,
+                currency: currentExpenseCurrency,
+                exchangeRate: rateVal,
+                payer: currentExpensePayer,
+                splitMode: currentExpenseSplitMode
+            });
+
+            if (!calc.hasValue) {
+                box.innerHTML = `<span class="opacity-75">กรอกยอดเงินด้านบนเพื่อคำนวณส่วนแบ่ง <b>PPWR</b> และ <b>PPSR</b> อัตโนมัติ</span>`;
+                return;
+            }
+
+            const thbHint = calc.currency === 'KRW'
+                ? `<div class="text-[10px] opacity-80 mt-1">💱 ยอดรวมแปลงเป็นเงินไทย: <b>≈ ${formatMoneyVal(calc.thbEquivalent, 'THB')}</b> (เรต ${calc.rate.toFixed(4)})</div>`
+                : '';
+
+            if (calc.isSplit) {
+                box.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 font-extrabold">
+                            <span class="px-2 py-0.5 rounded-md bg-[#6D567D] text-[#FBF6EE]">🤍 PPWR: ${formatMoneyVal(calc.ppwrShare, calc.currency)}</span>
+                            <span class="px-2 py-0.5 rounded-md bg-[#A65E5E] text-[#FBF6EE]">🤍 PPSR: ${formatMoneyVal(calc.ppsrShare, calc.currency)}</span>
+                        </div>
+                        <span class="font-extrabold text-[#8C5843]">👉 ${calc.oweText}</span>
+                    </div>
+                    ${thbHint}
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="font-extrabold">👤 🤍 ${calc.payer} จ่ายส่วนตัวเต็มยอด ${formatMoneyVal(calc.total, calc.currency)}</span>
+                        <span class="opacity-75 font-semibold">(ไม่หาร • ไม่ต้องโอนคืน)</span>
+                    </div>
+                    ${thbHint}
+                `;
+            }
         }
 
         function toggleExpenseForm(show, isEdit = false) {
@@ -3821,7 +4313,9 @@
                     document.getElementById('exp-cleared-checkbox').checked = false;
                     pendingExpensePhotos = [];
                     renderPendingExpensePhotos();
+                    setExpenseCurrency('THB');
                     setExpensePayer(currentAuthor);
+                    setExpenseSplitMode('split');
                 }
             } else {
                 box.classList.add('hidden');
@@ -3876,11 +4370,16 @@
                 return;
             }
             const editId = document.getElementById('exp-edit-id').value;
+            const rawAmount = document.getElementById('exp-amount-input').value.trim();
+            const rateVal = parseFloat(document.getElementById('exp-rate-input')?.value) || currentExpenseRate;
             const payload = {
                 title,
-                amount: document.getElementById('exp-amount-input').value.trim(),
+                amount: rawAmount,
+                currency: currentExpenseCurrency,
+                exchangeRate: currentExpenseCurrency === 'KRW' ? rateVal : 1,
                 date: document.getElementById('exp-date-input').value,
                 payer: currentExpensePayer,
+                splitMode: currentExpenseSplitMode,
                 photos: [...pendingExpensePhotos],
                 cleared: document.getElementById('exp-cleared-checkbox').checked
             };
@@ -3890,7 +4389,7 @@
                 if (idx !== -1) appState.expenses[idx] = { ...appState.expenses[idx], ...payload };
                 showToast('แก้ไขรายการค่าใช้จ่ายแล้ว!');
             } else {
-                appState.expenses.push({ id: 'exp_' + Date.now(), ...payload });
+                appState.expenses.unshift({ id: 'exp_' + Date.now(), ...payload });
                 showToast('บันทึกรายการค่าใช้จ่ายเรียบร้อย!');
             }
 
@@ -3909,13 +4408,21 @@
             document.getElementById('exp-edit-id').value = item.id;
             document.getElementById('exp-form-title').textContent = 'แก้ไขรายการค่าใช้จ่าย';
             document.getElementById('exp-form-number-badge').textContent = `#${idx + 1}`;
+            const parsed = parseExpenseAmount(item.amount, item.currency || null);
             document.getElementById('exp-title-input').value = item.title || '';
-            document.getElementById('exp-amount-input').value = item.amount || '';
+            document.getElementById('exp-amount-input').value = parsed.hasValue ? parsed.num : '';
             document.getElementById('exp-date-input').value = item.date || '';
             document.getElementById('exp-cleared-checkbox').checked = !!item.cleared;
             pendingExpensePhotos = Array.isArray(item.photos) ? [...item.photos] : [];
             renderPendingExpensePhotos();
-            setExpensePayer(item.payer || 'PPWR');
+            if (item.exchangeRate) {
+                currentExpenseRate = parseFloat(item.exchangeRate);
+                const rInp = document.getElementById('exp-rate-input');
+                if (rInp) rInp.value = currentExpenseRate.toFixed(4);
+            }
+            setExpenseCurrency(parsed.currency);
+            setExpensePayer(item.payer === 'PPSR' ? 'PPSR' : 'PPWR');
+            setExpenseSplitMode(item.splitMode || 'split');
         }
 
         function toggleExpenseCleared(id) {
@@ -3923,8 +4430,13 @@
             if (!item) return;
             item.cleared = !item.cleared;
             renderExpenseList();
+            const btn = document.getElementById(`exp-status-btn-${id}`);
+            if (btn) {
+                btn.classList.add('scale-110');
+                setTimeout(() => btn.classList.remove('scale-110'), 180);
+            }
             persistState(true);
-            showToast(item.cleared ? 'ทำเครื่องหมาย ✅ Clear แล้ว!' : 'เปลี่ยนเป็นรอเคลียร์');
+            showToast(item.cleared ? 'เปลี่ยนสถานะเป็น ✅ Cleared แล้ว!' : 'เปลี่ยนสถานะเป็น ⏳ Pending');
         }
 
         function deleteExpenseItem(id) {
@@ -3940,77 +4452,246 @@
             const all = appState.expenses || [];
             const clearedCount = all.filter(e => e.cleared).length;
             const pendingCount = all.length - clearedCount;
-            document.getElementById('expense-summary-subtitle').textContent = `ทั้งหมด ${all.length} รายการ • ✅ Clear แล้ว ${clearedCount} • รอเคลียร์ ${pendingCount}`;
 
-            let list = all.map((item, idx) => ({ ...item, num: idx + 1 }));
+            const sub = document.getElementById('expense-summary-subtitle');
+            if (sub) {
+                sub.textContent = `ทั้งหมด ${all.length} รายการ • ✅ Clear แล้ว ${clearedCount} • รอเคลียร์ ${pendingCount}`;
+            }
+
+            // Sort newest-first (by timestamp in id if available, preserving reverse chronological order)
+            const sortedAll = [...all].sort((a, b) => {
+                const tA = parseInt(String(a.id || '').replace(/\D/g, ''), 10) || 0;
+                const tB = parseInt(String(b.id || '').replace(/\D/g, ''), 10) || 0;
+                return tB - tA;
+            });
+
+            let list = sortedAll.map((item, idx) => ({ ...item, num: sortedAll.length - idx }));
             if (expenseFilter === 'pending') list = list.filter(i => !i.cleared);
             else if (expenseFilter === 'cleared') list = list.filter(i => i.cleared);
 
             const container = document.getElementById('expense-list-container');
+            if (!container) return;
+
             if (!list.length) {
                 container.innerHTML = `<div class="py-10 text-center text-xs text-slate-400">ยังไม่มีรายการค่าใช้จ่ายในหมวดนี้ กด "+ เพิ่มรายการค่าใช้จ่าย" เพื่อเริ่มจดบันทึก</div>`;
                 return;
             }
 
-            container.innerHTML = list.map(item => `
-                <div class="p-3.5 rounded-2xl border ${item.cleared ? 'bg-emerald-50/50 border-emerald-200' : 'bg-white border-slate-200'} space-y-2 text-xs">
+            container.innerHTML = list.map(item => {
+                const calc = computeSingleExpenseBreakdown(item);
+                const thbSubText = calc.currency === 'KRW' && calc.hasValue
+                    ? ` <span class="text-[11px] opacity-80 font-semibold">(≈ ${formatMoneyVal(calc.thbEquivalent, 'THB')} • เรต ${calc.rate.toFixed(4)})</span>`
+                    : '';
+                return `
+                <div class="expense-item-card ${item.cleared ? 'is-cleared' : ''} p-3.5 rounded-2xl border space-y-2 text-xs">
                     <div class="flex items-start justify-between gap-2">
                         <div class="space-y-1 min-w-0 flex-1">
                             <div class="flex flex-wrap items-center gap-1.5">
-                                <span class="px-2 py-0.5 rounded-md bg-slate-900 text-white font-mono text-[10px] font-bold">#${item.num}</span>
-                                <span class="px-2 py-0.5 rounded-md bg-purple-100 text-purple-900 font-bold text-[10px]">${item.payer === 'BOTH' ? '👫 หาร/ด้วยกัน' : '🤍 ' + item.payer}</span>
-                                ${item.date ? `<span class="text-[11px] text-slate-500 font-medium">📅 ${item.date}</span>` : ''}
+                                <span class="px-2 py-0.5 rounded-md bg-[#3E332A] text-[#FBF6EE] font-mono text-[10px] font-bold">#${item.num}</span>
+                                <span class="px-2 py-0.5 rounded-md ${calc.payer === 'PPSR' ? 'bg-[#A65E5E]' : 'bg-[#6D567D]'} text-[#FBF6EE] font-bold text-[10px]">💳 ผู้จ่าย: ${calc.payer}</span>
+                                <span class="px-2 py-0.5 rounded-md ${calc.isSplit ? 'bg-[#8C5843] text-[#FBF6EE]' : 'bg-[#EAE0D0] text-[#4A3B32]'} font-bold text-[10px]">
+                                    ${calc.isSplit ? '➗ หาร 50/50' : '👤 จ่ายส่วนตัว'}
+                                </span>
+                                ${item.date ? `<span class="text-[11px] opacity-75 font-medium">📅 ${item.date}</span>` : ''}
                             </div>
-                            <div class="text-sm font-extrabold text-slate-900">${item.title}</div>
-                            ${item.amount ? `<div class="text-xs font-extrabold text-emerald-700">${item.amount}</div>` : ''}
+                            <div class="text-sm font-extrabold">${item.title}</div>
+                            ${calc.hasValue ? `<div class="text-xs font-extrabold text-[#8C5843]">ยอดรวมบิลนี้: ${formatMoneyVal(calc.total, calc.currency)}${thbSubText}</div>` : ''}
+                            ${calc.hasValue ? `
+                                <div class="expense-item-breakdown mt-1.5 p-2 rounded-xl border flex flex-wrap items-center justify-between gap-1.5 text-[11px]">
+                                    <div class="flex items-center gap-2 font-bold">
+                                        <span>🤍 PPWR: ${formatMoneyVal(calc.ppwrShare, calc.currency)}</span>
+                                        <span class="opacity-40">|</span>
+                                        <span>🤍 PPSR: ${formatMoneyVal(calc.ppsrShare, calc.currency)}</span>
+                                    </div>
+                                    ${calc.isSplit && calc.oweAmount > 0 ? `<span class="font-extrabold text-[#B9382C]">👉 ${calc.oweText}</span>` : ''}
+                                </div>
+                            ` : ''}
                         </div>
                         <div class="flex items-center gap-1 shrink-0">
-                            <button type="button" onclick="toggleExpenseCleared('${item.id}')" class="px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold border transition cursor-pointer ${item.cleared ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-50 hover:bg-emerald-50 text-slate-600 border-slate-200'}">
-                                ${item.cleared ? '✅ Clear' : 'รอเคลียร์'}
+                            <button type="button" id="exp-status-btn-${item.id}" onclick="toggleExpenseCleared('${item.id}')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold border flex items-center gap-1 transition-all duration-200 transform active:scale-90 cursor-pointer ${item.cleared ? 'exp-status-cleared bg-[#15803D] text-white border-[#15803D] shadow-xs' : 'exp-status-pending bg-amber-50 text-amber-800 border-amber-300 border-dashed hover:bg-amber-100'}">
+                                ${item.cleared ? '✅ Cleared' : '⏳ Pending'}
                             </button>
-                            <button type="button" onclick="editExpenseItem('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-royal cursor-pointer"><i class="ph-bold ph-pencil-simple"></i></button>
-                            <button type="button" onclick="deleteExpenseItem('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 cursor-pointer"><i class="ph-bold ph-trash"></i></button>
+                            <button type="button" onclick="editExpenseItem('${item.id}')" class="p-1.5 rounded-lg opacity-70 hover:opacity-100 cursor-pointer"><i class="ph-bold ph-pencil-simple"></i></button>
+                            <button type="button" onclick="deleteExpenseItem('${item.id}')" class="p-1.5 rounded-lg opacity-70 hover:opacity-100 hover:text-rose-600 cursor-pointer"><i class="ph-bold ph-trash"></i></button>
                         </div>
                     </div>
                     ${(item.photos && item.photos.length) ? `
                         <div class="flex items-center gap-2 pt-1">
-                            ${item.photos.map(p => `<img src="${p}" onclick="openImageViewer('${p}')" class="w-14 h-14 object-cover rounded-xl border border-slate-200 cursor-zoom-in">`).join('')}
+                            ${item.photos.map(p => `<img src="${p}" onclick="openImageViewer('${p}')" class="w-14 h-14 object-cover rounded-xl border border-[#D6C7B2] cursor-zoom-in">`).join('')}
                         </div>
                     ` : ''}
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function openExpenseReceiptModal() {
             const all = appState.expenses || [];
             const clearedCount = all.filter(e => e.cleared).length;
+
+            // Aggregate totals per currency (THB, KRW, etc.) + Combined THB Settlement
+            const summaryByCurrency = {};
+            let combinedThbTotal = 0;
+            let combinedThbPpwrShare = 0;
+            let combinedThbPpsrShare = 0;
+            let combinedThbPpwrPaid = 0;
+            let combinedThbPpsrPaid = 0;
+            let combinedUnsettledPpsrOwePpwrThb = 0;
+            let combinedUnsettledPpwrOwePpsrThb = 0;
+
+            all.forEach(item => {
+                const calc = computeSingleExpenseBreakdown(item);
+                if (!calc.hasValue) return;
+                const cur = calc.currency;
+                if (!summaryByCurrency[cur]) {
+                    summaryByCurrency[cur] = {
+                        totalTrip: 0,
+                        ppwrShare: 0,
+                        ppsrShare: 0,
+                        ppwrPaid: 0,
+                        ppsrPaid: 0,
+                        unsettledPpwrOwePpsr: 0,
+                        unsettledPpsrOwePpwr: 0
+                    };
+                }
+                const s = summaryByCurrency[cur];
+                s.totalTrip += calc.total;
+                s.ppwrShare += calc.ppwrShare;
+                s.ppsrShare += calc.ppsrShare;
+
+                const ratioToThb = cur === 'KRW' ? calc.rate : 1;
+                combinedThbTotal += calc.total * ratioToThb;
+                combinedThbPpwrShare += calc.ppwrShare * ratioToThb;
+                combinedThbPpsrShare += calc.ppsrShare * ratioToThb;
+
+                if (calc.payer === 'PPWR') {
+                    s.ppwrPaid += calc.total;
+                    combinedThbPpwrPaid += calc.total * ratioToThb;
+                } else if (calc.payer === 'PPSR') {
+                    s.ppsrPaid += calc.total;
+                    combinedThbPpsrPaid += calc.total * ratioToThb;
+                } else {
+                    s.ppwrPaid += calc.total / 2;
+                    s.ppsrPaid += calc.total / 2;
+                    combinedThbPpwrPaid += (calc.total / 2) * ratioToThb;
+                    combinedThbPpsrPaid += (calc.total / 2) * ratioToThb;
+                }
+
+                if (!item.cleared && calc.isSplit && calc.oweAmount > 0) {
+                    if (calc.oweFrom === 'PPSR' && calc.oweTo === 'PPWR') {
+                        s.unsettledPpsrOwePpwr += calc.oweAmount;
+                        combinedUnsettledPpsrOwePpwrThb += calc.oweAmount * ratioToThb;
+                    } else if (calc.oweFrom === 'PPWR' && calc.oweTo === 'PPSR') {
+                        s.unsettledPpwrOwePpsr += calc.oweAmount;
+                        combinedUnsettledPpwrOwePpsrThb += calc.oweAmount * ratioToThb;
+                    }
+                }
+            });
+
+            const currencies = Object.keys(summaryByCurrency);
+            const netCombinedDiffThb = combinedUnsettledPpsrOwePpwrThb - combinedUnsettledPpwrOwePpsrThb;
+
+            let finalNetSettlementHtml = '';
+            if (currencies.length > 0) {
+                let netActionText = `<div class="text-center font-black text-sm receipt-accent-green">✅ เคลียร์ยอดลงตัวแล้ว (0.00 THB)</div>`;
+                if (netCombinedDiffThb > 0.01) {
+                    netActionText = `
+                        <div class="text-center space-y-0.5">
+                            <div class="text-[10px] font-bold receipt-muted">สรุปยอดสุทธิที่ต้องโอนคืน (รวมทุกสกุลเงินเป็น THB)</div>
+                            <div class="text-sm font-black receipt-accent-red">👉 PPSR ต้องโอนคืน PPWR: ${formatMoneyVal(netCombinedDiffThb, 'THB')}</div>
+                        </div>
+                    `;
+                } else if (netCombinedDiffThb < -0.01) {
+                    netActionText = `
+                        <div class="text-center space-y-0.5">
+                            <div class="text-[10px] font-bold receipt-muted">สรุปยอดสุทธิที่ต้องโอนคืน (รวมทุกสกุลเงินเป็น THB)</div>
+                            <div class="text-sm font-black receipt-accent-red">👉 PPWR ต้องโอนคืน PPSR: ${formatMoneyVal(Math.abs(netCombinedDiffThb), 'THB')}</div>
+                        </div>
+                    `;
+                }
+
+                finalNetSettlementHtml = `
+                    <div class="receipt-box-highlight p-3 rounded-xl border-2 space-y-2 text-[11px]">
+                        <div class="flex justify-between items-center font-black text-xs border-b border-dashed border-[#B5A593] pb-1.5">
+                            <span>GRAND TOTAL (รวมสุทธิเป็น THB):</span>
+                            <span class="receipt-accent-brown">${formatMoneyVal(combinedThbTotal, 'THB')}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[10px]">
+                            <div class="p-2 rounded-lg bg-white/80 border border-[#D6C7B2] space-y-0.5">
+                                <div class="font-black">🤍 PPWR</div>
+                                <div class="receipt-muted">สำรองจ่าย: <b class="text-[#1E1915]">${formatMoneyVal(combinedThbPpwrPaid, 'THB')}</b></div>
+                                <div>ต้องจ่าย: <b>${formatMoneyVal(combinedThbPpwrShare, 'THB')}</b></div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-white/80 border border-[#D6C7B2] space-y-0.5">
+                                <div class="font-black">🤍 PPSR</div>
+                                <div class="receipt-muted">สำรองจ่าย: <b class="text-[#1E1915]">${formatMoneyVal(combinedThbPpsrPaid, 'THB')}</b></div>
+                                <div>ต้องจ่าย: <b>${formatMoneyVal(combinedThbPpsrShare, 'THB')}</b></div>
+                            </div>
+                        </div>
+                        <div class="pt-1.5 border-t border-dashed border-[#B5A593]">
+                            ${netActionText}
+                        </div>
+                    </div>
+                `;
+            }
+
             const body = document.getElementById('expense-receipt-body');
             body.innerHTML = `
-                <div class="w-full max-w-sm bg-[#FFFDF9] border border-slate-300 shadow-md p-5 font-mono text-xs text-slate-900 space-y-3">
-                    <div class="text-center border-b-2 border-dashed border-slate-400 pb-3">
+                <div id="expense-receipt-paper" class="w-full max-w-md bg-[#FFFDF9] border border-[#D6C7B2] shadow-md p-5 font-mono text-xs text-[#1E1915] space-y-3">
+                    <div class="text-center border-b-2 border-dashed border-[#8C7B6B] pb-3">
                         <div class="text-sm font-black tracking-wider">PP_R IN KOREA 2026</div>
-                        <div class="text-[11px] text-slate-600">EXPENSE & SETTLEMENT SLIP</div>
-                        <div class="text-[10px] text-slate-500 mt-1">Printed: ${new Date().toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                        <div class="text-[11px] receipt-muted font-bold">EXPENSE SPLIT & SETTLEMENT SLIP</div>
+                        <div class="text-[10px] receipt-muted mt-1">Printed: ${new Date().toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
                     </div>
-                    <div class="divide-y divide-dashed divide-slate-300">
-                        ${!all.length ? `<div class="py-6 text-center text-slate-400">ยังไม่มีรายการค่าใช้จ่าย</div>` : all.map((e, i) => `
-                            <div class="py-2 space-y-0.5">
-                                <div class="flex justify-between font-bold">
-                                    <span>#${i + 1} ${e.title}</span>
-                                    <span>${e.amount || '-'}</span>
+
+                    <!-- Overall Trip Expense & Split Summary -->
+                    <div class="space-y-2">
+                        <div class="text-[10px] font-black uppercase tracking-wider receipt-muted">SUMMARY • ยอดรวม & สรุปโอนคืน (เฉพาะบิลยังไม่ CLEAR)</div>
+                        ${currencies.length > 0 ? finalNetSettlementHtml : `<div class="text-center text-[11px] receipt-muted py-2">ยังไม่มีตัวเลขยอดเงินที่คำนวณได้</div>`}
+                    </div>
+
+                    <!-- Line Items -->
+                    <div class="border-t-2 border-dashed border-[#8C7B6B] pt-2">
+                        <div class="text-[10px] font-black uppercase tracking-wider receipt-muted mb-1">ITEMIZED BILLS (${all.length})</div>
+                        <div class="divide-y divide-dashed divide-[#C8B89E]">
+                            ${!all.length ? `<div class="py-6 text-center receipt-muted">ยังไม่มีรายการค่าใช้จ่าย</div>` : [...all].sort((a, b) => {
+                                const tA = parseInt(String(a.id || '').replace(/\D/g, ''), 10) || 0;
+                                const tB = parseInt(String(b.id || '').replace(/\D/g, ''), 10) || 0;
+                                return tB - tA;
+                            }).map((e, i, arr) => {
+                                const calc = computeSingleExpenseBreakdown(e);
+                                const billNum = arr.length - i;
+                                const thbLine = calc.currency === 'KRW' && calc.hasValue
+                                    ? `<div class="text-[10px] receipt-muted">≈ ${formatMoneyVal(calc.thbEquivalent, 'THB')} (เรต ${calc.rate.toFixed(4)})</div>`
+                                    : '';
+                                return `
+                                <div class="py-2 space-y-0.5">
+                                    <div class="flex justify-between font-black">
+                                        <span>#${billNum} ${e.title}</span>
+                                        <span>${calc.hasValue ? formatMoneyVal(calc.total, calc.currency) : (e.amount || '-')}</span>
+                                    </div>
+                                    ${thbLine}
+                                    <div class="flex justify-between text-[10px] receipt-muted">
+                                        <span>Paid by: <b>${calc.payer}</b> ${e.date ? '• ' + e.date : ''}</span>
+                                        <span class="font-black ${e.cleared ? 'receipt-accent-green' : 'receipt-accent-brown'}">${e.cleared ? '[✅ CLEAR]' : '[PENDING]'}</span>
+                                    </div>
+                                    ${calc.hasValue ? `
+                                        <div class="flex justify-between text-[10px] pt-0.5">
+                                            <span>PPWR: <b>${formatMoneyVal(calc.ppwrShare, calc.currency)}</b> | PPSR: <b>${formatMoneyVal(calc.ppsrShare, calc.currency)}</b></span>
+                                            <span class="font-bold receipt-accent-brown">${calc.isSplit ? calc.oweText : 'ส่วนตัว'}</span>
+                                        </div>
+                                    ` : ''}
                                 </div>
-                                <div class="flex justify-between text-[10px] text-slate-600">
-                                    <span>By: ${e.payer} ${e.date ? '• ' + e.date : ''}</span>
-                                    <span class="font-bold">${e.cleared ? '[✅ CLEAR]' : '[PENDING]'}</span>
-                                </div>
-                            </div>
-                        `).join('')}
+                            `;
+                            }).join('')}
+                        </div>
                     </div>
-                    <div class="border-t-2 border-dashed border-slate-400 pt-2.5 text-[11px] space-y-1">
-                        <div class="flex justify-between font-bold"><span>TOTAL ITEMS:</span><span>${all.length}</span></div>
-                        <div class="flex justify-between font-bold text-emerald-700"><span>CLEARED:</span><span>${clearedCount} / ${all.length}</span></div>
+
+                    <div class="border-t-2 border-dashed border-[#8C7B6B] pt-2.5 text-[11px] space-y-1">
+                        <div class="flex justify-between font-bold"><span>TOTAL BILLS:</span><span>${all.length}</span></div>
+                        <div class="flex justify-between font-bold receipt-accent-green"><span>CLEARED BILLS:</span><span>${clearedCount} / ${all.length}</span></div>
                     </div>
-                    <div class="text-center text-[10px] text-slate-400 pt-2">*** THANK YOU • HAVE A GREAT TRIP ***</div>
+                    <div class="text-center text-[10px] receipt-muted pt-2">*** THANK YOU • HAVE A GREAT TRIP ***</div>
                 </div>
             `;
             const m = document.getElementById('expense-receipt-modal');
@@ -4081,8 +4762,8 @@
                 <button type="button" onclick="openStickyBoardModal()" title="เปิดกระดานโน้ต PPWR ↔ PPSR" class="w-full h-full ${noteStyle.widget} rounded-2xl p-2.5 px-3 border-2 shadow-sm flex items-center justify-between gap-2.5 text-left transition cursor-pointer">
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         ${hasPhoto ? `
-                            <div class="w-11 h-11 rounded-md border-2 border-dashed border-[#B5A593] bg-white p-0.5 shrink-0 overflow-hidden shadow-2xs">
-                                <img src="${thumbSrc}" alt="Stamp" class="w-full h-full object-cover rounded-xs">
+                            <div class="stamp-thumb-box w-11 h-11 rounded-[4px] p-[2px] shrink-0 overflow-hidden">
+                                <img src="${thumbSrc}" alt="Stamp" class="w-full h-full object-cover rounded-[2px]">
                             </div>
                         ` : ''}
                         <div class="min-w-0 flex-1">
@@ -4570,6 +5251,8 @@
             openTravelerModal, closeTravelerModal, submitVaultPin, lockTravelerVault,
             promptChangeVaultPin, saveNewVaultPin, saveTravelerVaultData,
             openExpenseModal, closeExpenseModal, setExpenseFilter, setExpensePayer,
+            setExpenseCurrency, handleExpenseDateChange,
+            setExpenseSplitMode, updateExpenseSplitPreview,
             toggleExpenseForm, cancelExpenseForm, triggerExpensePhotoPicker, handleExpensePhotoSelect,
             removePendingExpensePhoto, handleSaveExpense, editExpenseItem, toggleExpenseCleared,
             deleteExpenseItem, openExpenseReceiptModal, closeExpenseReceiptModal,
@@ -4587,10 +5270,14 @@
 
         // Boot Application
         window.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('ppr_dark_mode') === '1') {
+            const savedTheme = localStorage.getItem('ppr_dark_mode');
+            const isDark = savedTheme !== '0';
+            if (isDark) {
                 document.documentElement.classList.add('dark-mode');
-                syncThemeToggleVisuals(true);
+            } else {
+                document.documentElement.classList.remove('dark-mode');
             }
+            syncThemeToggleVisuals(isDark);
             document.getElementById('current-author-label').textContent = currentAuthor;
             loadLocalState();
             renderEverything();
